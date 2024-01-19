@@ -1,0 +1,19 @@
+[
+	{
+		"__TYPE__": "SharedSliceContent",
+		"variation": "default",
+		"primary": {
+			"coordinates": {
+				"__TYPE__": "FieldContent",
+				"value": "wave",
+				"type": "Text"
+			},
+			"name": {
+				"__TYPE__": "FieldContent",
+				"value": "hundred",
+				"type": "Text"
+			}
+		},
+		"items": []
+	}
+]

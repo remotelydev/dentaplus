@@ -1,0 +1,19 @@
+[
+	{
+		"__TYPE__": "SharedSliceContent",
+		"variation": "default",
+		"primary": {
+			"anchor": {
+				"__TYPE__": "FieldContent",
+				"value": "post",
+				"type": "Text"
+			},
+			"anchor_level": {
+				"__TYPE__": "FieldContent",
+				"value": "4",
+				"type": "Select"
+			}
+		},
+		"items": []
+	}
+]

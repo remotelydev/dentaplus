@@ -1,0 +1,41 @@
+{
+  "id": "anchor",
+  "type": "SharedSlice",
+  "name": "Anchor",
+  "description": "Anchor",
+  "variations": [
+    {
+      "id": "default",
+      "name": "Default",
+      "docURL": "...",
+      "version": "initial",
+      "description": "Default",
+      "imageUrl": "",
+      "primary": {
+        "anchor": {
+          "type": "Text",
+          "config": {
+            "label": "Anchor text",
+            "placeholder": ""
+          }
+        },
+        "anchor_level": {
+          "type": "Select",
+          "config": {
+            "label": "Anchor level",
+            "placeholder": "Select header level",
+            "options": [
+              "1",
+              "2",
+              "3",
+              "4",
+              "5",
+              "6"
+            ]
+          }
+        }
+      },
+      "items": {}
+    }
+  ]
+}

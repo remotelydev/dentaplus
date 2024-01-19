@@ -1,0 +1,80 @@
+[
+	{
+		"__TYPE__": "SharedSliceContent",
+		"variation": "default",
+		"primary": {
+			"header": {
+				"__TYPE__": "StructuredTextContent",
+				"value": [
+					{
+						"type": "paragraph",
+						"content": {
+							"text": "Labore anim dolor qui enim eiusmod minim eiusmod nostrud ipsum velit cupidatat."
+						}
+					}
+				]
+			}
+		},
+		"items": [
+			{
+				"__TYPE__": "GroupItemContent",
+				"value": [
+					[
+						"place",
+						{
+							"__TYPE__": "StructuredTextContent",
+							"value": [
+								{
+									"type": "paragraph",
+									"content": {
+										"text": "Velit dolore pariatur laboris quis incididunt aute cupidatat tempor ullamco esse incididunt consectetur ex. Amet nisi sint excepteur dolore ut proident cillum reprehenderit deserunt cupidatat in."
+									}
+								}
+							]
+						}
+					],
+					[
+						"address",
+						{
+							"__TYPE__": "StructuredTextContent",
+							"value": [
+								{
+									"type": "paragraph",
+									"content": {
+										"text": "Lorem est proident aliquip aliqua incididunt Lorem."
+									}
+								}
+							]
+						}
+					],
+					[
+						"phone",
+						{
+							"__TYPE__": "FieldContent",
+							"value": "couple",
+							"type": "Text"
+						}
+					],
+					[
+						"open_hours",
+						{
+							"__TYPE__": "FieldContent",
+							"value": "earth",
+							"type": "Text"
+						}
+					],
+					[
+						"location",
+						{
+							"position": {
+								"lat": 48.8841267,
+								"lng": 2.3300579
+							},
+							"__TYPE__": "GeoPointContent"
+						}
+					]
+				]
+			}
+		]
+	}
+]

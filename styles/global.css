@@ -1,0 +1,17 @@
+/* @import url("https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400;900&family=Open+Sans:wght@400;600;700&family=Roboto:wght@700&display=swap"); */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply overflow-x-hidden antialiased;
+}
+
+[data-collapsible="true"].bg-white + [data-collapsible="true"].bg-white {
+  @apply pt-0 md:pt-0;
+}
+
+.debug {
+  outline: 3px dashed purple;
+}

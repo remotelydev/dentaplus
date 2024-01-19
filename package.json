@@ -1,0 +1,33 @@
+{
+  "name": "nuxt-starter-prismic-multi-page",
+  "version": "0.0.0",
+  "private": true,
+  "license": "Apache-2.0",
+  "author": "Prismic <contact@prismic.io> (https://prismic.io)",
+  "scripts": {
+    "dev": "concurrently \"npm:nuxt:dev\" \"npm:slicemachine\" --names \"nuxt,slicemachine\" --prefix-colors green,magenta",
+    "nuxt:dev": "nuxt dev",
+    "build": "nuxt build",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "slicemachine": "start-slicemachine",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "@fontsource/inter": "^5.0.15"
+  },
+  "devDependencies": {
+    "@nuxt/devtools": "^1.0.0",
+    "@nuxt/eslint-config": "^0.2.0",
+    "@nuxt/image": "^1.2.0",
+    "@nuxtjs/prismic": "^3.1.0",
+    "@nuxtjs/tailwindcss": "^6.8.0",
+    "@slicemachine/adapter-nuxt": "^0.3.25",
+    "@tailwindcss/aspect-ratio": "^0.4.2",
+    "concurrently": "^8.2.2",
+    "eslint": "^8.52.0",
+    "nuxt": "^3.8.0",
+    "slice-machine-ui": "^1.20.0"
+  }
+}
