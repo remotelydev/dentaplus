@@ -8,10 +8,10 @@ console.log(settings);
   <div class="bg-slate-900 text-white p-2">
     <div class="container mx-auto flex justify-between">
       <div class="flex gap-x-2">
-        <a :href="`+48${settings.data.phone_turek}`">
+        <a :href="`tel:+48${settings.data.phone_turek}`">
           Turek: {{ settings.data.phone_turek }}
         </a>
-        <a :href="`+48${settings.data.phone_poddebice}`">
+        <a :href="`tel:+48${settings.data.phone_poddebice}`">
           Poddębice: {{ settings.data.phone_poddebice }}
         </a>
       </div>
