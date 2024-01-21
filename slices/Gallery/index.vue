@@ -63,7 +63,7 @@ const props = defineProps(
     "index",
     "slices",
     "context",
-  ])
+  ]),
 );
 </script>
 
@@ -71,28 +71,17 @@ const props = defineProps(
   <section
     :data-slice-type="slice.slice_type"
     :data-slice-variation="slice.variation"
-    class="container mx-auto"
-  >
+    class="container mx-auto">
     <div class="flex flex-wrap">
-      <!-- <Thumbnail /> -->
-      <!-- <Thumbnail
-        v-for="item in slice.items"
-        class="w-1/4"
-        :src="item.image.url"
-        :alt="item.image.alt"
-        :key="item.image.id"
-      /> -->
       <div
         v-for="(pic, i) in slice.items"
         class="h-64 basis-1/4"
-        :key="pic.image.id"
-      >
+        :key="pic.image.id">
         <NuxtImg
           class="object-cover h-full w-full"
           :src="pic.image.url"
           :alt="pic.image.alt"
-          @click="showDialog(pic.image.url, pic.image.alt, i)"
-        />
+          @click="showDialog(pic.image.url, pic.image.alt, i)" />
       </div>
 
       <dialog ref="dialog" @close="visible = false">
