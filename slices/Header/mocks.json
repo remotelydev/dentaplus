@@ -7,9 +7,9 @@
 				"__TYPE__": "StructuredTextContent",
 				"value": [
 					{
-						"type": "paragraph",
+						"type": "heading1",
 						"content": {
-							"text": "Exercitation id Lorem nostrud velit duis laborum consectetur mollit culpa proident eu qui. Anim Lorem laborum in mollit aliquip sunt eiusmod anim dolor duis sint Lorem esse."
+							"text": "Place"
 						}
 					}
 				]
