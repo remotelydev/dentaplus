@@ -2,13 +2,13 @@
 defineProps({
   as: {
     type: [String, Object, Function],
-    default: 'h1'
+    default: "h1",
   },
   size: {
     type: String,
-    default: 'lg'
-  }
-})
+    default: "lg",
+  },
+});
 </script>
 
 <template>
@@ -20,9 +20,7 @@ defineProps({
       'text-4xl md:text-5xl': size === 'lg',
       'text-3xl md:text-4xl': size === 'md',
       'text-xl md:text-2xl': size === 'sm',
-    }"
-  >
+    }">
     <slot />
   </Component>
 </template>
-

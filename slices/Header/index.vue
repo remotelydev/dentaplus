@@ -9,7 +9,7 @@ defineProps(
     "index",
     "slices",
     "context",
-  ])
+  ]),
 );
 </script>
 
@@ -17,10 +17,11 @@ defineProps(
   <section
     :data-slice-type="slice.slice_type"
     :data-slice-variation="slice.variation"
-    class="bg-gray-100 py-8"
-  >
+    class="bg-gray-100 py-8">
     <div class="container mx-auto">
-      <PrismicRichText class="px-6" :field="slice.primary.header" />
+      <PrismicRichText
+        class="max-w-6xl mx-auto"
+        :field="slice.primary.header" />
     </div>
   </section>
 </template>

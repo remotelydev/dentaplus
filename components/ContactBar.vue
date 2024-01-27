@@ -1,11 +1,9 @@
 <script setup>
 const settings = useSettings();
-
-console.log(settings);
 </script>
 
 <template>
-  <div class="bg-slate-900 text-white p-2">
+  <div class="sticky top-0 z-50 bg-slate-900 text-white p-2">
     <div class="container mx-auto flex justify-between">
       <div class="flex gap-x-2">
         <a :href="`tel:+48${settings.data.phone_turek}`">

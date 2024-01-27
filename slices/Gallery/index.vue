@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { type Content } from "@prismicio/client";
 import { ref } from "vue";
+import { type Content } from "@prismicio/client";
 
 const dialog = ref();
 const visible = ref(false);

@@ -12,11 +12,7 @@ defineProps(
   ])
 );
 
-onMounted(() => {
-  console.log("anchor slice", slice);
-});
 const anchorId = computed(() => {
-  console.log("c", this);
   return "anchor-id";
   // return slice.primary.anchor.replace(/\s+/g, "-").toLowerCase();
 });
