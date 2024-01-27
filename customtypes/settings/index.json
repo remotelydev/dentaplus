@@ -41,6 +41,13 @@
           "label": "Email",
           "placeholder": ""
         }
+      },
+      "siteTitle": {
+        "type": "Text",
+        "config": {
+          "label": "Site title",
+          "placeholder": ""
+        }
       }
     }
   }
