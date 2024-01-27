@@ -1,13 +1,17 @@
 <template>
-  <img
-    class="w-full h-full max-w-1/2 max-h-96 object-cover"
-    :src="image"
-    :alt="alt"
-  />
+  <div class="flex justify-center">
+    <img
+      :class="`${
+        fit === 'cover' ? 'w-full' : ''
+      } max-w-1/2 max-h-96 object-${fit}`"
+      :src="image"
+      :alt="alt" />
+  </div>
 </template>
 <script setup>
 defineProps({
-  image: String,
-  alt: String,
+  image: String | null,
+  alt: String | null,
+  fit: String,
 });
 </script>

@@ -42,6 +42,19 @@
             "constraint": {},
             "thumbnails": []
           }
+        },
+        "image_fit": {
+          "type": "Select",
+          "config": {
+            "label": "Image fit",
+            "placeholder": "",
+            "options": [
+              "cover",
+              "contain",
+              "scale-down"
+            ],
+            "default_value": "cover"
+          }
         }
       }
     }

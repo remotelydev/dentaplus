@@ -58,6 +58,14 @@
 							"__TYPE__": "ImageContent",
 							"thumbnails": {}
 						}
+					],
+					[
+						"image_fit",
+						{
+							"__TYPE__": "FieldContent",
+							"value": "cover",
+							"type": "Select"
+						}
 					]
 				]
 			}

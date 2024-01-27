@@ -185,6 +185,17 @@ interface SettingsDocumentData {
    * - **Documentation**: https://prismic.io/docs/field#key-text
    */
   email: prismic.KeyTextField;
+
+  /**
+   * Site title field in *Settings*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: settings.siteTitle
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/field#key-text
+   */
+  siteTitle: prismic.KeyTextField;
 }
 
 /**
@@ -298,26 +309,6 @@ export interface ContactSliceDefaultItem {
    * - **Documentation**: https://prismic.io/docs/field#rich-text-title
    */
   address: prismic.RichTextField;
-
-  /**
-   * Phone field in *Contact → Items*
-   *
-   * - **Field Type**: Text
-   * - **Placeholder**: *None*
-   * - **API ID Path**: contact.items[].phone
-   * - **Documentation**: https://prismic.io/docs/field#key-text
-   */
-  phone: prismic.KeyTextField;
-
-  /**
-   * Open hours field in *Contact → Items*
-   *
-   * - **Field Type**: Text
-   * - **Placeholder**: *None*
-   * - **API ID Path**: contact.items[].open_hours
-   * - **Documentation**: https://prismic.io/docs/field#key-text
-   */
-  open_hours: prismic.KeyTextField;
 
   /**
    * location field in *Contact → Items*
@@ -1156,6 +1147,17 @@ export interface TilesSliceDefaultItem {
    * - **Documentation**: https://prismic.io/docs/field#image
    */
   image: prismic.ImageField<never>;
+
+  /**
+   * Image fit field in *Tiles → Items*
+   *
+   * - **Field Type**: Select
+   * - **Placeholder**: *None*
+   * - **Default Value**: cover
+   * - **API ID Path**: tiles.items[].image_fit
+   * - **Documentation**: https://prismic.io/docs/field#select
+   */
+  image_fit: prismic.SelectField<"cover" | "contain" | "scale-down", "filled">;
 }
 
 /**

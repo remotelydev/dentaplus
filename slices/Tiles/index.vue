@@ -9,7 +9,7 @@ defineProps(
     "index",
     "slices",
     "context",
-  ])
+  ]),
 );
 </script>
 
@@ -17,31 +17,27 @@ defineProps(
   <section
     :data-slice-type="slice.slice_type"
     :data-slice-variation="slice.variation"
-    class="w-full flex flex-wrap"
-  >
+    class="w-full flex flex-wrap">
     <div
       v-for="(item, i) in slice.items"
       class="flex-1 basis-1/2"
-      :key="`tile-${i}`"
-    >
+      :key="`tile-${i}`">
       <TileImage
         v-if="item.image.url"
         :image="item.image.url"
-        :alt="item.image.alt"
-      />
+        :fit="item.image_fit"
+        :alt="item.image.alt" />
       <TileLink
         v-else-if="item.link.url"
         :header="item.header"
         :description="item.description"
         :link="item.link.url"
-        :index="i"
-      />
+        :index="i" />
       <TileText
         v-else
         :header="item.header"
         :description="item.description"
-        :index="i"
-      />
+        :index="i" />
     </div>
   </section>
 </template>
