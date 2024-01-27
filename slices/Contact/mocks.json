@@ -48,22 +48,6 @@
 						}
 					],
 					[
-						"phone",
-						{
-							"__TYPE__": "FieldContent",
-							"value": "couple",
-							"type": "Text"
-						}
-					],
-					[
-						"open_hours",
-						{
-							"__TYPE__": "FieldContent",
-							"value": "earth",
-							"type": "Text"
-						}
-					],
-					[
 						"location",
 						{
 							"position": {
