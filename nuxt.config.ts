@@ -1,4 +1,5 @@
 import tailwindAspectRatio from "@tailwindcss/aspect-ratio";
+import svgLoader from "vite-svg-loader";
 import { repositoryName } from "./slicemachine.config.json";
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
@@ -34,6 +35,12 @@ export default defineNuxtConfig({
 
   modules: ["@nuxtjs/prismic", "@nuxtjs/tailwindcss", "@nuxt/image"],
 
+  vite: {
+    plugins: [
+      svgLoader()
+    ]
+  },
+
   prismic: {
     endpoint: "dentaplus",
     preview: "/api/preview",
@@ -62,6 +69,9 @@ export default defineNuxtConfig({
         extend: {
           colors: {
             "denta-green": "#b7d424",
+          },
+          screens: {
+            xs: "390px",
           },
         },
       },
