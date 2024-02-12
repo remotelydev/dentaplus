@@ -4,7 +4,7 @@ const settings = useSettings();
 </script>
 
 <template>
-  <div class="sticky top-0 z-50 bg-slate-900 text-white py-2">
+  <div class="fixed bottom-0 w-full z-50 bg-slate-900 text-white py-2 sm:sticky sm:top-0 sm:bottom-auto">
     <div class="container mx-auto flex flex-col gap-2 text-xs xs:text-sm sm:flex-row sm:justify-end sm:items-center sm:gap-4 sm:px-4">
       <span class="text-center bold">Umów się na wizytę!</span>
       <div class="flex gap-3 justify-around">
