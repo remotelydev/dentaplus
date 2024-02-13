@@ -66,6 +66,14 @@
 							"value": "cover",
 							"type": "Select"
 						}
+					],
+					[
+						"link_label",
+						{
+							"__TYPE__": "FieldContent",
+							"value": "tree",
+							"type": "Text"
+						}
 					]
 				]
 			}

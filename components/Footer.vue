@@ -3,7 +3,7 @@ const navigation = useNavigation();
 </script>
 
 <template>
-  <footer class="py-6 px-4 text-gray-200 bg-slate-700">
+  <footer class="py-6 px-4 mb-16 text-gray-200 bg-slate-700 sm:mb-0">
     <div
       class="container mx-auto flex flex-col-reverse justify-between md:flex-row"
     >

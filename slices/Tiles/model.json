@@ -35,6 +35,13 @@
             "select": null
           }
         },
+        "link_label": {
+          "type": "Text",
+          "config": {
+            "label": "Link label",
+            "placeholder": ""
+          }
+        },
         "image": {
           "type": "Image",
           "config": {

@@ -21,15 +21,15 @@ watch(isMobileMenuOpen, (nextIsMobileMenuOpen) => {
   <Bounded class="relative" as="header" y-padding="sm">
     <div class="flex items-center justify-between leading-none">
       <NuxtLink to="/" @click="isMobileMenuOpen = false">
-        <img class="h-10 md:h-12 lg:h-14"
+        <img class="h-12 md:h-14"
           :src="$prismic.asImageSrc(settings?.data.logo)"
           alt="Logo" />
       </NuxtLink>
-      <button type="button" class="sm:hidden" @click="isMobileMenuOpen = !isMobileMenuOpen">
+      <button type="button" class="p-2 md:hidden" @click="isMobileMenuOpen = !isMobileMenuOpen">
         <BurgerIcon v-if="!isMobileMenuOpen" class="w-8 h-8"/>
         <CloseIcon v-else class="w-8 h-8" />
       </button>
-      <nav class="hidden sm:block">
+      <nav class="hidden md:block">
         <ul class="flex flex-wrap gap-6 md:gap-10">
           <li
             v-for="link, i in navigation?.data.links"

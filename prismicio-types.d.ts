@@ -1139,6 +1139,16 @@ export interface TilesSliceDefaultItem {
   link: prismic.LinkField;
 
   /**
+   * Link label field in *Tiles → Items*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: tiles.items[].link_label
+   * - **Documentation**: https://prismic.io/docs/field#key-text
+   */
+  link_label: prismic.KeyTextField;
+
+  /**
    * Image field in *Tiles → Items*
    *
    * - **Field Type**: Image

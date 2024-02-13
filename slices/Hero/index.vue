@@ -40,7 +40,7 @@ const serializer: HTMLRichTextMapSerializer = {
           class="max-w-2xl text-center"
           wrapper="div"
         />
-        <p class="text-2xl" v-if="slice.primary.description">
+        <p class="text-2xl text-center" v-if="slice.primary.description">
           {{ slice.primary.description }}
         </p>
         <!-- <PrismicLink

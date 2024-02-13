@@ -1,9 +1,10 @@
 <template>
   <div class="flex justify-center">
     <img
+      class="max-h-96 md:h-96 md:object-cover"
       :class="`${
         fit === 'cover' ? 'w-full' : ''
-      } max-w-1/2 max-h-96 object-${fit}`"
+      } max-w-1/2 object-${fit}`"
       :src="image"
       :alt="alt" />
   </div>
