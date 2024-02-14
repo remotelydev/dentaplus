@@ -17,7 +17,7 @@ defineProps(
   <section
     :data-slice-type="slice.slice_type"
     :data-slice-variation="slice.variation"
-    class="bg-gray-100 py-8">
+    class="bg-gray-100 py-8 px-4">
     <div class="container mx-auto">
       <PrismicRichText
         class="max-w-6xl mx-auto"
