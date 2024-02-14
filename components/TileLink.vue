@@ -1,6 +1,6 @@
 <template>
   <a
-    class="min-h-0 h-80 min-w-0 w-dvw flex flex-col justify-center items-center py-6 px-6 border-2 border-transparent hover:border-denta-green sm:h-96"
+    class="min-h-0 h-80 min-w-0 w-dvw flex flex-col justify-center items-center py-6 px-6 border-2 border-transparent hover:border-denta-green sm:h-96 sm:px-10 lg:px-20"
     :class="`bg-stone-${(index % 3) + 1}00`"
     :href="link">
     <h2 class="mb-5 mt-0 text-center text-2xl uppercase">{{ header }}</h2>
