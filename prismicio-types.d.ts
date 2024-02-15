@@ -4,6 +4,89 @@ import type * as prismic from "@prismicio/client";
 
 type Simplify<T> = { [KeyType in keyof T]: T[KeyType] };
 
+type BioDocumentDataSlicesSlice = TextWithImageSlice | HeaderSlice;
+
+/**
+ * Content for Bio documents
+ */
+interface BioDocumentData {
+  /**
+   * Title field in *Bio*
+   *
+   * - **Field Type**: Title
+   * - **Placeholder**: *None*
+   * - **API ID Path**: bio.title
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/field#rich-text-title
+   */
+  title: prismic.TitleField;
+
+  /**
+   * Parent field in *Bio*
+   *
+   * - **Field Type**: Content Relationship
+   * - **Placeholder**: *None*
+   * - **API ID Path**: bio.parent
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/field#link-content-relationship
+   */
+  parent: prismic.ContentRelationshipField;
+
+  /**
+   * Slice Zone field in *Bio*
+   *
+   * - **Field Type**: Slice Zone
+   * - **Placeholder**: *None*
+   * - **API ID Path**: bio.slices[]
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/field#slices
+   */
+  slices: prismic.SliceZone<BioDocumentDataSlicesSlice> /**
+   * Meta Description field in *Bio*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: A brief summary of the page
+   * - **API ID Path**: bio.meta_description
+   * - **Tab**: SEO & Metadata
+   * - **Documentation**: https://prismic.io/docs/field#key-text
+   */;
+  meta_description: prismic.KeyTextField;
+
+  /**
+   * Meta Image field in *Bio*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: bio.meta_image
+   * - **Tab**: SEO & Metadata
+   * - **Documentation**: https://prismic.io/docs/field#image
+   */
+  meta_image: prismic.ImageField<never>;
+
+  /**
+   * Meta Title field in *Bio*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: A title of the page used for social media and search engines
+   * - **API ID Path**: bio.meta_title
+   * - **Tab**: SEO & Metadata
+   * - **Documentation**: https://prismic.io/docs/field#key-text
+   */
+  meta_title: prismic.KeyTextField;
+}
+
+/**
+ * Bio document from Prismic
+ *
+ * - **API ID**: `bio`
+ * - **Repeatable**: `true`
+ * - **Documentation**: https://prismic.io/docs/custom-types
+ *
+ * @typeParam Lang - Language API ID of the document.
+ */
+export type BioDocument<Lang extends string = string> =
+  prismic.PrismicDocumentWithUID<Simplify<BioDocumentData>, "bio", Lang>;
+
 /**
  * Item in *Navigation → Links*
  */
@@ -215,6 +298,7 @@ export type SettingsDocument<Lang extends string = string> =
   >;
 
 export type AllDocumentTypes =
+  | BioDocument
   | NavigationDocument
   | PageDocument
   | SettingsDocument;
@@ -765,6 +849,16 @@ export interface PortraitsSliceDefaultItem {
    * - **Documentation**: https://prismic.io/docs/field#key-text
    */
   role: prismic.KeyTextField;
+
+  /**
+   * details field in *Portraits → Items*
+   *
+   * - **Field Type**: Link
+   * - **Placeholder**: *None*
+   * - **API ID Path**: portraits.items[].details
+   * - **Documentation**: https://prismic.io/docs/field#link-content-relationship
+   */
+  details: prismic.LinkField;
 }
 
 /**
@@ -1207,6 +1301,9 @@ declare module "@prismicio/client" {
 
   namespace Content {
     export type {
+      BioDocument,
+      BioDocumentData,
+      BioDocumentDataSlicesSlice,
       NavigationDocument,
       NavigationDocumentData,
       NavigationDocumentDataLinksItem,

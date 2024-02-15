@@ -34,6 +34,14 @@
             "label": "role",
             "placeholder": ""
           }
+        },
+        "details": {
+          "type": "Link",
+          "config": {
+            "label": "details",
+            "placeholder": "",
+            "select": null
+          }
         }
       }
     }

@@ -51,6 +51,10 @@ export default defineNuxtConfig({
           path: "/:uid",
         },
         {
+          type: "bio",
+          path: '/zespol/:uid',
+        },
+        {
           type: "page",
           uid: "home",
           path: "/",

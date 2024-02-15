@@ -14,7 +14,6 @@ defineProps(getSliceComponentProps<Content.TextWithImageSlice>(
     class="bg-white"
   >
     <div class="grid grid-cols-1 items-center gap-8 md:grid-cols-2">
-      <PrismicRichText :field="slice.primary.text" />
       <div>
         <div
           v-if="slice.primary.image.url"
@@ -23,6 +22,7 @@ defineProps(getSliceComponentProps<Content.TextWithImageSlice>(
           <PrismicImage :field="slice.primary.image" />
         </div>
       </div>
+      <PrismicRichText :field="slice.primary.text" />
     </div>
   </Bounded>
 </template>
