@@ -14,6 +14,13 @@
           "thumbnails": []
         }
       },
+      "siteTitle": {
+        "type": "Text",
+        "config": {
+          "label": "Site title",
+          "placeholder": ""
+        }
+      },
       "phone_turek": {
         "type": "Text",
         "config": {
@@ -28,24 +35,24 @@
           "placeholder": ""
         }
       },
+      "email_turek": {
+        "type": "Text",
+        "config": {
+          "label": "Email Turek",
+          "placeholder": ""
+        }
+      },
+      "email_poddebice": {
+        "type": "Text",
+        "config": {
+          "label": "Email Poddębice",
+          "placeholder": ""
+        }
+      },
       "godziny": {
         "type": "Text",
         "config": {
           "label": "Godziny",
-          "placeholder": ""
-        }
-      },
-      "email": {
-        "type": "Text",
-        "config": {
-          "label": "Email",
-          "placeholder": ""
-        }
-      },
-      "siteTitle": {
-        "type": "Text",
-        "config": {
-          "label": "Site title",
           "placeholder": ""
         }
       }
