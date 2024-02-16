@@ -145,6 +145,7 @@ export type NavigationDocument<Lang extends string = string> =
   >;
 
 type PageDocumentDataSlicesSlice =
+  | MetamorphosisSlice
   | GallerySlice
   | PortraitsSlice
   | ContactSlice
@@ -817,6 +818,81 @@ type MapSliceVariation = MapSliceDefault;
 export type MapSlice = prismic.SharedSlice<"map", MapSliceVariation>;
 
 /**
+ * Primary content in *Metamorphoses → Items*
+ */
+export interface MetamorphosisSliceDefaultItem {
+  /**
+   * title field in *Metamorphoses → Items*
+   *
+   * - **Field Type**: Title
+   * - **Placeholder**: *None*
+   * - **API ID Path**: metamorphosis.items[].title
+   * - **Documentation**: https://prismic.io/docs/field#rich-text-title
+   */
+  title: prismic.TitleField;
+
+  /**
+   * description field in *Metamorphoses → Items*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: metamorphosis.items[].description
+   * - **Documentation**: https://prismic.io/docs/field#rich-text-title
+   */
+  description: prismic.RichTextField;
+
+  /**
+   * before field in *Metamorphoses → Items*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: metamorphosis.items[].before
+   * - **Documentation**: https://prismic.io/docs/field#image
+   */
+  before: prismic.ImageField<never>;
+
+  /**
+   * after field in *Metamorphoses → Items*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: metamorphosis.items[].after
+   * - **Documentation**: https://prismic.io/docs/field#image
+   */
+  after: prismic.ImageField<never>;
+}
+
+/**
+ * Default variation for Metamorphoses Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: Default
+ * - **Documentation**: https://prismic.io/docs/slice
+ */
+export type MetamorphosisSliceDefault = prismic.SharedSliceVariation<
+  "default",
+  Record<string, never>,
+  Simplify<MetamorphosisSliceDefaultItem>
+>;
+
+/**
+ * Slice variation for *Metamorphoses*
+ */
+type MetamorphosisSliceVariation = MetamorphosisSliceDefault;
+
+/**
+ * Metamorphoses Shared Slice
+ *
+ * - **API ID**: `metamorphosis`
+ * - **Description**: Metamorphosis
+ * - **Documentation**: https://prismic.io/docs/slice
+ */
+export type MetamorphosisSlice = prismic.SharedSlice<
+  "metamorphosis",
+  MetamorphosisSliceVariation
+>;
+
+/**
  * Primary content in *Portraits → Items*
  */
 export interface PortraitsSliceDefaultItem {
@@ -1349,6 +1425,10 @@ declare module "@prismicio/client" {
       MapSliceDefaultPrimary,
       MapSliceVariation,
       MapSliceDefault,
+      MetamorphosisSlice,
+      MetamorphosisSliceDefaultItem,
+      MetamorphosisSliceVariation,
+      MetamorphosisSliceDefault,
       PortraitsSlice,
       PortraitsSliceDefaultItem,
       PortraitsSliceVariation,

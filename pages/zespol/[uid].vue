@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import { components } from '~/slices'
 
 const prismic = usePrismic()

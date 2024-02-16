@@ -15,7 +15,8 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "@fontsource/inter": "^5.0.15"
+    "@fontsource/inter": "^5.0.15",
+    "vue3-compare-image": "^1.1.1"
   },
   "devDependencies": {
     "@nuxt/devtools": "^1.0.0",
