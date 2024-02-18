@@ -145,6 +145,7 @@ export type NavigationDocument<Lang extends string = string> =
   >;
 
 type PageDocumentDataSlicesSlice =
+  | TestimonialsSlice
   | MetamorphosisSlice
   | GallerySlice
   | PortraitsSlice
@@ -227,6 +228,17 @@ interface SettingsDocumentData {
   logo: prismic.ImageField<never>;
 
   /**
+   * Site title field in *Settings*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: settings.siteTitle
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/field#key-text
+   */
+  siteTitle: prismic.KeyTextField;
+
+  /**
    * Phone Turek field in *Settings*
    *
    * - **Field Type**: Text
@@ -249,6 +261,28 @@ interface SettingsDocumentData {
   phone_poddebice: prismic.KeyTextField;
 
   /**
+   * Email Turek field in *Settings*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: settings.email_turek
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/field#key-text
+   */
+  email_turek: prismic.KeyTextField;
+
+  /**
+   * Email Poddębice field in *Settings*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: settings.email_poddebice
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/field#key-text
+   */
+  email_poddebice: prismic.KeyTextField;
+
+  /**
    * Godziny field in *Settings*
    *
    * - **Field Type**: Text
@@ -258,28 +292,6 @@ interface SettingsDocumentData {
    * - **Documentation**: https://prismic.io/docs/field#key-text
    */
   godziny: prismic.KeyTextField;
-
-  /**
-   * Email field in *Settings*
-   *
-   * - **Field Type**: Text
-   * - **Placeholder**: *None*
-   * - **API ID Path**: settings.email
-   * - **Tab**: Main
-   * - **Documentation**: https://prismic.io/docs/field#key-text
-   */
-  email: prismic.KeyTextField;
-
-  /**
-   * Site title field in *Settings*
-   *
-   * - **Field Type**: Text
-   * - **Placeholder**: *None*
-   * - **API ID Path**: settings.siteTitle
-   * - **Tab**: Main
-   * - **Documentation**: https://prismic.io/docs/field#key-text
-   */
-  siteTitle: prismic.KeyTextField;
 }
 
 /**
@@ -357,21 +369,6 @@ type AnchorSliceVariation = AnchorSliceDefault;
 export type AnchorSlice = prismic.SharedSlice<"anchor", AnchorSliceVariation>;
 
 /**
- * Primary content in *Contact → Primary*
- */
-export interface ContactSliceDefaultPrimary {
-  /**
-   * Header field in *Contact → Primary*
-   *
-   * - **Field Type**: Rich Text
-   * - **Placeholder**: *None*
-   * - **API ID Path**: contact.primary.header
-   * - **Documentation**: https://prismic.io/docs/field#rich-text-title
-   */
-  header: prismic.RichTextField;
-}
-
-/**
  * Primary content in *Contact → Items*
  */
 export interface ContactSliceDefaultItem {
@@ -415,7 +412,7 @@ export interface ContactSliceDefaultItem {
  */
 export type ContactSliceDefault = prismic.SharedSliceVariation<
   "default",
-  Simplify<ContactSliceDefaultPrimary>,
+  Record<string, never>,
   Simplify<ContactSliceDefaultItem>
 >;
 
@@ -1090,6 +1087,87 @@ type QuoteSliceVariation = QuoteSliceDefault;
 export type QuoteSlice = prismic.SharedSlice<"quote", QuoteSliceVariation>;
 
 /**
+ * Primary content in *Testimonials → Primary*
+ */
+export interface TestimonialsSliceDefaultPrimary {
+  /**
+   * header field in *Testimonials → Primary*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: testimonials.primary.header
+   * - **Documentation**: https://prismic.io/docs/field#rich-text-title
+   */
+  header: prismic.RichTextField;
+}
+
+/**
+ * Primary content in *Testimonials → Items*
+ */
+export interface TestimonialsSliceDefaultItem {
+  /**
+   * name field in *Testimonials → Items*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: testimonials.items[].name
+   * - **Documentation**: https://prismic.io/docs/field#key-text
+   */
+  name: prismic.KeyTextField;
+
+  /**
+   * stars field in *Testimonials → Items*
+   *
+   * - **Field Type**: Select
+   * - **Placeholder**: *None*
+   * - **Default Value**: 5
+   * - **API ID Path**: testimonials.items[].stars
+   * - **Documentation**: https://prismic.io/docs/field#select
+   */
+  stars: prismic.SelectField<"5" | "4" | "3" | "2" | "1", "filled">;
+
+  /**
+   * review field in *Testimonials → Items*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: testimonials.items[].review
+   * - **Documentation**: https://prismic.io/docs/field#rich-text-title
+   */
+  review: prismic.RichTextField;
+}
+
+/**
+ * Default variation for Testimonials Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: Default
+ * - **Documentation**: https://prismic.io/docs/slice
+ */
+export type TestimonialsSliceDefault = prismic.SharedSliceVariation<
+  "default",
+  Simplify<TestimonialsSliceDefaultPrimary>,
+  Simplify<TestimonialsSliceDefaultItem>
+>;
+
+/**
+ * Slice variation for *Testimonials*
+ */
+type TestimonialsSliceVariation = TestimonialsSliceDefault;
+
+/**
+ * Testimonials Shared Slice
+ *
+ * - **API ID**: `testimonials`
+ * - **Description**: Testimonials
+ * - **Documentation**: https://prismic.io/docs/slice
+ */
+export type TestimonialsSlice = prismic.SharedSlice<
+  "testimonials",
+  TestimonialsSliceVariation
+>;
+
+/**
  * Primary content in *Text → Primary*
  */
 export interface TextSliceDefaultPrimary {
@@ -1394,7 +1472,6 @@ declare module "@prismicio/client" {
       AnchorSliceVariation,
       AnchorSliceDefault,
       ContactSlice,
-      ContactSliceDefaultPrimary,
       ContactSliceDefaultItem,
       ContactSliceVariation,
       ContactSliceDefault,
@@ -1442,6 +1519,11 @@ declare module "@prismicio/client" {
       QuoteSliceDefaultPrimary,
       QuoteSliceVariation,
       QuoteSliceDefault,
+      TestimonialsSlice,
+      TestimonialsSliceDefaultPrimary,
+      TestimonialsSliceDefaultItem,
+      TestimonialsSliceVariation,
+      TestimonialsSliceDefault,
       TextSlice,
       TextSliceDefaultPrimary,
       TextSliceTwoColumnsPrimary,

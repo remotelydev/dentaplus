@@ -18,6 +18,7 @@ export const components = defineSliceZoneComponents({
   portraits: defineAsyncComponent(() => import("./Portraits/index.vue")),
   pricelist: defineAsyncComponent(() => import("./Pricelist/index.vue")),
   quote: defineAsyncComponent(() => import("./Quote/index.vue")),
+  testimonials: defineAsyncComponent(() => import("./Testimonials/index.vue")),
   text: defineAsyncComponent(() => import("./Text/index.vue")),
   text_with_image: defineAsyncComponent(
     () => import("./TextWithImage/index.vue"),

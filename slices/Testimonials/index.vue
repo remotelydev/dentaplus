@@ -15,9 +15,23 @@ defineProps(
 
 <template>
   <section
+    class="bg-slate-200 py-6"
     :data-slice-type="slice.slice_type"
-    :data-slice-variation="slice.variation">
-    Placeholder component for testimonials (variation: {{ slice.variation }})
-    Slices
+    :data-slice-variation="slice.variation"
+  >
+    <PrismicRichText
+      class="font-bold text-center text-3xl my-4 px-4 md:my-8"
+      :field="slice?.primary.header"
+    />
+    <div class="lg:container mx-auto relative flex gap-4 overflow-x-auto scroll-smooth snap-proximity snap-x scroll-px-4 p-4 lg:justify-center lg:gap-8">
+      <Testimonial
+        v-for="review in slice.items"
+        :key="review.name"
+        class="snap-center shrink-0"
+        :name="review.name"
+        :stars="review.stars"
+        :review="review.review"
+      />
+    </div>
   </section>
 </template>

@@ -2,7 +2,55 @@
 	{
 		"__TYPE__": "SharedSliceContent",
 		"variation": "default",
-		"primary": {},
-		"items": []
+		"primary": {
+			"header": {
+				"__TYPE__": "StructuredTextContent",
+				"value": [
+					{
+						"type": "paragraph",
+						"content": {
+							"text": "Aliqua id enim incididunt ut labore labore enim."
+						}
+					}
+				]
+			}
+		},
+		"items": [
+			{
+				"__TYPE__": "GroupItemContent",
+				"value": [
+					[
+						"name",
+						{
+							"__TYPE__": "FieldContent",
+							"value": "lucky",
+							"type": "Text"
+						}
+					],
+					[
+						"stars",
+						{
+							"__TYPE__": "FieldContent",
+							"value": "5",
+							"type": "Select"
+						}
+					],
+					[
+						"review",
+						{
+							"__TYPE__": "StructuredTextContent",
+							"value": [
+								{
+									"type": "paragraph",
+									"content": {
+										"text": "Nulla qui excepteur consectetur dolor sint commodo enim veniam veniam amet ex quis cillum."
+									}
+								}
+							]
+						}
+					]
+				]
+			}
+		]
 	}
 ]
