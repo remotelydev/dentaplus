@@ -2,7 +2,8 @@
 import { ref } from "vue";
 import { useSwipe } from '@vueuse/core'
 import ChevronIcon from "../../public/chevron.svg";
-import CloseIcon from "../../public/close.svg"
+import CloseIcon from "../../public/close.svg";
+import { useBodyScrollLock } from '../../composables/useBodyScrollLock';
 import { type Content } from "@prismicio/client";
 
 
@@ -17,9 +18,12 @@ const props = defineProps(
   ]),
 );
 
+const gallery = ref<HTMLElement | null>(null)
 const dialog = ref<HTMLDialogElement | null>(null);
 const visible = ref(false);
 const currentPic = ref(undefined);
+const isGalleryLocked = useScrollLock(gallery)
+const { setBodyScrollLock } = useBodyScrollLock()
 
 const { isSwiping, direction } = useSwipe(dialog, {
   onSwipeEnd() {
@@ -33,12 +37,14 @@ const { isSwiping, direction } = useSwipe(dialog, {
 })
 
 const showDialog = (src, alt, id) => {
+  setBodyScrollLock(true)
   dialog.value?.showModal();
   currentPic.value = { src, alt, id };
   visible.value = true;
 };
 
 const closeDialog = () => {
+  setBodyScrollLock(false)
   dialog.value?.close()
 };
 
@@ -118,7 +124,7 @@ defineExpose({
         ref="dialog"
         class="gallery-item bg-transparent max-w-full text-white"
         @click="clickDialog"
-        @close="visible = false"
+        @close="visible = false; setBodyScrollLock(false)"
         @keyup.left="prevPic(currentPic.id)"
         @keyup.right="nextPic(currentPic.id)"
       >
