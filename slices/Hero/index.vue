@@ -24,12 +24,12 @@ const serializer: HTMLRichTextMapSerializer = {
 </script>
 
 <template>
-  <section class="relative bg-slate-900 text-white">
+  <section class="relative bg-slate-800 text-white border-b-8 border-slate-100">
     <figure class="absolute inset-0">
       <PrismicImage
         v-if="slice.primary.backgroundImage.url"
         :field="slice.primary.backgroundImage"
-        class="pointer-events-none select-none object-cover opacity-50 h-full w-full"
+        class="pointer-events-none select-none object-cover opacity-60 h-full w-full"
       />
     </figure>
     <Bounded y-padding="lg" class="relative">
