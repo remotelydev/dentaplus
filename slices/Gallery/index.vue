@@ -1,16 +1,53 @@
 <script setup lang="ts">
 import { ref } from "vue";
+import { useSwipe } from '@vueuse/core'
+import ChevronIcon from "../../public/chevron.svg";
+import CloseIcon from "../../public/close.svg"
 import { type Content } from "@prismicio/client";
 
-const dialog = ref();
+
+// The array passed to `getSliceComponentProps` is purely optional.
+// Consider it as a visual hint for you when templating your slice.
+const props = defineProps(
+  getSliceComponentProps<Content.GallerySlice>([
+    "slice",
+    "index",
+    "slices",
+    "context",
+  ]),
+);
+
+const dialog = ref<HTMLDialogElement | null>(null);
 const visible = ref(false);
 const currentPic = ref(undefined);
+
+const { isSwiping, direction } = useSwipe(dialog, {
+  onSwipeEnd() {
+    if (isSwiping && direction.value === "right") {
+      nextPic(currentPic.value.id)
+    }
+    if (isSwiping && direction.value == "left") {
+      prevPic(currentPic.value.id)
+    }
+  }
+})
 
 const showDialog = (src, alt, id) => {
   dialog.value?.showModal();
   currentPic.value = { src, alt, id };
   visible.value = true;
 };
+
+const closeDialog = () => {
+  dialog.value?.close()
+};
+
+const clickDialog = (event) => {
+  if (event.target === dialog.value) {
+    closeDialog()
+  }
+}
+
 const prevPic = (index) => {
   const prevId = index - 1;
   const lastPicIndex = props.slice.items.length - 1;
@@ -55,45 +92,76 @@ defineExpose({
   currentPic,
 });
 
-// The array passed to `getSliceComponentProps` is purely optional.
-// Consider it as a visual hint for you when templating your slice.
-const props = defineProps(
-  getSliceComponentProps<Content.GallerySlice>([
-    "slice",
-    "index",
-    "slices",
-    "context",
-  ]),
-);
 </script>
 
 <template>
   <section
     :data-slice-type="slice.slice_type"
     :data-slice-variation="slice.variation"
-    class="container mx-auto">
+    class="container mx-auto"
+  >
     <div class="flex flex-wrap">
       <div
         v-for="(pic, i) in slice.items"
-        class="h-64 basis-1/4"
-        :key="pic.image.id">
+        :key="`pic-${pic.image.id}`"
+        class="h-64 basis-full sm:basis-1/2 xl:basis-1/4 cursor-pointer"
+      >
         <NuxtImg
           class="object-cover h-full w-full"
           :src="pic.image.url"
           :alt="pic.image.alt"
-          @click="showDialog(pic.image.url, pic.image.alt, i)" />
+          @click="showDialog(pic.image.url, pic.image.alt, i)"
+        />
       </div>
 
-      <dialog ref="dialog" @close="visible = false">
-        <form v-if="visible" class="flex" method="dialog">
-          <button type="button" @click="prevPic(currentPic.id)">prev</button>
-          <NuxtImg :src="currentPic.src" :alt="currentPic.alt" />
-          <button type="button" @click="nextPic(currentPic.id)">next</button>
+      <dialog
+        ref="dialog"
+        class="gallery-item bg-transparent max-w-full text-white"
+        @click="clickDialog"
+        @close="visible = false"
+        @keyup.left="prevPic(currentPic.id)"
+        @keyup.right="nextPic(currentPic.id)"
+      >
+        <form
+          v-if="visible"
+          class="flex max-w-full"
+          method="dialog"
+        >
+          <button
+            type="button"
+            class="hidden lg:block outline-0"
+            @click="prevPic(currentPic.id)"
+          >
+            <ChevronIcon class="w-6 h-6 rotate-180" />
+          </button>
+          <NuxtImg
+            class="select-none"
+            :src="currentPic.src"
+            :alt="currentPic.alt"
+          />
+          <button
+            type="button"
+            class="hidden lg:block outline-0"
+            @click="nextPic(currentPic.id)"
+          >
+            <ChevronIcon class="w-6 h-6" />
+          </button>
         </form>
+        <CloseIcon
+          class="w-6 h-6 fixed top-0 right-0 m-10"
+          @click="closeDialog"
+        />
       </dialog>
     </div>
   </section>
-  <!-- <pre>
-    {{ slice }}
-  </pre> -->
 </template>
+
+<style scoped>
+.gallery-item {
+  outline: 0;
+
+  &::backdrop {
+    background: rgba(0, 0, 0, .7);
+  }
+}
+</style>

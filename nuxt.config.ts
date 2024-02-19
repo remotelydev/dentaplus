@@ -1,6 +1,5 @@
 import tailwindAspectRatio from "@tailwindcss/aspect-ratio";
 import svgLoader from "vite-svg-loader";
-import { repositoryName } from "./slicemachine.config.json";
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -33,12 +32,19 @@ export default defineNuxtConfig({
     "@fontsource/inter/600.css",
   ],
 
-  modules: ["@nuxtjs/prismic", "@nuxtjs/tailwindcss", "@nuxt/image"],
+  modules: [
+    "@nuxtjs/prismic",
+    "@nuxtjs/tailwindcss",
+    "@nuxt/image",
+    "@vueuse/nuxt",
+  ],
 
   vite: {
-    plugins: [
-      svgLoader()
-    ]
+    plugins: [svgLoader()],
+  },
+
+  image: {
+    prismic: {},
   },
 
   prismic: {
@@ -52,7 +58,7 @@ export default defineNuxtConfig({
         },
         {
           type: "bio",
-          path: '/zespol/:uid',
+          path: "/zespol/:uid",
         },
         {
           type: "page",
