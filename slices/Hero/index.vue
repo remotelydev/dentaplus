@@ -32,15 +32,15 @@ const serializer: HTMLRichTextMapSerializer = {
         class="pointer-events-none select-none object-cover opacity-60 h-full w-full"
       />
     </figure>
-    <Bounded y-padding="lg" class="relative invisible sm:visible">
+    <Bounded y-padding="lg" class="relative">
       <div class="grid justify-items-center">
         <PrismicRichText
           :field="slice.primary.text"
           :html-serializer="serializer"
-          class="max-w-2xl text-center"
+          class="hidden sm:block max-w-2xl text-center"
           wrapper="div"
         />
-        <p class="text-2xl text-center" v-if="slice.primary.description">
+        <p class="hidden sm:block text-2xl text-center" v-if="slice.primary.description">
           {{ slice.primary.description }}
         </p>
         <!-- <PrismicLink
