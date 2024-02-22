@@ -32,7 +32,7 @@ const serializer: HTMLRichTextMapSerializer = {
         class="pointer-events-none select-none object-cover opacity-60 h-full w-full"
       />
     </figure>
-    <Bounded y-padding="lg" class="relative">
+    <Bounded y-padding="lg" class="relative invisible sm:visible">
       <div class="grid justify-items-center">
         <PrismicRichText
           :field="slice.primary.text"
