@@ -20,19 +20,26 @@ defineProps(
   <section
     :data-slice-type="slice.slice_type"
     :data-slice-variation="slice.variation"
-    class="container mx-auto">
+    class="container mx-auto flex flex-wrap gap-x-4 gap-y-8 items-start justify-center mt-8 mb-20"
+  >
     <div
       v-for="item in slice.items"
       :key="item.title"
-      class="flex flex-col-reverse items-center my-10 lg:flex-row lg:items-start lg:gap-8 lg:my-14 xl:my-20"
-    >
-      <div class="min-w-0 w-full lg:w-1/2 p-4 lg:p-8">
+      class="flex flex-col-reverse items-center"
+    > 
+      <div class="min-w-0 w-full max-w-sm px-6 py-4 lg:p-8 border border-t-0">
         <PrismicRichText :field="item.title" />
-        <PrismicRichText class="mt-4 text-sm sm:text-base" :field="item.description" />
+        <PrismicRichText
+          class="mt-4 text-sm sm:text-base"
+          :field="item.description"
+        />
       </div>
-      <div class="flex justify-center items-center min-w-0 w-full md:w-4/5 lg:w-1/2">
+      <div class="flex justify-center items-center min-w-0 w-full max-w-sm">
         <ClientOnly>
-          <VueCompareImage :leftImage="item.before.url" :rightImage="item.after.url"/>
+          <VueCompareImage
+            :left-image="item.before.url"
+            :right-image="item.after.url"
+          />
         </ClientOnly>
       </div>
     </div>
