@@ -15,7 +15,7 @@ defineProps(
 
 <template>
   <section
-    class="bg-slate-200 py-6"
+    class="bg-slate-200 pt-6 pb-16"
     :data-slice-type="slice.slice_type"
     :data-slice-variation="slice.variation"
   >
