@@ -24,36 +24,44 @@ const serializer: HTMLRichTextMapSerializer = {
 </script>
 
 <template>
-  <section class="relative bg-slate-800 text-white border-b-8 border-slate-100">
+  <section class="relative bg-slate-800 text-white border-b border-slate-100">
     <figure class="absolute inset-0">
       <PrismicImage
         v-if="slice.primary.backgroundImage.url"
         :field="slice.primary.backgroundImage"
-        class="pointer-events-none select-none object-cover opacity-60 h-full w-full"
+        class="pointer-events-none select-none object-cover opacity-80 h-full w-full"
       />
     </figure>
-    <Bounded y-padding="lg" class="relative">
+    <Bounded
+      y-padding="lg"
+      class="relative"
+    >
       <div class="grid justify-items-center">
-        <PrismicRichText
-          :field="slice.primary.text"
-          :html-serializer="serializer"
-          class="hidden sm:block max-w-2xl text-center"
-          wrapper="div"
-        />
-        <p class="hidden sm:block text-2xl text-center" v-if="slice.primary.description">
-          {{ slice.primary.description }}
-        </p>
-        <!-- <PrismicLink
-          v-if="
-            slice.primary.buttonLink &&
-            ('id' in slice.primary.buttonLink ||
-              'url' in slice.primary.buttonLink)
-          "
-          :field="slice.primary.buttonLink"
-          class="rounded bg-white px-5 py-3 font-medium text-slate-800"
-        >
-          {{ slice.primary.buttonText || "Learn More" }}
-        </PrismicLink> -->
+        <div class="hidden sm:block p-4 backdrop-blur-sm rounded-3xl">
+          <PrismicRichText
+            :field="slice.primary.text"
+            :html-serializer="serializer"
+            class="max-w-2xl text-center"
+            wrapper="div"
+          />
+          <p
+            v-if="slice.primary.description"
+            class="text-2xl text-center"
+          >
+            {{ slice.primary.description }}
+          </p>
+          <!-- <PrismicLink
+            v-if="
+              slice.primary.buttonLink &&
+              ('id' in slice.primary.buttonLink ||
+                'url' in slice.primary.buttonLink)
+            "
+            :field="slice.primary.buttonLink"
+            class="rounded bg-white px-5 py-3 font-medium text-slate-800"
+          >
+            {{ slice.primary.buttonText || "Learn More" }}
+          </PrismicLink> -->
+        </div>
       </div>
     </Bounded>
   </section>
