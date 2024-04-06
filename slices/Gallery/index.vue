@@ -104,7 +104,7 @@ defineExpose({
   <section
     :data-slice-type="slice.slice_type"
     :data-slice-variation="slice.variation"
-    class="container mx-auto"
+    class="container mx-auto last-of-type:mb-20"
   >
     <div class="flex flex-wrap">
       <div
