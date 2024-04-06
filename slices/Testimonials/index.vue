@@ -26,7 +26,7 @@ defineProps(
     <div class="lg:container mx-auto relative flex gap-4 overflow-x-auto scroll-smooth snap-proximity snap-x scroll-px-4 p-4 lg:justify-center lg:gap-8">
       <Testimonial
         v-for="review in slice.items"
-        :key="review.name"
+        :key="`${review.name}`"
         class="snap-center shrink-0"
         :name="review.name"
         :stars="review.stars"

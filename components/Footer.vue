@@ -11,22 +11,32 @@ const navigation = useNavigation();
     >
       <div class="mt-6 md:m-0">
         Developed with ❤️ by&nbsp;
-        <a href="http://www.trzos.dev" target="_blank"> Bartosz Trzos </a>.
+        <a
+          href="http://www.trzos.dev"
+          class="hover:underline"
+          target="_blank"
+        > Bartosz Trzos </a>.
       </div>
       <nav class="flex justify-between items-center flex-wrap gap-4 order-1">
         <PrismicLink
           v-for="item in navigation?.data.links"
           :key="$prismic.asText(item.label) || ''"
-          class="basis-1/3 md:basis-1 whitespace-nowrap"
+          class="basis-1/3 md:basis-1 whitespace-nowrap hover:underline"
           :field="item.link"
         >
           {{ $prismic.asText(item.label) }}
         </PrismicLink>
         <div class="flex items-center basis-1/3 gap-2 md:basis-1">
-          <a href="https://www.instagram.com/klinika.dentaplus" target="_blank">
+          <a
+            href="https://www.instagram.com/klinika.dentaplus"
+            target="_blank"
+          >
             <InstagramIcon class="w-6 h-6" />
           </a>
-          <a href="https://www.facebook.com/dentaplusturek" target="_blank">
+          <a
+            href="https://www.facebook.com/dentaplusturek"
+            target="_blank"
+          >
             <FacebookIcon class="w-6 h-6" />
           </a>
         </div>

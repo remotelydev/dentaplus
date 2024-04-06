@@ -20,30 +20,44 @@ watch(isMobileMenuOpen, (nextIsMobileMenuOpen) => {
 </script>
 
 <template>
-  <Bounded class="relative" as="header" y-padding="sm">
+  <Bounded
+    class="relative"
+    as="header"
+    y-padding="sm"
+  >
     <div class="flex items-center justify-between leading-none">
-      <div class="dummy invisible basis-8 md:hidden"></div>
-      <NuxtLink to="/" @click="isMobileMenuOpen = false">
+      <div class="dummy invisible basis-8 md:hidden" />
+      <NuxtLink
+        to="/"
+        @click="isMobileMenuOpen = false"
+      >
         <img
           class="h-16 md:h-16"
           :src="$prismic.asImageSrc(settings?.data.logo)"
           alt="Logo"
-        />
+        >
       </NuxtLink>
       <button
         type="button"
         class="md:hidden"
         @click="isMobileMenuOpen = !isMobileMenuOpen"
       >
-        <BurgerIcon v-if="!isMobileMenuOpen" class="w-8 h-8"/>
-        <CloseIcon v-else class="w-8 h-8" />
+        <BurgerIcon
+          v-if="!isMobileMenuOpen"
+          class="w-8 h-8"
+        />
+        <CloseIcon
+          v-else
+          class="w-8 h-8"
+        />
       </button>
       <nav class="hidden md:block">
         <ul class="flex flex-wrap items-center gap-8 lg:gap-10">
           <li
             v-for="link, i in navigation?.data.links"
             :key="`desktop-link-${i}`"
-            class="font-semibold tracking-tight text-slate-800">
+            class="font-semibold tracking-tight text-slate-800 hover:underline"
+          >
             <PrismicLink :field="link.link">
               {{ $prismic.asText(link.label) }}
             </PrismicLink>
@@ -63,7 +77,8 @@ watch(isMobileMenuOpen, (nextIsMobileMenuOpen) => {
       <nav
         :class="isMobileMenuOpen ? 'block' : 'hidden'"
         class="absolute right-0 top-full w-screen h-screen flex flex-col z-10 bg-white"
-        @click="isMobileMenuOpen = false">
+        @click="isMobileMenuOpen = false"
+      >
         <PrismicLink
           v-for="link, i in navigation?.data.links"
           :key="`mobile-link-${i}`"
@@ -74,10 +89,16 @@ watch(isMobileMenuOpen, (nextIsMobileMenuOpen) => {
           {{ $prismic.asText(link.label) }}
         </PrismicLink>
         <div class="flex justify-center gap-8 p-8">
-          <a href="https://www.facebook.com/dentaplusturek" target="_blank">
+          <a
+            href="https://www.facebook.com/dentaplusturek"
+            target="_blank"
+          >
             <FacebookIcon class="w-8 h-8" />
           </a>
-          <a href="https://www.instagram.com/klinika.dentaplus" target="_blank">
+          <a
+            href="https://www.instagram.com/klinika.dentaplus"
+            target="_blank"
+          >
             <InstagramIcon class="w-8 h-8" />
           </a>
         </div>
