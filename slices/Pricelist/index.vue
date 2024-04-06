@@ -17,7 +17,7 @@ defineProps(
   <section
     :data-slice-type="slice.slice_type"
     :data-slice-variation="slice.variation"
-    class="container mx-auto last-of-type:mb-16"
+    class="container mx-auto max-w-[1280px] last-of-type:mb-16"
   >
     <PrismicRichText
       v-if="slice.primary.name"
@@ -25,12 +25,14 @@ defineProps(
       :field="slice.primary.name"
     />
     <div
-      class="w-full flex justify-between p-2 hover:bg-slate-800 hover:text-slate-100"
-      :class="i % 2 === 1 ? 'bg-slate-100' : ''"
       v-for="(item, i) in slice.items"
       :key="`${item.name}-price`"
+      class="w-full flex justify-between p-2 hover:bg-slate-800 hover:text-slate-100"
+      :class="i % 2 === 1 ? 'bg-slate-100' : ''"
     >
-      <div class="basis-3/4">{{ item.name }}</div>
+      <div class="basis-3/4">
+        {{ item.name }}
+      </div>
       <div class="basis-1/4 flex justify-end items-center text-no-wrap">
         {{ item.price }}
       </div>
