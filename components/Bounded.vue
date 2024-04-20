@@ -23,8 +23,9 @@ defineProps({
     :class="{
       'py-2 md:py-4': yPadding === 'sm',
       'py-4 md:py-8': yPadding === 'base',
-      'pt-4 pb-40 sm:pt-16 sm:pb-56 md:pb-80': yPadding === 'lg',
-    }">
+      'pt-4 pb-48 sm:pt-16 sm:pb-60 md:pb-96': yPadding === 'lg',
+    }"
+  >
     <div class="mx-auto w-full max-w-6xl">
       <slot />
     </div>
