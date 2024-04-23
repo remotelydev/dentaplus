@@ -27,7 +27,7 @@ defineProps([
       >
         {{ name }}
       </h3>
-      <p class="text-sm">
+      <p class="">
         {{ role }}
       </p>
     </div>
