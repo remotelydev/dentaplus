@@ -37,7 +37,7 @@ const serializer: HTMLRichTextMapSerializer = {
       class="relative"
     >
       <div class="grid justify-items-center">
-        <div class="hidden sm:block p-4 backdrop-blur-sm rounded-3xl">
+        <div class="hidden sm:block pb-8">
           <PrismicRichText
             :field="slice.primary.text"
             :html-serializer="serializer"

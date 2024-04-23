@@ -15,7 +15,6 @@ defineProps(getSliceComponentProps<Content.TextSlice>(
   >
     <PrismicRichText
       :field="slice.primary.text"
-      class="text-sm sm:text-base"
       :class="{
         'md:columns-2 md:gap-6': slice.variation === 'twoColumns'
       }"
