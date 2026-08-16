@@ -9,7 +9,7 @@
     "dev": "concurrently \"npm:nuxt:dev\" \"npm:slicemachine\" --names \"nuxt,slicemachine\" --prefix-colors green,magenta",
     "nuxt:dev": "nuxt dev",
     "build": "nuxt build",
-    "generate": "nuxt generate",
+    "generate": "nuxt generate && node scripts/verify-generated-site.mjs",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "slicemachine": "start-slicemachine",

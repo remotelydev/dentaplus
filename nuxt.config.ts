@@ -58,23 +58,6 @@ export default defineNuxtConfig({
   prismic: {
     endpoint: "dentaplus",
     preview: "/api/preview",
-    clientConfig: {
-      routes: [
-        {
-          type: "page",
-          path: "/:uid",
-        },
-        {
-          type: "bio",
-          path: "/zespol/:uid",
-        },
-        {
-          type: "page",
-          uid: "home",
-          path: "/",
-        },
-      ],
-    },
   },
 
   tailwindcss: {
