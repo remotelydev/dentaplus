@@ -49,6 +49,10 @@ export default defineNuxtConfig({
 
   vite: {
     plugins: [svgLoader()],
+    // Keep Vue's injection symbols shared when pnpm dependencies resolve through symlinks.
+    resolve: {
+      dedupe: ["vue", "@prismicio/vue", "@prismicio/client"],
+    },
   },
 
   image: {
