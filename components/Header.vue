@@ -32,10 +32,12 @@ watch(isMobileMenuOpen, (nextIsMobileMenuOpen) => {
         @click="isMobileMenuOpen = false"
       >
         <img
+          v-if="settings?.data?.logo"
           class="h-16 md:h-16"
-          :src="$prismic.asImageSrc(settings?.data.logo)"
-          alt="Logo"
+          :src="$prismic.asImageSrc(settings.data.logo)"
+          alt="DentaPlus+"
         >
+        <span v-else class="text-xl font-semibold tracking-tight text-slate-800">DentaPlus+</span>
       </NuxtLink>
       <button
         type="button"
