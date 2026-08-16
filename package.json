@@ -2,6 +2,7 @@
   "name": "nuxt-starter-prismic-multi-page",
   "version": "0.0.0",
   "private": true,
+  "packageManager": "pnpm@11.10.0",
   "license": "Apache-2.0",
   "author": "Bartosz Trzos <bartosz@trzos.dev> (https://trzos.dev)",
   "scripts": {
