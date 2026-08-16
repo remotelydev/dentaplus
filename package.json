@@ -12,7 +12,8 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "slicemachine": "start-slicemachine",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "test:seo": "node --test tests/seo.test.mjs"
   },
   "dependencies": {
     "@fontsource/inter": "^5.0.15",

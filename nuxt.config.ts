@@ -5,23 +5,31 @@ import svgLoader from "vite-svg-loader";
 export default defineNuxtConfig({
   devtools: true,
 
+  runtimeConfig: {
+    public: {
+      siteUrl: "https://www.dentaplus.pl",
+    },
+  },
+
   app: {
     head: {
-      title: "Prismic + Nuxt multi-page example",
+      title: "DentaPlus+ | Gabinety stomatologiczne w Turku i Poddębicach",
       htmlAttrs: {
-        lang: "en",
+        lang: "pl",
       },
       meta: [
         { charset: "utf-8" },
         { name: "viewport", content: "width=device-width, initial-scale=1" },
         {
-          hid: "description",
           name: "description",
-          content: "Prismic + Nuxt multi-page example",
+          content:
+            "DentaPlus+ to gabinety stomatologiczne w Turku i Poddębicach. Poznaj naszych specjalistów i sprawdź zakres leczenia.",
         },
         { name: "format-detection", content: "telephone=no" },
+        { property: "og:locale", content: "pl_PL" },
+        { property: "og:site_name", content: "DentaPlus+" },
       ],
-      link: [{ rel: "icon", type: "image/png", href: "/denta.ico" }],
+      link: [{ rel: "icon", type: "image/x-icon", href: "/denta.ico" }],
     },
   },
 
