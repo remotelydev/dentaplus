@@ -1,3 +1,6 @@
 [build]
   command = "pnpm run generate"
-  publish = "dist"
+  publish = ".output/public"
+
+[build.environment]
+  NITRO_PRESET = "static"
