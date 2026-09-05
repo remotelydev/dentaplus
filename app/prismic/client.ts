@@ -1,6 +1,6 @@
 import { createClient } from '@prismicio/client'
 
-export default createClient('dentaplus', {
+export default createClient(process.env.NUXT_PUBLIC_PRISMIC_ENDPOINT || 'dentaplus', {
   routes: [
     {
       type: 'page',

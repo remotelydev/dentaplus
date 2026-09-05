@@ -7,7 +7,7 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      siteUrl: "https://www.dentaplus.pl",
+      siteUrl: process.env.NUXT_PUBLIC_SITE_URL || "https://www.dentaplus.pl",
     },
   },
 
@@ -60,7 +60,7 @@ export default defineNuxtConfig({
   },
 
   prismic: {
-    endpoint: "dentaplus",
+    endpoint: process.env.NUXT_PUBLIC_PRISMIC_ENDPOINT || "dentaplus",
     preview: "/api/preview",
   },
 

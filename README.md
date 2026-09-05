@@ -1,65 +1,26 @@
-# Prismic + Nuxt Multi-Page Starter
+# DentaPlus+
 
-Want to see an example of a multi-page website using [Prismic][prismic] and [Nuxt][nuxt]? Look no further! This project provides all the code you need for a personal website with a homepage, information pages, and navigation.
+Website for [DentaPlus+](https://www.dentaplus.pl) — dental clinics in Turek and Poddębice.
 
-- **Demo**: [Open live demo][live-demo]
-- **Learn more about Prismic and Nuxt**: [Prismic Nuxt Documentation][prismic-docs]
+Built for a friend as a production multi-page site covering treatments, gallery, locations, and patient reviews.
 
-&nbsp;
+## Live
 
-<img src="https://user-images.githubusercontent.com/8601064/166617932-eaaa1643-f086-4909-9868-56234f8da98d.png" alt="Screenshots of the site seen on deskop and mobile browsers" />
+https://www.dentaplus.pl
 
-&nbsp;
+## Stack
 
-## 🚀 Quick Start
+- Nuxt 3
+- TypeScript
+- Tailwind CSS
+- Prismic CMS
 
-To start a new project using this starter, run the following commands in your terminal:
+## Local development
 
-```sh
-npx degit prismicio-community/nuxt-starter-prismic-multi-page your-project-name
-cd your-project-name
-npx @slicemachine/init@latest
+```bash
+cp .env.example .env
+pnpm install
+pnpm nuxt:dev
 ```
 
-The commands will do the following:
-
-1. Start a new Nuxt project using this starter.
-2. Ask you to log in to Prismic or [create an account][prismic-sign-up].
-3. Create a new Prismic content repository with sample content.
-
-When you're ready to start your project, run the following command:
-
-```sh
-npm run dev
-```
-
-## Documentation
-
-To learn how to work with your new project, [**see this starter's docs**][starter-docs].
-
-To learn more about working with Prismic, [**see the Prismic docs**][prismic-docs].
-
-## License
-
-```
-Copyright 2013-2023 Prismic <contact@prismic.io> (https://prismic.io)
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-```
-
-[prismic]: https://prismic.io
-[prismic-docs]: https://prismic.io/docs/nuxt-3-setup
-[prismic-sign-up]: https://prismic.io/dashboard/signup
-[starter-docs]: ./docs/README.md
-[nuxt]: https://nuxt.com
-[live-demo]: https://nuxt-starter-prismic-multi-page.vercel.app
+Copy `.env.example` to `.env` and adjust if needed. Slice Machine still reads the repository name from `slicemachine.config.json`.
