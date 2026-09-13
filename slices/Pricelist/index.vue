@@ -99,7 +99,7 @@ function categoryAnchorId(name: string) {
     <div
       v-for="(item, i) in slice.items"
       :key="`${item.name}-price`"
-      class="w-full flex flex-col items-start p-2 hover:bg-slate-800 hover:text-slate-100 sm:flex-row sm:items-center sm:justify-between"
+      class="w-full flex flex-col items-start p-2 hover:bg-denta-green hover:text-slate-800 sm:flex-row sm:items-center sm:justify-between"
       :class="i % 2 === 1 ? 'bg-slate-100' : ''"
     >
       <div class="sm:basis-3/4">

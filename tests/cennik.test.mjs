@@ -36,3 +36,12 @@ test('cennik stacks name over price on mobile', () => {
   assert.match(source, /sm:basis-3\/4/)
   assert.match(source, /sm:basis-1\/4 sm:flex sm:justify-end/)
 })
+
+test('cennik row hover is lime, not slate invert', () => {
+  const source = read('slices/Pricelist/index.vue')
+
+  assert.match(source, /hover:bg-denta-green/)
+  assert.match(source, /hover:text-slate-800/)
+  assert.doesNotMatch(source, /hover:bg-slate-800/)
+  assert.doesNotMatch(source, /hover:text-slate-100/)
+})
