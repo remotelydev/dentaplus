@@ -1,4 +1,5 @@
 import type { ComputedRef, Ref } from 'vue'
+import { toCanonicalUrl } from '~/utils/canonical.mjs'
 
 type SeoValue<T> = Ref<T> | ComputedRef<T>
 
@@ -83,11 +84,6 @@ export const formatPageTitle = ({
   return brand
 }
 
-const normalizePath = (path: string) => {
-  if (path === '/') return '/'
-  return `/${path.replace(/^\/+|\/+$/g, '')}/`
-}
-
 export const usePageSeo = (options: {
   title: SeoValue<string>
   description?: SeoValue<string | undefined>
@@ -96,7 +92,7 @@ export const usePageSeo = (options: {
   const route = useRoute()
   const runtimeConfig = useRuntimeConfig()
   const siteUrl = String(runtimeConfig.public.siteUrl || 'https://www.dentaplus.pl').replace(/\/$/, '')
-  const canonicalUrl = computed(() => new URL(normalizePath(route.path), `${siteUrl}/`).toString())
+  const canonicalUrl = computed(() => toCanonicalUrl(siteUrl, route.path))
   const descriptionPath = computed(() => route.path === '/' ? '/' : route.path.replace(/\/+$/, ''))
   const description = computed(() => {
     const value = options.description?.value?.trim()

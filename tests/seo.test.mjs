@@ -148,6 +148,18 @@ test('telephone hrefs are normalized without spaces', () => {
   assert.doesNotMatch(read('components/ContactBar.vue'), /tel:\+48\$\{/)
 })
 
+test('canonical URLs encode unicode slugs once', async () => {
+  const { toCanonicalUrl } = await import('../utils/canonical.mjs')
+  const once = toCanonicalUrl('https://www.dentaplus.pl', '/zespol/michał-trzos/')
+  const encoded = toCanonicalUrl('https://www.dentaplus.pl', '/zespol/micha%C5%82-trzos/')
+  const doubled = toCanonicalUrl('https://www.dentaplus.pl', '/zespol/micha%25C5%2582-trzos/')
+  assert.equal(once, 'https://www.dentaplus.pl/zespol/micha%C5%82-trzos/')
+  assert.equal(encoded, once)
+  assert.equal(doubled, once)
+  assert.match(read('netlify.toml'), /michal-trzos/)
+  assert.match(read('netlify.toml'), /weronika-wlodarska/)
+})
+
 test('source files do not contain debug console calls', () => {
   const files = ['app', 'components', 'composables', 'layouts', 'pages', 'server', 'slices']
     .flatMap(sourceFiles)

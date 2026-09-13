@@ -4,3 +4,23 @@
 
 [build.environment]
   NITRO_PRESET = "static"
+
+[[redirects]]
+  from = "/zespol/michal-trzos"
+  to = "/zespol/micha%C5%82-trzos/"
+  status = 301
+
+[[redirects]]
+  from = "/zespol/michal-trzos/"
+  to = "/zespol/micha%C5%82-trzos/"
+  status = 301
+
+[[redirects]]
+  from = "/zespol/weronika-wlodarska"
+  to = "/zespol/weronika-w%C5%82odarska/"
+  status = 301
+
+[[redirects]]
+  from = "/zespol/weronika-wlodarska/"
+  to = "/zespol/weronika-w%C5%82odarska/"
+  status = 301
