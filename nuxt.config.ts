@@ -66,6 +66,7 @@ export default defineNuxtConfig({
   prismic: {
     endpoint: process.env.NUXT_PUBLIC_PRISMIC_ENDPOINT || "dentaplus",
     preview: "/api/preview",
+    toolbar: process.env.NODE_ENV !== "production",
   },
 
   routeRules: {
