@@ -2,12 +2,15 @@
 import { computed } from 'vue'
 import { formatPageTitle, type SeoDocumentData } from '~/composables/usePageSeo'
 import { components } from '~/slices'
-import { DOCTOR_UID_ALIASES, doctors } from '~/data/doctors'
+import { DOCTOR_TYPO_UIDS, DOCTOR_UID_ALIASES, doctors } from '~/data/doctors'
 import { fullyDecode, toCanonicalUrl } from '~/utils/canonical.mjs'
 
 const prismic = usePrismic()
 const route = useRoute()
 const uid = computed(() => fullyDecode(String(route.params.uid || '')))
+if (DOCTOR_TYPO_UIDS[uid.value]) {
+  await navigateTo(`/zespol/${DOCTOR_TYPO_UIDS[uid.value]}/`, { redirectCode: 301 })
+}
 const prismicUid = computed(() => DOCTOR_UID_ALIASES[uid.value] || uid.value)
 const stub = computed(() => doctors[uid.value] || doctors[prismicUid.value])
 

@@ -1,3 +1,5 @@
+import { copyFileSync, existsSync } from "node:fs";
+import { join } from "node:path";
 import tailwindAspectRatio from "@tailwindcss/aspect-ratio";
 import svgLoader from "vite-svg-loader";
 import { sitemapDoctorUids } from "./data/doctors";
@@ -75,10 +77,32 @@ export default defineNuxtConfig({
     "/slice-simulator": { headers: { "X-Robots-Tag": "noindex, nofollow" } },
   },
 
+  hooks: {
+    "nitro:init"(nitro) {
+      nitro.hooks.hook("prerender:done", () => {
+        const publicDir = nitro.options.output.publicDir;
+        const generatedNotFound = join(publicDir, "404", "index.html");
+        const netlifyNotFound = join(publicDir, "404.html");
+
+        if (!existsSync(generatedNotFound)) {
+          throw new Error("Prerendered /404/ is missing; cannot write 404.html");
+        }
+
+        copyFileSync(generatedNotFound, netlifyNotFound);
+      });
+    },
+  },
+
   nitro: {
     prerender: {
       crawlLinks: true,
+      ignore: [
+        "/zespol/monika-maciejeweska",
+        "/zespol/monika-maciejeweska/",
+      ],
       routes: [
+        "/404/",
+        "/api/preview/",
         "/turek/",
         "/poddebice/",
         "/polityka-prywatnosci/",

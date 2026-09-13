@@ -1,10 +1,21 @@
-import { readFile } from 'node:fs/promises'
+import { copyFile, readFile } from 'node:fs/promises'
+import { existsSync } from 'node:fs'
 
 const outputDirectory = new URL('../.output/public/', import.meta.url)
 
-const [html, payload] = await Promise.all([
+const generatedNotFound = new URL('404/index.html', outputDirectory)
+const netlifyNotFound = new URL('404.html', outputDirectory)
+
+if (!existsSync(generatedNotFound)) {
+  throw new Error('Generated /404/index.html is missing.')
+}
+
+await copyFile(generatedNotFound, netlifyNotFound)
+
+const [html, payload, notFoundHtml] = await Promise.all([
   readFile(new URL('index.html', outputDirectory), 'utf8'),
   readFile(new URL('_payload.json', outputDirectory), 'utf8'),
+  readFile(netlifyNotFound, 'utf8'),
 ])
 
 const main = html.match(/<main(?:\s[^>]*)?>([\s\S]*?)<\/main>/i)?.[1]
@@ -38,3 +49,33 @@ for (const error of dataErrors) {
 }
 
 console.log('Generated homepage contains Prismic content.')
+
+if (!/noindex/.test(notFoundHtml) || !/Nie znaleziono strony/.test(notFoundHtml)) {
+  throw new Error('Generated 404.html is missing noindex or the not-found title.')
+}
+
+if (!/<h1\b[^>]*>\s*Nie znaleziono strony\s*<\/h1>/i.test(notFoundHtml)) {
+  throw new Error('Generated 404.html is missing the not-found H1.')
+}
+
+console.log('Generated 404.html is noindexed with a distinct title.')
+
+if (existsSync(new URL('zespol/monika-maciejeweska/index.html', outputDirectory))) {
+  throw new Error('Typo slug HTML was prerendered; Netlify would serve it as 200 without force.')
+}
+
+const previewHtml = existsSync(new URL('api/preview/index.html', outputDirectory))
+  ? await readFile(new URL('api/preview/index.html', outputDirectory), 'utf8')
+  : existsSync(new URL('api/preview.html', outputDirectory))
+    ? await readFile(new URL('api/preview.html', outputDirectory), 'utf8')
+    : null
+
+if (!previewHtml) {
+  throw new Error('Generated /api/preview HTML is missing.')
+}
+
+if (!/noindex/.test(previewHtml)) {
+  throw new Error('Generated /api/preview HTML is missing robots noindex.')
+}
+
+console.log('Generated preview route is noindexed.')

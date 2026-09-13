@@ -168,12 +168,24 @@ test('doctor stubs and slug typo redirect are wired', () => {
   const sitemap = read('public/sitemap.xml')
   const netlify = read('netlify.toml')
   const doctors = read('data/doctors.ts')
+  const nuxtConfig = read('nuxt.config.ts')
   assert.match(sitemap, /monika-maciejewska/)
   assert.doesNotMatch(sitemap, /maciejeweska/)
   assert.match(sitemap, /piotr-pietryka/)
-  assert.match(netlify, /monika-maciejeweska/)
   assert.match(doctors, /DOCTOR_UID_ALIASES/)
+  assert.match(doctors, /DOCTOR_TYPO_UIDS/)
+  assert.doesNotMatch(doctors, /'monika-maciejeweska': \{/)
   assert.match(read('pages/zespol/[uid].vue'), /stub/)
+  assert.match(read('pages/zespol/[uid].vue'), /redirectCode: 301/)
+  assert.match(nuxtConfig, /\/zespol\/monika-maciejeweska\//)
+
+  const typoRedirects = netlify.split('[[redirects]]').filter((block) => block.includes('maciejeweska'))
+  assert.equal(typoRedirects.length, 2)
+  for (const block of typoRedirects) {
+    assert.match(block, /force = true/)
+    assert.match(block, /status = 301/)
+    assert.match(block, /to = "\/zespol\/monika-maciejewska\/"/)
+  }
 })
 
 test('Prismic route resolver emits trailing slashes', () => {
@@ -202,9 +214,25 @@ test('hero LCP image is width-constrained and Inter is latin subset', () => {
 test('404 and preview are noindexed', () => {
   assert.match(read('error.vue'), /noindex/)
   assert.match(read('error.vue'), /Nie znaleziono strony/)
+  assert.match(read('pages/404.vue'), /noindex/)
+  assert.match(read('pages/404.vue'), /Nie znaleziono strony/)
+  assert.match(read('pages/404.vue'), /layout:\s*false/)
+  assert.match(read('components/ErrorScreen.vue'), /Nie znaleziono strony/)
   assert.match(read('pages/[uid].vue'), /createError/)
   assert.match(read('nuxt.config.ts'), /X-Robots-Tag/)
+  assert.match(read('nuxt.config.ts'), /["']\/404\/["']/)
+  assert.match(read('nuxt.config.ts'), /prerender:done/)
+  assert.match(read('nuxt.config.ts'), /["']\/api\/preview\/["']/)
+  assert.match(read('scripts/verify-generated-site.mjs'), /404\.html/)
+  assert.match(read('scripts/verify-generated-site.mjs'), /api\/preview/)
+  assert.match(read('plugins/preview-robots.ts'), /noindex/)
   assert.match(read('public/robots.txt'), /Disallow: \/api\/preview/)
+
+  const previewHeaders = read('netlify.toml').split('[[headers]]').filter((block) => block.includes('/api/preview'))
+  assert.ok(previewHeaders.length >= 2)
+  for (const block of previewHeaders) {
+    assert.match(block, /X-Robots-Tag = "noindex, nofollow"/)
+  }
 })
 
 test('prerender fetches use a string useAsyncData key and guard missing slices', () => {
