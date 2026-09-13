@@ -214,8 +214,15 @@ test('hero LCP image is width-constrained and Inter is latin subset', () => {
 test('404 and preview are noindexed', () => {
   assert.match(read('error.vue'), /noindex/)
   assert.match(read('error.vue'), /Nie znaleziono strony/)
+  assert.match(read('pages/404.vue'), /noindex/)
+  assert.match(read('pages/404.vue'), /Nie znaleziono strony/)
+  assert.match(read('pages/404.vue'), /layout:\s*false/)
+  assert.match(read('components/ErrorScreen.vue'), /Nie znaleziono strony/)
   assert.match(read('pages/[uid].vue'), /createError/)
   assert.match(read('nuxt.config.ts'), /X-Robots-Tag/)
+  assert.match(read('nuxt.config.ts'), /["']\/404\/["']/)
+  assert.match(read('nuxt.config.ts'), /prerender:done/)
+  assert.match(read('scripts/verify-generated-site.mjs'), /404\.html/)
   assert.match(read('public/robots.txt'), /Disallow: \/api\/preview/)
 })
 
