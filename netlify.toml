@@ -40,3 +40,11 @@
   from = "/zespol/monika-maciejeweska/"
   to = "/zespol/monika-maciejewska/"
   status = 301
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    X-Frame-Options = "SAMEORIGIN"
+    Content-Security-Policy-Report-Only = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://static.cdn.prismic.io; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; frame-src https://www.google.com https://maps.google.com; connect-src 'self' https://*.cdn.prismic.io https://www.dentaplus.pl;"
