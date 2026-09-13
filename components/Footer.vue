@@ -1,13 +1,21 @@
 <script setup>
 import FacebookIcon from '../public/facebook.svg';
 import InstagramIcon from '../public/instagram.svg';
-import { SERVICE_NAV } from '~/data/services'
+import { resolveServiceNav } from '~/data/services'
 import { locations } from '~/data/locations'
 
 const navigation = useNavigation();
 const settings = useSettings();
+const prismic = usePrismic()
 const turek = locations.turek
 const poddebice = locations.poddebice
+const serviceNavItems = computed(() =>
+  resolveServiceNav(
+    navigation.value?.data.service_links,
+    (field) => String(prismic.asText(field) || ''),
+    (field) => prismic.asLink(field),
+  )
+)
 </script>
 
 <template>
@@ -17,7 +25,7 @@ const poddebice = locations.poddebice
         <p class="mb-3 font-semibold tracking-tight">Usługi</p>
         <ul class="space-y-2">
           <li
-            v-for="item in SERVICE_NAV"
+            v-for="item in serviceNavItems"
             :key="item.uid"
           >
             <NuxtLink
