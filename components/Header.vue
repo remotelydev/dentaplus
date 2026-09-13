@@ -9,21 +9,69 @@ import { SERVICE_NAV } from '~/data/services'
 
 const navigation = useNavigation();
 const settings = useSettings();
+const prismic = usePrismic()
 
 const isMobileMenuOpen = ref(false);
 const isServicesOpen = ref(false);
+const isKontaktOpen = ref(false);
 const isDesktopServicesOpen = ref(false);
+const isDesktopKontaktOpen = ref(false);
 const desktopServices = ref<HTMLElement | null>(null);
+const desktopKontakt = ref<HTMLElement | null>(null);
+
+const navLinkPath = (link: unknown) => {
+  const href = prismic.asLink(link as never) || ''
+  try {
+    const path = href.startsWith('http') ? new URL(href).pathname : href
+    return path.replace(/\/$/, '') || '/'
+  } catch {
+    return href
+  }
+}
+
+const isKontaktItem = (item: { label?: unknown, link?: unknown }) => {
+  const label = String(prismic.asText(item.label as never) || '').toLowerCase()
+  return label.includes('kontakt') || navLinkPath(item.link) === '/kontakt'
+}
+
+const kontaktItem = computed(() =>
+  (navigation.value?.data.links || []).find(item => isKontaktItem(item))
+)
+const desktopNavLinks = computed(() =>
+  (navigation.value?.data.links || []).filter(item => !isKontaktItem(item))
+)
 
 const closeDesktopServices = () => {
   isDesktopServicesOpen.value = false
 }
 
+const closeDesktopKontakt = () => {
+  isDesktopKontaktOpen.value = false
+}
+
+const toggleDesktopServices = () => {
+  isDesktopServicesOpen.value = !isDesktopServicesOpen.value
+  if (isDesktopServicesOpen.value) closeDesktopKontakt()
+}
+
+const toggleDesktopKontakt = () => {
+  isDesktopKontaktOpen.value = !isDesktopKontaktOpen.value
+  if (isDesktopKontaktOpen.value) closeDesktopServices()
+}
+
 onClickOutside(desktopServices, closeDesktopServices)
+onClickOutside(desktopKontakt, closeDesktopKontakt)
 
 const onDesktopServicesKeydown = (event: KeyboardEvent) => {
   if (event.key === 'Escape') {
     closeDesktopServices()
+    ;(event.currentTarget as HTMLElement | null)?.querySelector('button')?.focus()
+  }
+}
+
+const onDesktopKontaktKeydown = (event: KeyboardEvent) => {
+  if (event.key === 'Escape') {
+    closeDesktopKontakt()
     ;(event.currentTarget as HTMLElement | null)?.querySelector('button')?.focus()
   }
 }
@@ -34,6 +82,7 @@ watch(isMobileMenuOpen, (nextIsMobileMenuOpen) => {
   } else {
     document?.body.classList.remove('overflow-hidden')
     isServicesOpen.value = false
+    isKontaktOpen.value = false
   }
 })
 </script>
@@ -77,7 +126,7 @@ watch(isMobileMenuOpen, (nextIsMobileMenuOpen) => {
       <nav class="hidden md:block">
         <ul class="flex flex-wrap items-center gap-8 lg:gap-10">
           <li
-            v-for="link, i in navigation?.data.links"
+            v-for="link, i in desktopNavLinks"
             :key="`desktop-link-${i}`"
             class="font-semibold tracking-tight text-slate-800 hover:underline"
           >
@@ -104,7 +153,7 @@ watch(isMobileMenuOpen, (nextIsMobileMenuOpen) => {
                 aria-controls="desktop-services-menu"
                 aria-haspopup="true"
                 aria-label="Pokaż listę usług"
-                @click="isDesktopServicesOpen = !isDesktopServicesOpen"
+                @click="toggleDesktopServices"
               >
                 <ChevronIcon
                   aria-hidden="true"
@@ -132,6 +181,63 @@ watch(isMobileMenuOpen, (nextIsMobileMenuOpen) => {
               </li>
             </ul>
           </li>
+          <li
+            ref="desktopKontakt"
+            class="relative font-semibold tracking-tight text-slate-800"
+            @keydown="onDesktopKontaktKeydown"
+          >
+            <div class="flex items-center gap-1">
+              <PrismicLink
+                v-if="kontaktItem"
+                class="hover:underline"
+                :field="kontaktItem.link"
+              >
+                {{ $prismic.asText(kontaktItem.label) }}
+              </PrismicLink>
+              <NuxtLink
+                v-else
+                class="hover:underline"
+                to="/kontakt/"
+              >
+                Kontakt
+              </NuxtLink>
+              <button
+                type="button"
+                class="px-1"
+                :aria-expanded="isDesktopKontaktOpen"
+                aria-controls="desktop-kontakt-menu"
+                aria-haspopup="true"
+                aria-label="Pokaż gabinety"
+                @click="toggleDesktopKontakt"
+              >
+                <span aria-hidden="true">▾</span>
+              </button>
+            </div>
+            <ul
+              v-show="isDesktopKontaktOpen"
+              id="desktop-kontakt-menu"
+              class="absolute left-0 top-full z-20 min-w-[12rem] bg-white py-2 shadow-md"
+            >
+              <li>
+                <NuxtLink
+                  class="block px-4 py-2 hover:bg-slate-100"
+                  to="/turek/"
+                  @click="closeDesktopKontakt"
+                >
+                  Turek
+                </NuxtLink>
+              </li>
+              <li>
+                <NuxtLink
+                  class="block px-4 py-2 hover:bg-slate-100"
+                  to="/poddebice/"
+                  @click="closeDesktopKontakt"
+                >
+                  Poddębice
+                </NuxtLink>
+              </li>
+            </ul>
+          </li>
           <!-- <li>
             <a href="https://www.facebook.com/dentaplusturek" target="_blank">
               <FacebookIcon class="w-6 h-6" />
@@ -150,7 +256,7 @@ watch(isMobileMenuOpen, (nextIsMobileMenuOpen) => {
         @click="isMobileMenuOpen = false"
       >
         <PrismicLink
-          v-for="link, i in navigation?.data.links"
+          v-for="link, i in desktopNavLinks"
           :key="`mobile-link-${i}`"
           class="px-6 py-4 font-bold text-center"
           :class="i % 2 === 0 ? 'bg-slate-100' : ''"
@@ -187,6 +293,45 @@ watch(isMobileMenuOpen, (nextIsMobileMenuOpen) => {
           :to="item.to"
         >
           {{ item.label }}
+        </NuxtLink>
+        <div class="flex bg-slate-100">
+          <PrismicLink
+            v-if="kontaktItem"
+            class="flex-1 px-6 py-4 font-bold text-center"
+            :field="kontaktItem.link"
+          >
+            {{ $prismic.asText(kontaktItem.label) }}
+          </PrismicLink>
+          <NuxtLink
+            v-else
+            class="flex-1 px-6 py-4 font-bold text-center"
+            to="/kontakt/"
+          >
+            Kontakt
+          </NuxtLink>
+          <button
+            type="button"
+            class="px-4 py-4 font-bold"
+            :aria-expanded="isKontaktOpen"
+            aria-label="Pokaż gabinety"
+            @click.stop="isKontaktOpen = !isKontaktOpen"
+          >
+            <span aria-hidden="true">▾</span>
+          </button>
+        </div>
+        <NuxtLink
+          v-show="isKontaktOpen"
+          class="px-6 py-3 font-semibold text-center bg-slate-50"
+          to="/turek/"
+        >
+          Turek
+        </NuxtLink>
+        <NuxtLink
+          v-show="isKontaktOpen"
+          class="px-6 py-3 font-semibold text-center bg-slate-50"
+          to="/poddebice/"
+        >
+          Poddębice
         </NuxtLink>
         <div class="flex justify-center gap-8 p-8">
           <a
