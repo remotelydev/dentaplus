@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { formatPageTitle, type SeoDocumentData } from '~/composables/usePageSeo'
 import { components } from '~/slices'
+import { serviceFaqs } from '~/data/services'
 
 const prismic = usePrismic()
 const route = useRoute()
@@ -37,6 +38,28 @@ usePageSeo({
   title,
   description,
   image,
+})
+
+const faqSchema = computed(() => {
+  const faqs = serviceFaqs[uid.value]
+  if (!faqs?.length) return null
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((item) => ({
+      '@type': 'Question',
+      name: item.q,
+      acceptedAnswer: { '@type': 'Answer', text: item.a },
+    })),
+  }
+})
+
+useHead({
+  script: computed(() =>
+    faqSchema.value
+      ? [{ type: 'application/ld+json', children: JSON.stringify(faqSchema.value) }]
+      : []
+  ),
 })
 </script>
 

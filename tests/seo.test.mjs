@@ -225,6 +225,12 @@ test('maps use Polish locale and controls have accessible names', () => {
   assert.match(read('components/Footer.vue'), /aria-label="Facebook DentaPlus\+ Turek"/)
 })
 
+test('service pages include FAQ copy', () => {
+  assert.match(read('data/services.ts'), /serviceFaqs/)
+  assert.match(read('components/ServiceExtras.vue'), /Najczęstsze pytania/)
+  assert.match(read('pages/[uid].vue'), /FAQPage/)
+})
+
 test('source files do not contain debug console calls', () => {
   const files = ['app', 'components', 'composables', 'layouts', 'pages', 'server', 'slices']
     .flatMap(sourceFiles)

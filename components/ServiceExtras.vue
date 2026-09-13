@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { servicePages } from '~/data/services'
+import { serviceFaqs, servicePages } from '~/data/services'
 
 defineProps<{
   uid: string
@@ -24,6 +24,13 @@ defineProps<{
       <p class="mb-4">
         {{ servicePages[uid].cta }}
       </p>
+      <section v-if="serviceFaqs[uid]?.length" class="mt-12">
+        <h2 class="font-semibold text-2xl md:text-3xl mb-4">Najczęstsze pytania</h2>
+        <div v-for="item in serviceFaqs[uid]" :key="item.q" class="mb-6">
+          <h3 class="font-semibold text-xl mb-2">{{ item.q }}</h3>
+          <p>{{ item.a }}</p>
+        </div>
+      </section>
       <p>
         <NuxtLink class="underline font-semibold" to="/cennik/">Cennik DentaPlus+</NuxtLink>
         ·

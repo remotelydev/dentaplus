@@ -96,3 +96,31 @@ export const servicePages: Record<string, {
     cta: 'Umów tomografię 3D w Turku i zobacz cennik radiologii.',
   },
 }
+
+export const serviceFaqs: Record<string, { q: string, a: string }[]> = {
+  implanty: [
+    { q: 'Ile kosztuje implant zęba w Turku?', a: 'Cena zależy od systemu implantu, korony i ewentualnej regeneracji kości. Orientacyjne pozycje są w cenniku; dokładną wycenę podajemy po tomografii 3D.' },
+    { q: 'Czy implanty robicie też w Poddębicach?', a: 'Tak. Konsultacje i część zabiegów odbywają się w Poddębicach, diagnostyka 3D w Turku.' },
+    { q: 'Jak długo goi się implant?', a: 'Osteointegracja trwa zwykle kilka miesięcy. Harmonogram ustalamy indywidualnie.' },
+  ],
+  invisalign: [
+    { q: 'Czy Invisalign jest w Poddębicach?', a: 'Tak, konsultacje i skan iTero robimy w Turku i Poddębicach.' },
+    { q: 'Ile trwa leczenie nakładkami?', a: 'Proste przypadki to kilka miesięcy, bardziej złożone nawet powyżej roku — plan widać po skanie.' },
+    { q: 'Czy nakładki bolą?', a: 'Nacisk przy wymianie serii bywa odczuwalny przez 1–2 dni, bez klasycznych otarć od zamków.' },
+  ],
+  endodoncja: [
+    { q: 'Czy leczenie kanałowe w Turku robicie pod mikroskopem?', a: 'Tak. Mikroskop pomaga znaleźć dodatkowe kanały i ogranicza ryzyko pozostawienia zakażenia.' },
+    { q: 'Ile trwa leczenie kanałowe?', a: 'Często jedną wizytę; rewizje i zęby wielokanałowe mogą wymagać dwóch.' },
+    { q: 'Czy ząb po kanale trzeba koronować?', a: 'Zęby boczne zwykle tak, żeby nie pękły. Decyzję podejmujemy po odbudowie.' },
+  ],
+  itero: [
+    { q: 'Czy skan iTero zastępuje wycisk?', a: 'W większości prac protetycznych i przy Invisalign — tak.' },
+    { q: 'Czy skan jest dostępny w obu gabinetach?', a: 'Tak, korzystamy z cyfrowego modelu w Turku i Poddębicach.' },
+    { q: 'Czy skan boli?', a: 'Nie. Końcówka skanera jest w ustach kilka minut.' },
+  ],
+  tomografia: [
+    { q: 'Gdzie jest tomografia 3D DentaPlus+?', a: 'W gabinecie w Turku przy ul. Łąkowej 10. Pacjenci z Poddębic są na to badanie umawiani w Turku.' },
+    { q: 'Czy potrzebuję skierowania?', a: 'Na potrzeby leczenia w DentaPlus+ kwalifikuje lekarz po konsultacji.' },
+    { q: 'Jaka jest dawka promieniowania?', a: 'CBCT ma istotnie niższą dawkę niż tomografia szpitalna; i tak robimy je tylko gdy zmienia plan leczenia.' },
+  ],
+}
