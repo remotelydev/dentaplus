@@ -120,7 +120,11 @@ test('global SEO configuration includes Polish language and local business schem
   assert.match(layout, /'@type': 'Dentist'/)
   assert.match(layout, /\/turek\//)
   assert.match(layout, /\/poddebice\//)
+  assert.match(layout, /ul\. Łąkowa 10/)
+  assert.match(layout, /Krasickiego 1C/)
   assert.match(hero, /heading1:[\s\S]*?<h1 /)
+  assert.match(read('slices/Contact/index.vue'), /locations\.turek\.streetAddress/)
+  assert.match(read('slices/Contact/index.vue'), /locations\.poddebice\.streetAddress/)
 })
 
 test('source files do not contain debug console calls', () => {

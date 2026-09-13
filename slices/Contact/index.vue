@@ -4,6 +4,7 @@ import { useResizeObserver, useWindowSize } from '@vueuse/core'
 import FacebookIcon from '../public/facebook.svg';
 import InstagramIcon from '../public/instagram.svg';
 import { type Content } from "@prismicio/client";
+import { locations } from '~/data/locations'
 
 const settings = useSettings();
 
@@ -65,11 +66,9 @@ defineProps(
           <p class="font-bold">Godziny otwarcia:</p>
           <p>Pn-Pt: 8:00 - 20:00</p>
           <p>Sb: 10:00 - 15:00</p>
-          <PrismicRichText
-            class="my-2"
-            :field="slice.items[0].address"
-            wrapper="address"
-          />
+          <address class="my-2 not-italic">
+            {{ locations.turek.streetAddress }}, {{ locations.turek.postalCode }} {{ locations.turek.addressLocality }}
+          </address>
           <a class="block" :href="`tel:${settings?.data.phone_turek}`">
             +48 {{ settings?.data.phone_turek }}
           </a>
@@ -103,11 +102,9 @@ defineProps(
           <p class="font-bold">Godziny otwarcia:</p>
           <p>Pn-Pt: 8:00 - 20:00</p>
           <p>Sb: 10:00 - 15:00</p>
-          <PrismicRichText
-            class="my-2"
-            :field="slice.items[1].address"
-            wrapper="address"
-          />
+          <address class="my-2 not-italic">
+            {{ locations.poddebice.streetAddress }}, {{ locations.poddebice.postalCode }} {{ locations.poddebice.addressLocality }}
+          </address>
           <a class="block" :href="`tel:${settings?.data.phone_poddebice}`">
             +48 {{ settings?.data.phone_poddebice }}
           </a>
