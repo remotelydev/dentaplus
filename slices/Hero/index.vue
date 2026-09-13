@@ -100,17 +100,17 @@ const showDescription = computed(
           >
             {{ slice.primary.description }}
           </p>
-          <!-- <PrismicLink
+          <PrismicLink
             v-if="
               slice.primary.buttonLink &&
               ('id' in slice.primary.buttonLink ||
                 'url' in slice.primary.buttonLink)
             "
             :field="slice.primary.buttonLink"
-            class="rounded bg-white px-5 py-3 font-medium text-slate-800"
+            class="mt-6 inline-block rounded bg-white px-5 py-3 font-medium text-slate-800"
           >
-            {{ slice.primary.buttonText || "Learn More" }}
-          </PrismicLink> -->
+            {{ slice.primary.buttonText || "Umów wizytę" }}
+          </PrismicLink>
         </div>
       </div>
     </Bounded>
