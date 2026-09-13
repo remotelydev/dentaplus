@@ -300,6 +300,18 @@ test('hero CTA uses a Polish button fallback', () => {
   assert.doesNotMatch(hero, /<!-- <PrismicLink/)
 })
 
+test('hero uses a tighter padding size without changing Bounded lg', () => {
+  const hero = read('slices/Hero/index.vue')
+  const bounded = read('components/Bounded.vue')
+
+  assert.match(hero, /y-padding="hero"/)
+  assert.doesNotMatch(hero, /y-padding="lg"/)
+  assert.match(bounded, /yPadding === 'lg'/)
+  assert.match(bounded, /md:pb-96/)
+  assert.match(bounded, /yPadding === 'hero'/)
+  assert.match(bounded, /py-12 sm:py-16 md:py-24/)
+})
+
 test('images get a Polish alt fallback', () => {
   assert.match(read('composables/useImageAlt.ts'), /withImageAlt/)
   assert.match(read('slices/Image/index.vue'), /withImageAlt/)
