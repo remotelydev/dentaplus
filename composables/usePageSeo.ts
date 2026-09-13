@@ -44,6 +44,8 @@ export const TITLE_FALLBACKS: Record<string, string> = {
   '/endodoncja': 'Leczenie kanałowe Turek i Poddębice | DentaPlus+',
   '/turek': 'Stomatolog Turek — gabinet DentaPlus+ | DentaPlus+',
   '/poddebice': 'Stomatolog Poddębice — gabinet DentaPlus+ | DentaPlus+',
+  '/polityka-prywatnosci': 'Polityka prywatności | DentaPlus+',
+  '/cookies': 'Polityka cookies | DentaPlus+',
 }
 
 const isBrandName = (value?: string | null) => {
