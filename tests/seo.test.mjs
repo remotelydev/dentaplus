@@ -187,6 +187,11 @@ test('index.html redirects to the homepage', () => {
   assert.match(read('netlify.toml'), /to = "\/"/)
 })
 
+test('default Open Graph image is always set', () => {
+  assert.match(read('composables/usePageSeo.ts'), /og-default\.png/)
+  assert.equal(fs.existsSync(path.join(root, 'public/og-default.png')), true)
+})
+
 test('source files do not contain debug console calls', () => {
   const files = ['app', 'components', 'composables', 'layouts', 'pages', 'server', 'slices']
     .flatMap(sourceFiles)

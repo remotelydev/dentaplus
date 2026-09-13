@@ -99,6 +99,9 @@ export const usePageSeo = (options: {
     return value || descriptions[descriptionPath.value] || `${options.title.value} — DentaPlus+ w Turku i Poddębicach.`
   })
 
+  const defaultOgImage = `${siteUrl}/og-default.png`
+  const ogImage = computed(() => options.image?.value || defaultOgImage)
+
   useHead({
     link: [
       {
