@@ -253,8 +253,12 @@ test('prerender fetches use a string useAsyncData key and guard missing slices',
   assert.doesNotMatch(read('nuxt.config.ts'), /encodeURI\(uid\)/)
 })
 
-test('homepage H1 falls back to a local-search heading', () => {
-  assert.match(read('slices/Hero/index.vue'), /Gabinety stomatologiczne w Turku i Poddębicach/)
+test('hero does not rewrite a DentaPlus H1', () => {
+  const hero = read('slices/Hero/index.vue')
+
+  assert.match(hero, /heading1:/)
+  assert.doesNotMatch(hero, /Gabinety stomatologiczne w Turku i Poddębicach/)
+  assert.doesNotMatch(hero, /\^DentaPlus/)
 })
 
 test('images get a Polish alt fallback', () => {
