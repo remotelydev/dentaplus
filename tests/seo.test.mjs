@@ -217,6 +217,14 @@ test('images get a Polish alt fallback', () => {
   assert.match(read('slices/Hero/index.vue'), /DEFAULT_IMAGE_ALT/)
 })
 
+test('maps use Polish locale and controls have accessible names', () => {
+  assert.doesNotMatch(read('slices/Contact/index.vue'), /1sen!2spl/)
+  assert.match(read('slices/Contact/index.vue'), /1spl!2spl/)
+  assert.match(read('slices/Map/index.vue'), /title="Mapa gabinetu/)
+  assert.match(read('components/Header.vue'), /Otwórz menu/)
+  assert.match(read('components/Footer.vue'), /aria-label="Facebook DentaPlus\+ Turek"/)
+})
+
 test('source files do not contain debug console calls', () => {
   const files = ['app', 'components', 'composables', 'layouts', 'pages', 'server', 'slices']
     .flatMap(sourceFiles)

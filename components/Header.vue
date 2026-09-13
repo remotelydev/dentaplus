@@ -45,6 +45,8 @@ watch(isMobileMenuOpen, (nextIsMobileMenuOpen) => {
       <button
         type="button"
         class="md:hidden"
+        :aria-label="isMobileMenuOpen ? 'Zamknij menu' : 'Otwórz menu'"
+        :aria-expanded="isMobileMenuOpen"
         @click="isMobileMenuOpen = !isMobileMenuOpen"
       >
         <BurgerIcon
@@ -129,12 +131,14 @@ watch(isMobileMenuOpen, (nextIsMobileMenuOpen) => {
           <a
             href="https://www.facebook.com/dentaplusturek"
             target="_blank"
+            aria-label="Facebook DentaPlus+ Turek"
           >
             <FacebookIcon class="w-8 h-8" />
           </a>
           <a
             href="https://www.instagram.com/klinika.dentaplus"
             target="_blank"
+            aria-label="Instagram DentaPlus+"
           >
             <InstagramIcon class="w-8 h-8" />
           </a>

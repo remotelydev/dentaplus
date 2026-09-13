@@ -34,12 +34,14 @@ const navigation = useNavigation();
           <a
             href="https://www.instagram.com/klinika.dentaplus"
             target="_blank"
+            aria-label="Instagram DentaPlus+"
           >
             <InstagramIcon class="w-6 h-6" />
           </a>
           <a
             href="https://www.facebook.com/dentaplusturek"
             target="_blank"
+            aria-label="Facebook DentaPlus+ Turek"
           >
             <FacebookIcon class="w-6 h-6" />
           </a>
