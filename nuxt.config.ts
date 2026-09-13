@@ -1,5 +1,4 @@
-import tailwindAspectRatio from "@tailwindcss/aspect-ratio";
-import svgLoader from "vite-svg-loader";
+import { sitemapDoctorUids } from "./data/doctors";
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -62,6 +61,17 @@ export default defineNuxtConfig({
   prismic: {
     endpoint: process.env.NUXT_PUBLIC_PRISMIC_ENDPOINT || "dentaplus",
     preview: "/api/preview",
+  },
+
+  nitro: {
+    prerender: {
+      crawlLinks: true,
+      routes: [
+        "/turek/",
+        "/poddebice/",
+        ...sitemapDoctorUids.map((uid) => `/zespol/${encodeURI(uid)}/`),
+      ],
+    },
   },
 
   tailwindcss: {

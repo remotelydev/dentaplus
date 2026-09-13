@@ -160,6 +160,18 @@ test('canonical URLs encode unicode slugs once', async () => {
   assert.match(read('netlify.toml'), /weronika-wlodarska/)
 })
 
+test('doctor stubs and slug typo redirect are wired', () => {
+  const sitemap = read('public/sitemap.xml')
+  const netlify = read('netlify.toml')
+  const doctors = read('data/doctors.ts')
+  assert.match(sitemap, /monika-maciejewska/)
+  assert.doesNotMatch(sitemap, /maciejeweska/)
+  assert.match(sitemap, /piotr-pietryka/)
+  assert.match(netlify, /monika-maciejeweska/)
+  assert.match(doctors, /DOCTOR_UID_ALIASES/)
+  assert.match(read('pages/zespol/[uid].vue'), /stub/)
+})
+
 test('source files do not contain debug console calls', () => {
   const files = ['app', 'components', 'composables', 'layouts', 'pages', 'server', 'slices']
     .flatMap(sourceFiles)

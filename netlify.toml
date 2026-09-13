@@ -24,3 +24,13 @@
   from = "/zespol/weronika-wlodarska/"
   to = "/zespol/weronika-w%C5%82odarska/"
   status = 301
+
+[[redirects]]
+  from = "/zespol/monika-maciejeweska"
+  to = "/zespol/monika-maciejewska/"
+  status = 301
+
+[[redirects]]
+  from = "/zespol/monika-maciejeweska/"
+  to = "/zespol/monika-maciejewska/"
+  status = 301
