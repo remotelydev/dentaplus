@@ -178,6 +178,11 @@ test('Prismic route resolver emits trailing slashes', () => {
   assert.match(client, /path: '\/zespol\/:uid\/'/)
 })
 
+test('index.html redirects to the homepage', () => {
+  assert.match(read('netlify.toml'), /from = "\/index\.html"/)
+  assert.match(read('netlify.toml'), /to = "\/"/)
+})
+
 test('source files do not contain debug console calls', () => {
   const files = ['app', 'components', 'composables', 'layouts', 'pages', 'server', 'slices']
     .flatMap(sourceFiles)

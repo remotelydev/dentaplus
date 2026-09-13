@@ -6,6 +6,12 @@
   NITRO_PRESET = "static"
 
 [[redirects]]
+  from = "/index.html"
+  to = "/"
+  status = 301
+  force = true
+
+[[redirects]]
   from = "/zespol/michal-trzos"
   to = "/zespol/micha%C5%82-trzos/"
   status = 301
