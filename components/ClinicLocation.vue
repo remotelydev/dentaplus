@@ -8,11 +8,7 @@ const props = defineProps<{
 const settings = useSettings()
 const phone = computed(() => settings.value?.data[props.location.phoneSetting] as string | undefined)
 const email = computed(() => settings.value?.data[props.location.emailSetting] as string | undefined)
-const telHref = computed(() => {
-  const digits = phone.value?.replace(/[^\d+]/g, '') || ''
-  const withCountry = digits.startsWith('+') ? digits : digits ? `+48${digits}` : ''
-  return withCountry ? `tel:${withCountry}` : undefined
-})
+const telHref = computed(() => normalizeTelHref(phone.value))
 </script>
 
 <template>

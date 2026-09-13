@@ -7,6 +7,8 @@ import { type Content } from "@prismicio/client";
 import { locations } from '~/data/locations'
 
 const settings = useSettings();
+const turekTel = computed(() => normalizeTelHref(settings.value?.data.phone_turek))
+const poddebiceTel = computed(() => normalizeTelHref(settings.value?.data.phone_poddebice))
 
 const contact = ref<HTMLElement | null>(null);
 const mapWidth = ref<string>('');
@@ -69,7 +71,7 @@ defineProps(
           <address class="my-2 not-italic">
             {{ locations.turek.streetAddress }}, {{ locations.turek.postalCode }} {{ locations.turek.addressLocality }}
           </address>
-          <a class="block" :href="`tel:${settings?.data.phone_turek}`">
+          <a v-if="turekTel" class="block" :href="turekTel">
             +48 {{ settings?.data.phone_turek }}
           </a>
           <a class="block" :href="`mailto:${settings?.data.email_turek}`">
@@ -105,7 +107,7 @@ defineProps(
           <address class="my-2 not-italic">
             {{ locations.poddebice.streetAddress }}, {{ locations.poddebice.postalCode }} {{ locations.poddebice.addressLocality }}
           </address>
-          <a class="block" :href="`tel:${settings?.data.phone_poddebice}`">
+          <a v-if="poddebiceTel" class="block" :href="poddebiceTel">
             +48 {{ settings?.data.phone_poddebice }}
           </a>
           <a class="block" :href="`mailto:${settings?.data.email_poddebice}`">

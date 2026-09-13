@@ -141,6 +141,13 @@ test('service pages expose extra copy and Usługi navigation', () => {
   assert.match(read('customtypes/navigation/index.json'), /service_links/)
 })
 
+test('telephone hrefs are normalized without spaces', () => {
+  assert.match(read('composables/usePhoneLink.ts'), /export const normalizeTelHref/)
+  assert.match(read('slices/Contact/index.vue'), /normalizeTelHref/)
+  assert.match(read('components/ContactBar.vue'), /normalizeTelHref/)
+  assert.doesNotMatch(read('components/ContactBar.vue'), /tel:\+48\$\{/)
+})
+
 test('source files do not contain debug console calls', () => {
   const files = ['app', 'components', 'composables', 'layouts', 'pages', 'server', 'slices']
     .flatMap(sourceFiles)

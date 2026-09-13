@@ -4,7 +4,7 @@ const settings = useSettings()
 const runtimeConfig = useRuntimeConfig()
 const siteUrl = String(runtimeConfig.public.siteUrl || 'https://www.dentaplus.pl').replace(/\/$/, '')
 
-const normalizePhone = (phone?: string | null) => phone?.replace(/[^\d+]/g, '') || undefined
+const normalizePhone = (phone?: string | null) => normalizePhoneDigits(phone)
 
 const businessSchema = computed(() => {
   const organizationId = `${siteUrl}/#organization`

@@ -3,7 +3,9 @@ import PhoneIcon from '../public/phone.svg'
 import FacebookIcon from '../public/facebook.svg'
 import InstagramIcon from '../public/instagram.svg'
 
-const settings = useSettings();
+const settings = useSettings()
+const turekTel = computed(() => normalizeTelHref(settings.value?.data.phone_turek))
+const poddebiceTel = computed(() => normalizeTelHref(settings.value?.data.phone_poddebice))
 </script>
 
 <template>
@@ -16,14 +18,14 @@ const settings = useSettings();
       <div class="flex gap-3 justify-around">
         <span v-if="settings?.data?.phone_turek" class="flex items-center gap-1">
           Turek:
-          <a class="flex items-center min-w-0 bg-slate-100 px-2 py-1 text-slate-900 rounded-full whitespace-nowrap" :href="`tel:+48${settings.data.phone_turek}`">
+          <a v-if="turekTel" class="flex items-center min-w-0 bg-slate-100 px-2 py-1 text-slate-900 rounded-full whitespace-nowrap" :href="turekTel">
             <PhoneIcon class="hidden sm:inline-block w-4 h-4 rouded-full mr-1" />
             {{ settings.data.phone_turek }}
           </a>
         </span>
         <span v-if="settings?.data?.phone_poddebice" class="flex items-center gap-1">
           Poddębice:
-          <a class="flex items-center min-w-0 bg-slate-100 px-2 py-1 text-slate-900 rounded-full whitespace-nowrap" :href="`tel:+48${settings.data.phone_poddebice}`">
+          <a v-if="poddebiceTel" class="flex items-center min-w-0 bg-slate-100 px-2 py-1 text-slate-900 rounded-full whitespace-nowrap" :href="poddebiceTel">
             <PhoneIcon class="hidden sm:inline-block w-4 h-4 rouded-full mr-1" />
             {{ settings.data.phone_poddebice }}
           </a>
