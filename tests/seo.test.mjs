@@ -207,6 +207,10 @@ test('404 and preview are noindexed', () => {
   assert.match(read('public/robots.txt'), /Disallow: \/api\/preview/)
 })
 
+test('homepage H1 falls back to a local-search heading', () => {
+  assert.match(read('slices/Hero/index.vue'), /Gabinety stomatologiczne w Turku i Poddębicach/)
+})
+
 test('source files do not contain debug console calls', () => {
   const files = ['app', 'components', 'composables', 'layouts', 'pages', 'server', 'slices']
     .flatMap(sourceFiles)
