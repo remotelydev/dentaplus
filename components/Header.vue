@@ -11,6 +11,21 @@ const settings = useSettings();
 
 const isMobileMenuOpen = ref(false);
 const isServicesOpen = ref(false);
+const isDesktopServicesOpen = ref(false);
+const desktopServices = ref<HTMLElement | null>(null);
+
+const closeDesktopServices = () => {
+  isDesktopServicesOpen.value = false
+}
+
+onClickOutside(desktopServices, closeDesktopServices)
+
+const onDesktopServicesKeydown = (event: KeyboardEvent) => {
+  if (event.key === 'Escape') {
+    closeDesktopServices()
+    ;(event.currentTarget as HTMLElement | null)?.querySelector('button')?.focus()
+  }
+}
 
 watch(isMobileMenuOpen, (nextIsMobileMenuOpen) => {
   if (nextIsMobileMenuOpen) {
@@ -69,11 +84,37 @@ watch(isMobileMenuOpen, (nextIsMobileMenuOpen) => {
               {{ $prismic.asText(link.label) }}
             </PrismicLink>
           </li>
-          <li class="relative font-semibold tracking-tight text-slate-800 group">
-            <span class="hover:underline">Usługi</span>
-            <ul class="absolute left-0 top-full hidden group-hover:block bg-white shadow-md py-2 min-w-[12rem] z-20">
-              <li v-for="item in SERVICE_NAV" :key="item.uid">
-                <NuxtLink class="block px-4 py-2 hover:bg-slate-100" :to="item.to">{{ item.label }}</NuxtLink>
+          <li
+            ref="desktopServices"
+            class="relative font-semibold tracking-tight text-slate-800"
+            @keydown="onDesktopServicesKeydown"
+          >
+            <button
+              type="button"
+              class="hover:underline"
+              :aria-expanded="isDesktopServicesOpen"
+              aria-controls="desktop-services-menu"
+              aria-haspopup="true"
+              @click="isDesktopServicesOpen = !isDesktopServicesOpen"
+            >
+              Usługi
+            </button>
+            <ul
+              v-show="isDesktopServicesOpen"
+              id="desktop-services-menu"
+              class="absolute left-0 top-full z-20 min-w-[12rem] bg-white py-2 shadow-md"
+            >
+              <li
+                v-for="item in SERVICE_NAV"
+                :key="item.uid"
+              >
+                <NuxtLink
+                  class="block px-4 py-2 hover:bg-slate-100"
+                  :to="item.to"
+                  @click="closeDesktopServices"
+                >
+                  {{ item.label }}
+                </NuxtLink>
               </li>
             </ul>
           </li>
