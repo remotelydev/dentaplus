@@ -1,11 +1,10 @@
 <script setup lang="ts">
 import { type Content } from '@prismicio/client'
 
-// The array passed to \`getSliceComponentProps\` is purely optional.
-// Consider it as a visual hint for you when templating your slice.
-defineProps(getSliceComponentProps<Content.TextWithImageSlice>(
+const props = defineProps(getSliceComponentProps<Content.TextWithImageSlice>(
   ['slice', 'index', 'slices', 'context']
 ));
+const image = computed(() => withImageAlt(props.slice.primary.image))
 </script>
 
 <template>
@@ -17,10 +16,10 @@ defineProps(getSliceComponentProps<Content.TextWithImageSlice>(
       <PrismicRichText :field="slice.primary.text" />
       <div>
         <div
-          v-if="slice.primary.image.url"
+          v-if="image?.url"
           class="bg-gray-100"
         >
-          <PrismicImage :field="slice.primary.image" :imgix-params="{ w: 1000, auto: ['compress', 'format'] }" />
+          <PrismicImage :field="image" :imgix-params="{ w: 1000, auto: ['compress', 'format'] }" />
         </div>
       </div>
     </div>

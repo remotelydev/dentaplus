@@ -211,6 +211,12 @@ test('homepage H1 falls back to a local-search heading', () => {
   assert.match(read('slices/Hero/index.vue'), /Gabinety stomatologiczne w Turku i Poddębicach/)
 })
 
+test('images get a Polish alt fallback', () => {
+  assert.match(read('composables/useImageAlt.ts'), /withImageAlt/)
+  assert.match(read('slices/Image/index.vue'), /withImageAlt/)
+  assert.match(read('slices/Hero/index.vue'), /DEFAULT_IMAGE_ALT/)
+})
+
 test('source files do not contain debug console calls', () => {
   const files = ['app', 'components', 'composables', 'layouts', 'pages', 'server', 'slices']
     .flatMap(sourceFiles)

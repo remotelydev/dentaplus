@@ -20,7 +20,7 @@ const lcpImage = computed(() => {
   if (!field?.url) return undefined
   return {
     src: prismic.asImageSrc(field, { auto: ['format', 'compress'], w: 1400 }) || field.url,
-    alt: field.alt || '',
+    alt: field.alt?.trim() || DEFAULT_IMAGE_ALT,
     width: 1400,
     height: Math.round(1400 * ((field.dimensions?.height || 900) / (field.dimensions?.width || 1400))),
   }
@@ -58,7 +58,7 @@ const serializer: HTMLRichTextMapSerializer = {
       class="relative"
     >
       <div class="grid justify-items-center">
-        <div class="hidden sm:block pb-8">
+        <div class="pb-8">
           <PrismicRichText
             :field="slice.primary.text"
             :html-serializer="serializer"
