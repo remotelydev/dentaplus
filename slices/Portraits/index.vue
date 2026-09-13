@@ -37,8 +37,7 @@ const dentaEmployees = computed(() => {
         :role="image.role"
         :index="i"
         :link="image.details"
-        :is-leader="true"
-        @click="showPersona(image.portrait.url, image.portrait.alt)" />
+        :is-leader="true" />
     </div>
     <div class="max-w-7xl mx-auto px-4 flex flex-wrap justify-around gap-4 shrink">
       <Portrait
@@ -51,8 +50,7 @@ const dentaEmployees = computed(() => {
         :role="image.role"
         :index="i"
         :link="image.details"
-        :is-leader="false"
-        @click="showPersona(image.portrait.url, image.portrait.alt)" />
+        :is-leader="false" />
     </div>
   </section>
 </template>
