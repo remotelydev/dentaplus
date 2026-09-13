@@ -71,15 +71,35 @@ defineProps<{
           </details>
         </div>
       </section>
-      <p>
-        <NuxtLink class="underline font-semibold" to="/cennik/">Cennik DentaPlus+</NuxtLink>
-        ·
-        <NuxtLink class="underline" to="/turek/">Gabinet Turek</NuxtLink>
-        ·
-        <NuxtLink class="underline" to="/poddebice/">Gabinet Poddębice</NuxtLink>
-        ·
-        <NuxtLink class="underline" to="/kontakt/">Kontakt</NuxtLink>
-      </p>
+      <nav
+        class="mt-8 flex flex-wrap gap-3"
+        aria-label="Powiązane strony"
+      >
+        <NuxtLink
+          class="inline-flex items-center justify-center rounded-full bg-denta-green px-5 py-2.5 font-semibold text-slate-800"
+          to="/cennik/"
+        >
+          Cennik
+        </NuxtLink>
+        <NuxtLink
+          class="inline-flex items-center justify-center rounded-full border border-slate-300 bg-white px-5 py-2.5 font-semibold text-slate-800"
+          to="/turek/"
+        >
+          Turek
+        </NuxtLink>
+        <NuxtLink
+          class="inline-flex items-center justify-center rounded-full border border-slate-300 bg-white px-5 py-2.5 font-semibold text-slate-800"
+          to="/poddebice/"
+        >
+          Poddębice
+        </NuxtLink>
+        <NuxtLink
+          class="inline-flex items-center justify-center rounded-full border border-slate-300 bg-white px-5 py-2.5 font-semibold text-slate-800"
+          to="/kontakt/"
+        >
+          Kontakt
+        </NuxtLink>
+      </nav>
     </article>
   </Bounded>
 </template>

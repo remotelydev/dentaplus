@@ -95,3 +95,21 @@ test('FAQ copy stays in extras and JSON-LD stays on the page', () => {
   assert.match(uidPage, /<ServiceExtras :uid="uid" \/>/)
   assert.doesNotMatch(uidPage, /<details/)
 })
+
+test('service CTA row uses buttons instead of middot links', () => {
+  const extras = read('components/ServiceExtras.vue')
+
+  assert.match(extras, /aria-label="Powiązane strony"/)
+  assert.match(extras, /to="\/cennik\/"/)
+  assert.match(extras, /to="\/turek\/"/)
+  assert.match(extras, /to="\/poddebice\/"/)
+  assert.match(extras, /to="\/kontakt\/"/)
+  assert.match(extras, />\s*Cennik\s*</)
+  assert.match(extras, />\s*Turek\s*</)
+  assert.match(extras, />\s*Poddębice\s*</)
+  assert.match(extras, />\s*Kontakt\s*</)
+  assert.match(extras, /rounded-full bg-denta-green/)
+  assert.doesNotMatch(extras, /·/)
+  assert.doesNotMatch(extras, /Cennik DentaPlus\+/)
+  assert.doesNotMatch(extras, /Gabinet Turek/)
+})
