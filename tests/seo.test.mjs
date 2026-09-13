@@ -247,6 +247,8 @@ test('prerender fetches use a string useAsyncData key and guard missing slices',
   assert.match(uidPage, /data\?\.slices/)
   assert.match(bioPage, /data\?\.slices/)
   assert.match(homePage, /data\?\.slices/)
+  assert.match(homePage, /useAsyncData\('index'/)
+  assert.match(homePage, /useAsyncData\('index-zespol'/)
   assert.match(bioPage, /createError/)
   assert.match(bioPage, /^const runtimeConfig = useRuntimeConfig\(\)$/m)
   assert.match(bioPage, /fullyDecode/)
