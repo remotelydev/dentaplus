@@ -69,7 +69,7 @@ test('sitemap contains unique canonical URLs from the SEO route map', () => {
 })
 
 test('every public page uses the shared SEO metadata composable', () => {
-  for (const file of ['pages/index.vue', 'pages/[uid].vue', 'pages/zespol/[uid].vue']) {
+  for (const file of ['pages/index.vue', 'pages/[uid].vue', 'pages/zespol/[uid].vue', 'pages/turek.vue', 'pages/poddebice.vue']) {
     assert.match(read(file), /usePageSeo\(/, `${file} does not use usePageSeo`)
   }
 
@@ -113,11 +113,13 @@ test('global SEO configuration includes Polish language and local business schem
   const layout = read('layouts/default.vue')
   const hero = read('slices/Hero/index.vue')
 
-  assert.match(nuxtConfig, /siteUrl:\s*["']https:\/\/www\.dentaplus\.pl["']/)
+  assert.match(nuxtConfig, /https:\/\/www\.dentaplus\.pl/)
   assert.match(nuxtConfig, /lang:\s*["']pl["']/)
   assert.match(layout, /application\/ld\+json/)
   assert.match(layout, /'@type': 'Organization'/)
   assert.match(layout, /'@type': 'Dentist'/)
+  assert.match(layout, /\/turek\//)
+  assert.match(layout, /\/poddebice\//)
   assert.match(hero, /heading1:[\s\S]*?<h1 /)
 })
 

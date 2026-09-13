@@ -28,9 +28,9 @@ const businessSchema = computed(() => {
       },
       {
         '@type': 'Dentist',
-        '@id': `${siteUrl}/kontakt/#turek`,
+        '@id': `${siteUrl}/turek/#clinic`,
         name: 'DentaPlus+ Turek',
-        url: `${siteUrl}/kontakt/`,
+        url: `${siteUrl}/turek/`,
         telephone: normalizePhone(settings.value?.data.phone_turek),
         parentOrganization: { '@id': organizationId },
         address: {
@@ -57,9 +57,9 @@ const businessSchema = computed(() => {
       },
       {
         '@type': 'Dentist',
-        '@id': `${siteUrl}/kontakt/#poddebice`,
+        '@id': `${siteUrl}/poddebice/#clinic`,
         name: 'DentaPlus+ Poddębice',
-        url: `${siteUrl}/kontakt/`,
+        url: `${siteUrl}/poddebice/`,
         telephone: normalizePhone(settings.value?.data.phone_poddebice),
         parentOrganization: { '@id': organizationId },
         address: {

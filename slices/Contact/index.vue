@@ -53,6 +53,7 @@ defineProps(
       <div class="my-8 md:flex md:items-center md:justify-center xl:flex-col xl:w-1/3 ">
         <div class="m-4 sm:grow sm:max-w-72 md:grow-0 md:w-80 md:max-w-80 xl:w-full xl:grow ">
           <PrismicRichText :field="slice.items[0].place" />
+          <NuxtLink class="block underline mb-2" to="/turek/">Gabinet w Turku — ul. Łąkowa 10</NuxtLink>
           <div class="flex items-center basis-1/3 gap-2 my-2 md:basis-1">
             <a href="https://www.instagram.com/klinika.dentaplus" target="_blank">
               <InstagramIcon class="w-6 h-6" />
@@ -90,6 +91,7 @@ defineProps(
       <div class="my-8 md:flex md:items-center md:justify-center xl:flex-col xl:w-1/3">
         <div class="m-4 sm:max-w-72 md:grow-0 md:w-80 md:max-w-80 xl:w-full xl:grow ">
           <PrismicRichText :field="slice.items[1].place" />
+          <NuxtLink class="block underline mb-2" to="/poddebice/">Gabinet w Poddębicach — ul. Krasickiego 1C</NuxtLink>
           <div class="flex items-center basis-1/3 gap-2 my-2 md:basis-1">
             <a href="https://www.instagram.com/klinika.dentaplus" target="_blank">
               <InstagramIcon class="w-6 h-6" />

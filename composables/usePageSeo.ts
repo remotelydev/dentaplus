@@ -24,6 +24,8 @@ const descriptions: Record<string, string> = {
   '/itero': 'Skaner iTero w DentaPlus+. Cyfrowa diagnostyka i planowanie leczenia stomatologicznego.',
   '/tomografia': 'Tomografia 3D w DentaPlus+. Precyzyjna diagnostyka i planowanie leczenia stomatologicznego.',
   '/endodoncja': 'Endodoncja pod mikroskopem w DentaPlus+. Precyzyjne leczenie kanałowe.',
+  '/turek': 'Gabinet stomatologiczny DentaPlus+ w Turku, ul. Łąkowa 10. Implanty, Invisalign, leczenie kanałowe i tomografia 3D.',
+  '/poddebice': 'Gabinet stomatologiczny DentaPlus+ w Poddębicach, ul. Krasickiego 1C. Sprawdź adres, telefon i godziny otwarcia.',
 }
 
 export const TITLE_FALLBACKS: Record<string, string> = {
@@ -37,6 +39,8 @@ export const TITLE_FALLBACKS: Record<string, string> = {
   '/itero': 'Skaner iTero Turek i Poddębice | DentaPlus+',
   '/tomografia': 'Tomografia 3D Turek i Poddębice | DentaPlus+',
   '/endodoncja': 'Leczenie kanałowe Turek i Poddębice | DentaPlus+',
+  '/turek': 'Stomatolog Turek — gabinet DentaPlus+ | DentaPlus+',
+  '/poddebice': 'Stomatolog Poddębice — gabinet DentaPlus+ | DentaPlus+',
 }
 
 const isBrandName = (value?: string | null) => {
