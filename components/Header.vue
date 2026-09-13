@@ -5,9 +5,12 @@ import CloseIcon from '../public/close.svg';
 import FacebookIcon from '../public/facebook.svg';
 import InstagramIcon from '../public/instagram.svg';
 import { SERVICE_NAV } from '~/data/services'
+import { normalizeTelHref } from '~/composables/usePhoneLink'
 
 const navigation = useNavigation();
 const settings = useSettings();
+const turekTel = computed(() => normalizeTelHref(settings.value?.data.phone_turek))
+const poddebiceTel = computed(() => normalizeTelHref(settings.value?.data.phone_poddebice))
 
 const isMobileMenuOpen = ref(false);
 const isServicesOpen = ref(false);
@@ -95,6 +98,26 @@ watch(isMobileMenuOpen, (nextIsMobileMenuOpen) => {
           </li> -->
         </ul>
       </nav>
+      <div
+        v-if="turekTel || poddebiceTel"
+        class="hidden md:flex shrink-0 items-center gap-2"
+      >
+        <span class="text-sm font-semibold text-denta-ink">Umów wizytę</span>
+        <a
+          v-if="turekTel"
+          :href="turekTel"
+          class="rounded-full bg-denta-lime px-3 py-2 text-sm font-semibold text-denta-ink"
+        >
+          Turek
+        </a>
+        <a
+          v-if="poddebiceTel"
+          :href="poddebiceTel"
+          class="rounded-full bg-denta-lime px-3 py-2 text-sm font-semibold text-denta-ink"
+        >
+          Poddębice
+        </a>
+      </div>
       <nav
         :class="isMobileMenuOpen ? 'block' : 'hidden'"
         class="absolute right-0 top-full w-screen h-screen flex flex-col z-10 bg-white"
