@@ -1,3 +1,5 @@
+import tailwindAspectRatio from "@tailwindcss/aspect-ratio";
+import svgLoader from "vite-svg-loader";
 import { sitemapDoctorUids } from "./data/doctors";
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
