@@ -172,6 +172,12 @@ test('doctor stubs and slug typo redirect are wired', () => {
   assert.match(read('pages/zespol/[uid].vue'), /stub/)
 })
 
+test('Prismic route resolver emits trailing slashes', () => {
+  const client = read('app/prismic/client.ts')
+  assert.match(client, /path: '\/:uid\/'/)
+  assert.match(client, /path: '\/zespol\/:uid\/'/)
+})
+
 test('source files do not contain debug console calls', () => {
   const files = ['app', 'components', 'composables', 'layouts', 'pages', 'server', 'slices']
     .flatMap(sourceFiles)

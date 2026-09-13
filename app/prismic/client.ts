@@ -4,11 +4,11 @@ export default createClient(process.env.NUXT_PUBLIC_PRISMIC_ENDPOINT || 'dentapl
   routes: [
     {
       type: 'page',
-      path: '/:uid',
+      path: '/:uid/',
     },
     {
       type: 'bio',
-      path: '/zespol/:uid',
+      path: '/zespol/:uid/',
     },
     {
       type: 'page',
