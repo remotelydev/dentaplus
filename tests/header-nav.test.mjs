@@ -18,3 +18,8 @@ test('primary header keeps city pages under Kontakt, not as top-level items', ()
     /<li class="font-semibold tracking-tight text-slate-800 hover:underline">\s*<NuxtLink to="\/turek\/">Turek<\/NuxtLink>/
   )
 })
+
+test('Galeria is filtered out of the primary header', () => {
+  assert.match(header, /isGaleriaItem/)
+  assert.match(header, /!isGaleriaItem\(item\)/)
+})
