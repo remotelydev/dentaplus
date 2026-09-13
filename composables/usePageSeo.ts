@@ -10,6 +10,8 @@ export type SeoDocumentData = {
   } | null
 }
 
+export const BRAND_NAME = 'DentaPlus+'
+
 const descriptions: Record<string, string> = {
   '/': 'DentaPlus+ to gabinety stomatologiczne w Turku i Poddębicach. Poznaj naszych specjalistów i sprawdź zakres leczenia.',
   '/cennik': 'Sprawdź cennik usług stomatologicznych DentaPlus+ w Turku i Poddębicach.',
@@ -22,6 +24,59 @@ const descriptions: Record<string, string> = {
   '/itero': 'Skaner iTero w DentaPlus+. Cyfrowa diagnostyka i planowanie leczenia stomatologicznego.',
   '/tomografia': 'Tomografia 3D w DentaPlus+. Precyzyjna diagnostyka i planowanie leczenia stomatologicznego.',
   '/endodoncja': 'Endodoncja pod mikroskopem w DentaPlus+. Precyzyjne leczenie kanałowe.',
+}
+
+export const TITLE_FALLBACKS: Record<string, string> = {
+  '/cennik': 'Cennik stomatologiczny Turek i Poddębice | DentaPlus+',
+  '/kontakt': 'Kontakt — gabinety w Turku i Poddębicach | DentaPlus+',
+  '/zespol': 'Zespół stomatologów Turek i Poddębice | DentaPlus+',
+  '/metamorfozy': 'Metamorfozy uśmiechu | DentaPlus+',
+  '/galeria': 'Galeria gabinetów Turek i Poddębice | DentaPlus+',
+  '/invisalign': 'Invisalign Turek i Poddębice | DentaPlus+',
+  '/implanty': 'Implanty zębów Turek i Poddębice | DentaPlus+',
+  '/itero': 'Skaner iTero Turek i Poddębice | DentaPlus+',
+  '/tomografia': 'Tomografia 3D Turek i Poddębice | DentaPlus+',
+  '/endodoncja': 'Leczenie kanałowe Turek i Poddębice | DentaPlus+',
+}
+
+const isBrandName = (value?: string | null) => {
+  const normalized = value?.replace(/\s+/g, ' ').trim()
+  return !normalized || normalized === BRAND_NAME || /^DentaPlus\s*\+?$/.test(normalized)
+}
+
+export const humanizeUid = (uid: string) =>
+  uid
+    .replace(/-/g, ' ')
+    .replace(/\b\w/g, (character) => character.toUpperCase())
+
+export const formatPageTitle = ({
+  metaTitle,
+  contentTitle,
+  siteTitle,
+  uid,
+  path,
+}: {
+  metaTitle?: string | null
+  contentTitle?: string | null
+  siteTitle?: string | null
+  uid?: string | null
+  path?: string | null
+}) => {
+  const meta = metaTitle?.trim()
+  if (meta) return meta
+
+  const brand = siteTitle?.trim() || BRAND_NAME
+  const pathKey = !path || path === '/' ? '/' : `/${path.replace(/^\/+|\/+$/g, '')}`
+  if (TITLE_FALLBACKS[pathKey]) return TITLE_FALLBACKS[pathKey]
+
+  if (!isBrandName(contentTitle)) {
+    const page = contentTitle!.trim()
+    if (page.includes(brand) && page.includes('|')) return page
+    return `${page} | ${brand}`
+  }
+
+  if (uid) return `${humanizeUid(uid)} | ${brand}`
+  return brand
 }
 
 const normalizePath = (path: string) => {

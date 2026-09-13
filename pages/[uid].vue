@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { SeoDocumentData } from '~/composables/usePageSeo'
+import { formatPageTitle, type SeoDocumentData } from '~/composables/usePageSeo'
 import { components } from '~/slices'
 
 const prismic = usePrismic()
@@ -11,9 +11,15 @@ const settings = useSettings()
 
 const seoData = computed(() => page.value?.data as unknown as SeoDocumentData | undefined)
 const siteTitle = computed(() => settings.value?.data.siteTitle || 'DentaPlus+')
-const contentTitle = computed(() => prismic.asText(page.value?.data.title) || 'DentaPlus+')
+const contentTitle = computed(() => prismic.asText(page.value?.data.title) || '')
 const title = computed(() =>
-  seoData.value?.meta_title?.trim() || `${contentTitle.value} | ${siteTitle.value}`
+  formatPageTitle({
+    metaTitle: seoData.value?.meta_title,
+    contentTitle: contentTitle.value,
+    siteTitle: siteTitle.value,
+    uid: String(route.params.uid || ''),
+    path: route.path,
+  })
 )
 const description = computed(() => seoData.value?.meta_description || undefined)
 const image = computed(() => seoData.value?.meta_image?.url || undefined)

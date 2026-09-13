@@ -80,6 +80,22 @@ test('every public page uses the shared SEO metadata composable', () => {
   assert.match(seoSource, /twitterCard:/)
 })
 
+test('inner pages never fall back to a duplicated brand title', () => {
+  for (const file of ['pages/[uid].vue', 'pages/zespol/[uid].vue']) {
+    const source = read(file)
+    assert.match(source, /formatPageTitle\(/)
+    assert.doesNotMatch(source, /contentTitle\.value\} \| \$\{siteTitle\.value\}/)
+  }
+
+  const seoSource = read('composables/usePageSeo.ts')
+  assert.match(seoSource, /export const formatPageTitle/)
+  assert.match(seoSource, /export const TITLE_FALLBACKS/)
+
+  for (const pathKey of ['/cennik', '/kontakt', '/zespol', '/implanty', '/invisalign', '/endodoncja', '/itero', '/tomografia']) {
+    assert.ok(seoSource.includes(`'${pathKey}':`), `${pathKey} is missing a unique title fallback`)
+  }
+})
+
 test('SEO models expose editable metadata fields in Prismic', () => {
   for (const file of ['customtypes/page/index.json', 'customtypes/bio/index.json']) {
     const model = JSON.parse(read(file))
