@@ -97,6 +97,17 @@ export const servicePages: Record<string, {
   },
 }
 
+export const firstSentence = (text: string) => {
+  const normalized = text.replace(/\s+/g, ' ').trim()
+  const match = normalized.match(/^(.+?[.!?])(?:\s|$)/)
+  return (match?.[1] || normalized).trim()
+}
+
+export const serviceCardBlurb = (uid: string) => {
+  const body = servicePages[uid]?.h2s[0]?.body
+  return body ? firstSentence(body) : ''
+}
+
 export const serviceFaqs: Record<string, { q: string, a: string }[]> = {
   implanty: [
     { q: 'Ile kosztuje implant zęba w Turku?', a: 'Cena zależy od systemu implantu, korony i ewentualnej regeneracji kości. Orientacyjne pozycje są w cenniku; dokładną wycenę podajemy po tomografii 3D.' },
