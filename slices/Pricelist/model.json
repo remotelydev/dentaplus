@@ -20,6 +20,15 @@
             "allowTargetBlank": true,
             "single": "heading2,heading3"
           }
+        },
+        "service_link": {
+          "type": "Link",
+          "config": {
+            "label": "Service page",
+            "placeholder": "Optional link to a service URL",
+            "allowTargetBlank": false,
+            "select": null
+          }
         }
       },
       "items": {

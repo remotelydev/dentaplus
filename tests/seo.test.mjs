@@ -69,7 +69,7 @@ test('sitemap contains unique canonical URLs from the SEO route map', () => {
 })
 
 test('every public page uses the shared SEO metadata composable', () => {
-  for (const file of ['pages/index.vue', 'pages/[uid].vue', 'pages/zespol/[uid].vue']) {
+  for (const file of ['pages/index.vue', 'pages/[uid].vue', 'pages/zespol/[uid].vue', 'pages/turek.vue', 'pages/poddebice.vue', 'pages/polityka-prywatnosci.vue', 'pages/cookies.vue']) {
     assert.match(read(file), /usePageSeo\(/, `${file} does not use usePageSeo`)
   }
 
@@ -78,6 +78,22 @@ test('every public page uses the shared SEO metadata composable', () => {
   assert.ok(seoSource.includes("name: 'robots'"))
   assert.match(seoSource, /ogTitle:/)
   assert.match(seoSource, /twitterCard:/)
+})
+
+test('inner pages never fall back to a duplicated brand title', () => {
+  for (const file of ['pages/[uid].vue', 'pages/zespol/[uid].vue']) {
+    const source = read(file)
+    assert.match(source, /formatPageTitle\(/)
+    assert.doesNotMatch(source, /contentTitle\.value\} \| \$\{siteTitle\.value\}/)
+  }
+
+  const seoSource = read('composables/usePageSeo.ts')
+  assert.match(seoSource, /export const formatPageTitle/)
+  assert.match(seoSource, /export const TITLE_FALLBACKS/)
+
+  for (const pathKey of ['/cennik', '/kontakt', '/zespol', '/implanty', '/invisalign', '/endodoncja', '/itero', '/tomografia']) {
+    assert.ok(seoSource.includes(`'${pathKey}':`), `${pathKey} is missing a unique title fallback`)
+  }
 })
 
 test('SEO models expose editable metadata fields in Prismic', () => {
@@ -97,12 +113,122 @@ test('global SEO configuration includes Polish language and local business schem
   const layout = read('layouts/default.vue')
   const hero = read('slices/Hero/index.vue')
 
-  assert.match(nuxtConfig, /siteUrl:\s*["']https:\/\/www\.dentaplus\.pl["']/)
+  assert.match(nuxtConfig, /https:\/\/www\.dentaplus\.pl/)
   assert.match(nuxtConfig, /lang:\s*["']pl["']/)
   assert.match(layout, /application\/ld\+json/)
   assert.match(layout, /'@type': 'Organization'/)
   assert.match(layout, /'@type': 'Dentist'/)
-  assert.match(hero, /heading1:[\s\S]*?<h1 /)
+  assert.match(layout, /locations\.turek/)
+  assert.match(layout, /locations\.poddebice/)
+  assert.match(read('data/locations.ts'), /ul\. Łąkowa 10/)
+  assert.match(read('data/locations.ts'), /Krasickiego 1C/)
+  assert.match(layout, /geo/)
+  assert.match(layout, /BreadcrumbList/)
+  assert.match(layout, /dentapluspoddebice/)
+  assert.match(layout, /priceRange/)
+  assert.match(read('pages/zespol/[uid].vue'), /Person/)
+  assert.match(read('slices/Contact/index.vue'), /locations\.turek\.streetAddress/)
+  assert.match(read('slices/Contact/index.vue'), /locations\.poddebice\.streetAddress/)
+})
+
+test('service pages expose extra copy and Usługi navigation', () => {
+  const services = read('data/services.ts')
+  const header = read('components/Header.vue')
+  const extras = read('pages/[uid].vue')
+
+  for (const uid of ['implanty', 'invisalign', 'endodoncja', 'itero', 'tomografia']) {
+    assert.match(services, new RegExp(`${uid}:`))
+  }
+  assert.match(header, /Usługi/)
+  assert.match(header, /SERVICE_NAV/)
+  assert.match(extras, /ServiceExtras/)
+  assert.match(read('customtypes/navigation/index.json'), /service_links/)
+})
+
+test('telephone hrefs are normalized without spaces', () => {
+  assert.match(read('composables/usePhoneLink.ts'), /export const normalizeTelHref/)
+  assert.match(read('slices/Contact/index.vue'), /normalizeTelHref/)
+  assert.match(read('components/ContactBar.vue'), /normalizeTelHref/)
+  assert.doesNotMatch(read('components/ContactBar.vue'), /tel:\+48\$\{/)
+})
+
+test('canonical URLs encode unicode slugs once', async () => {
+  const { toCanonicalUrl } = await import('../utils/canonical.mjs')
+  const once = toCanonicalUrl('https://www.dentaplus.pl', '/zespol/michał-trzos/')
+  const encoded = toCanonicalUrl('https://www.dentaplus.pl', '/zespol/micha%C5%82-trzos/')
+  const doubled = toCanonicalUrl('https://www.dentaplus.pl', '/zespol/micha%25C5%2582-trzos/')
+  assert.equal(once, 'https://www.dentaplus.pl/zespol/micha%C5%82-trzos/')
+  assert.equal(encoded, once)
+  assert.equal(doubled, once)
+  assert.match(read('netlify.toml'), /michal-trzos/)
+  assert.match(read('netlify.toml'), /weronika-wlodarska/)
+})
+
+test('doctor stubs and slug typo redirect are wired', () => {
+  const sitemap = read('public/sitemap.xml')
+  const netlify = read('netlify.toml')
+  const doctors = read('data/doctors.ts')
+  assert.match(sitemap, /monika-maciejewska/)
+  assert.doesNotMatch(sitemap, /maciejeweska/)
+  assert.match(sitemap, /piotr-pietryka/)
+  assert.match(netlify, /monika-maciejeweska/)
+  assert.match(doctors, /DOCTOR_UID_ALIASES/)
+  assert.match(read('pages/zespol/[uid].vue'), /stub/)
+})
+
+test('Prismic route resolver emits trailing slashes', () => {
+  const client = read('app/prismic/client.ts')
+  assert.match(client, /path: '\/:uid\/'/)
+  assert.match(client, /path: '\/zespol\/:uid\/'/)
+})
+
+test('index.html redirects to the homepage', () => {
+  assert.match(read('netlify.toml'), /from = "\/index\.html"/)
+  assert.match(read('netlify.toml'), /to = "\/"/)
+})
+
+test('default Open Graph image is always set', () => {
+  assert.match(read('composables/usePageSeo.ts'), /og-default\.png/)
+  assert.equal(fs.existsSync(path.join(root, 'public/og-default.png')), true)
+})
+
+test('hero LCP image is width-constrained and Inter is latin subset', () => {
+  assert.match(read('slices/Hero/index.vue'), /NuxtImg/)
+  assert.match(read('slices/Hero/index.vue'), /w: 1400/)
+  assert.match(read('nuxt.config.ts'), /latin-ext-400/)
+  assert.doesNotMatch(read('nuxt.config.ts'), /@fontsource\/inter\/400\.css/)
+})
+
+test('404 and preview are noindexed', () => {
+  assert.match(read('error.vue'), /noindex/)
+  assert.match(read('error.vue'), /Nie znaleziono strony/)
+  assert.match(read('pages/[uid].vue'), /createError/)
+  assert.match(read('nuxt.config.ts'), /X-Robots-Tag/)
+  assert.match(read('public/robots.txt'), /Disallow: \/api\/preview/)
+})
+
+test('homepage H1 falls back to a local-search heading', () => {
+  assert.match(read('slices/Hero/index.vue'), /Gabinety stomatologiczne w Turku i Poddębicach/)
+})
+
+test('images get a Polish alt fallback', () => {
+  assert.match(read('composables/useImageAlt.ts'), /withImageAlt/)
+  assert.match(read('slices/Image/index.vue'), /withImageAlt/)
+  assert.match(read('slices/Hero/index.vue'), /DEFAULT_IMAGE_ALT/)
+})
+
+test('maps use Polish locale and controls have accessible names', () => {
+  assert.doesNotMatch(read('slices/Contact/index.vue'), /1sen!2spl/)
+  assert.match(read('slices/Contact/index.vue'), /1spl!2spl/)
+  assert.match(read('slices/Map/index.vue'), /title="Mapa gabinetu/)
+  assert.match(read('components/Header.vue'), /Otwórz menu/)
+  assert.match(read('components/Footer.vue'), /aria-label="Facebook DentaPlus\+ Turek"/)
+})
+
+test('service pages include FAQ copy', () => {
+  assert.match(read('data/services.ts'), /serviceFaqs/)
+  assert.match(read('components/ServiceExtras.vue'), /Najczęstsze pytania/)
+  assert.match(read('pages/[uid].vue'), /FAQPage/)
 })
 
 test('source files do not contain debug console calls', () => {

@@ -1,5 +1,6 @@
 User-agent: *
 Allow: /
 Disallow: /slice-simulator
+Disallow: /api/preview
 
 Sitemap: https://www.dentaplus.pl/sitemap.xml

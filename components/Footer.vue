@@ -12,7 +12,7 @@ const navigation = useNavigation();
       <div class="mt-6 md:m-0">
         Developed with ❤️ by&nbsp;
         <a
-          href="http://www.trzos.dev"
+          href="https://www.trzos.dev"
           class="hover:underline"
           target="_blank"
         > Bartosz Trzos </a>.
@@ -26,16 +26,22 @@ const navigation = useNavigation();
         >
           {{ $prismic.asText(item.label) }}
         </PrismicLink>
+        <NuxtLink class="basis-1/3 md:basis-1 whitespace-nowrap hover:underline" to="/turek/">Turek</NuxtLink>
+        <NuxtLink class="basis-1/3 md:basis-1 whitespace-nowrap hover:underline" to="/poddebice/">Poddębice</NuxtLink>
+        <NuxtLink class="basis-1/3 md:basis-1 whitespace-nowrap hover:underline" to="/polityka-prywatnosci/">Prywatność</NuxtLink>
+        <NuxtLink class="basis-1/3 md:basis-1 whitespace-nowrap hover:underline" to="/cookies/">Cookies</NuxtLink>
         <div class="flex items-center basis-1/3 gap-2 md:basis-1">
           <a
             href="https://www.instagram.com/klinika.dentaplus"
             target="_blank"
+            aria-label="Instagram DentaPlus+"
           >
             <InstagramIcon class="w-6 h-6" />
           </a>
           <a
             href="https://www.facebook.com/dentaplusturek"
             target="_blank"
+            aria-label="Facebook DentaPlus+ Turek"
           >
             <FacebookIcon class="w-6 h-6" />
           </a>

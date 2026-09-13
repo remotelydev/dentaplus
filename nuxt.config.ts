@@ -1,5 +1,6 @@
 import tailwindAspectRatio from "@tailwindcss/aspect-ratio";
 import svgLoader from "vite-svg-loader";
+import { sitemapDoctorUids } from "./data/doctors";
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -35,9 +36,12 @@ export default defineNuxtConfig({
 
   css: [
     "~/styles/global.css",
-    "@fontsource/inter/400.css",
-    "@fontsource/inter/500.css",
-    "@fontsource/inter/600.css",
+    "@fontsource/inter/latin-400.css",
+    "@fontsource/inter/latin-ext-400.css",
+    "@fontsource/inter/latin-500.css",
+    "@fontsource/inter/latin-ext-500.css",
+    "@fontsource/inter/latin-600.css",
+    "@fontsource/inter/latin-ext-600.css",
   ],
 
   modules: [
@@ -62,6 +66,26 @@ export default defineNuxtConfig({
   prismic: {
     endpoint: process.env.NUXT_PUBLIC_PRISMIC_ENDPOINT || "dentaplus",
     preview: "/api/preview",
+    toolbar: process.env.NODE_ENV !== "production",
+  },
+
+  routeRules: {
+    "/api/preview": { headers: { "X-Robots-Tag": "noindex, nofollow" } },
+    "/api/preview/**": { headers: { "X-Robots-Tag": "noindex, nofollow" } },
+    "/slice-simulator": { headers: { "X-Robots-Tag": "noindex, nofollow" } },
+  },
+
+  nitro: {
+    prerender: {
+      crawlLinks: true,
+      routes: [
+        "/turek/",
+        "/poddebice/",
+        "/polityka-prywatnosci/",
+        "/cookies/",
+        ...sitemapDoctorUids.map((uid) => `/zespol/${encodeURI(uid)}/`),
+      ],
+    },
   },
 
   tailwindcss: {

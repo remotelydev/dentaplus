@@ -1,39 +1,105 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import type { SeoDocumentData } from '~/composables/usePageSeo'
+import { formatPageTitle, type SeoDocumentData } from '~/composables/usePageSeo'
 import { components } from '~/slices'
+import { DOCTOR_UID_ALIASES, doctors } from '~/data/doctors'
 
 const prismic = usePrismic()
 const route = useRoute()
-const { data: page } = useAsyncData(route.params.uid as string, () =>
-  prismic.client.getByUID('bio', route.params.uid as string || 'home')
-)
+const uid = computed(() => {
+  try {
+    return decodeURIComponent(String(route.params.uid || ''))
+  } catch {
+    return String(route.params.uid || '')
+  }
+})
+const prismicUid = computed(() => DOCTOR_UID_ALIASES[uid.value] || uid.value)
+const stub = computed(() => doctors[uid.value] || doctors[prismicUid.value])
+
+const { data: page } = useAsyncData(() => `bio-${prismicUid.value}`, async () => {
+  try {
+    return await prismic.client.getByUID('bio', prismicUid.value)
+  } catch {
+    return null
+  }
+})
 const settings = useSettings()
 
 const seoData = computed(() => page.value?.data as unknown as SeoDocumentData | undefined)
 const siteTitle = computed(() => settings.value?.data.siteTitle || 'DentaPlus+')
-const contentTitle = computed(() => prismic.asText(page.value?.data.title) || 'DentaPlus+')
+const contentTitle = computed(() => prismic.asText(page.value?.data.title) || stub.value?.name || '')
 const title = computed(() =>
-  seoData.value?.meta_title?.trim() || `${contentTitle.value} | ${siteTitle.value}`
+  formatPageTitle({
+    metaTitle: seoData.value?.meta_title,
+    contentTitle: contentTitle.value,
+    siteTitle: siteTitle.value,
+    uid: uid.value,
+    path: route.path,
+  })
 )
-const description = computed(() => seoData.value?.meta_description || undefined)
+const description = computed(() =>
+  seoData.value?.meta_description ||
+  (stub.value ? `${stub.value.name} — ${stub.value.role} w DentaPlus+ (${stub.value.city}).` : undefined)
+)
 const image = computed(() => seoData.value?.meta_image?.url || undefined)
+const hasSlices = computed(() => Boolean(page.value?.data.slices?.length))
+
+const personSchema = computed(() => {
+  if (!contentTitle.value) return null
+  const runtimeConfig = useRuntimeConfig()
+  const origin = String(runtimeConfig.public.siteUrl || 'https://www.dentaplus.pl').replace(/\/$/, '')
+  return {
+    '@context': 'https://schema.org',
+    '@type': ['Person', 'Dentist'],
+    name: contentTitle.value,
+    jobTitle: stub.value?.role || 'Lekarz dentysta',
+    worksFor: {
+      '@type': 'Organization',
+      name: 'DentaPlus+',
+      url: `${origin}/`,
+    },
+    url: `${origin}/zespol/${encodeURI(uid.value)}/`,
+  }
+})
 
 usePageSeo({
   title,
   description,
   image,
 })
+
+useHead({
+  script: computed(() =>
+    personSchema.value
+      ? [{ type: 'application/ld+json', children: JSON.stringify(personSchema.value) }]
+      : []
+  ),
+})
 </script>
 
 
 <template>
   <SliceZone
+    v-if="hasSlices"
     wrapper="main"
     class="slice-zone"
     :slices="page?.data.slices ?? []"
     :components="components"
   />
+  <Bounded
+    v-else-if="stub"
+    as="main"
+    class="slice-zone"
+    y-padding="base"
+  >
+    <h1 class="font-semibold text-4xl md:text-5xl mb-4">{{ stub.name }}</h1>
+    <p class="text-lg mb-2">{{ stub.role }}</p>
+    <p class="mb-6">{{ stub.city }}</p>
+    <p>{{ stub.bio }}</p>
+    <p class="mt-8">
+      <NuxtLink class="underline" to="/zespol/">Wszyscy lekarze DentaPlus+</NuxtLink>
+    </p>
+  </Bounded>
 </template>
 
 <style scoped>

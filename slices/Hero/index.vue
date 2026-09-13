@@ -6,7 +6,7 @@ import {
 
 // The array passed to \`getSliceComponentProps\` is purely optional.
 // Consider it as a visual hint for you when templating your slice.
-defineProps(
+const props = defineProps(
   getSliceComponentProps<Content.HeroSlice>([
     "slice",
     "index",
@@ -15,20 +15,41 @@ defineProps(
   ])
 );
 const prismic = usePrismic();
+const lcpImage = computed(() => {
+  const field = props.slice.primary.backgroundImage
+  if (!field?.url) return undefined
+  return {
+    src: prismic.asImageSrc(field, { auto: ['format', 'compress'], w: 1400 }) || field.url,
+    alt: field.alt?.trim() || DEFAULT_IMAGE_ALT,
+    width: 1400,
+    height: Math.round(1400 * ((field.dimensions?.height || 900) / (field.dimensions?.width || 1400))),
+  }
+})
 
 const serializer: HTMLRichTextMapSerializer = {
   ...prismic.options.richTextSerializer,
-  heading1: ({ children }) =>
-    /* html */ `<h1 class="font-semibold leading-tight tracking-tight md:leading-tight text-5xl md:text-7xl mb-4 mt-12 first:mt-0 last:mb-0">${children}</h1>`,
+  heading1: ({ children, node }) => {
+    const plain = String(node?.text || '').replace(/\s+/g, ' ').trim()
+    const heading = /^DentaPlus\s*\+?$/.test(plain)
+      ? 'Gabinety stomatologiczne w Turku i Poddębicach'
+      : children
+    return /* html */ `<h1 class="font-semibold leading-tight tracking-tight md:leading-tight text-5xl md:text-7xl mb-4 mt-12 first:mt-0 last:mb-0">${heading}</h1>`
+  },
 };
 </script>
 
 <template>
   <section class="relative bg-slate-800 text-white border-b border-slate-100">
     <figure class="absolute inset-0">
-      <PrismicImage
-        v-if="slice.primary.backgroundImage.url"
-        :field="slice.primary.backgroundImage"
+      <NuxtImg
+        v-if="lcpImage"
+        :src="lcpImage.src"
+        :alt="lcpImage.alt"
+        :width="lcpImage.width"
+        :height="lcpImage.height"
+        sizes="100vw"
+        preload
+        fetchpriority="high"
         class="pointer-events-none select-none object-cover opacity-80 h-full w-full"
       />
     </figure>
@@ -37,7 +58,7 @@ const serializer: HTMLRichTextMapSerializer = {
       class="relative"
     >
       <div class="grid justify-items-center">
-        <div class="hidden sm:block pb-8">
+        <div class="pb-8">
           <PrismicRichText
             :field="slice.primary.text"
             :html-serializer="serializer"
