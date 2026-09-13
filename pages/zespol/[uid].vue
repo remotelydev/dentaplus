@@ -44,10 +44,36 @@ const description = computed(() =>
 const image = computed(() => seoData.value?.meta_image?.url || undefined)
 const hasSlices = computed(() => Boolean(page.value?.data.slices?.length))
 
+const personSchema = computed(() => {
+  if (!contentTitle.value) return null
+  const runtimeConfig = useRuntimeConfig()
+  const origin = String(runtimeConfig.public.siteUrl || 'https://www.dentaplus.pl').replace(/\/$/, '')
+  return {
+    '@context': 'https://schema.org',
+    '@type': ['Person', 'Dentist'],
+    name: contentTitle.value,
+    jobTitle: stub.value?.role || 'Lekarz dentysta',
+    worksFor: {
+      '@type': 'Organization',
+      name: 'DentaPlus+',
+      url: `${origin}/`,
+    },
+    url: `${origin}/zespol/${encodeURI(uid.value)}/`,
+  }
+})
+
 usePageSeo({
   title,
   description,
   image,
+})
+
+useHead({
+  script: computed(() =>
+    personSchema.value
+      ? [{ type: 'application/ld+json', children: JSON.stringify(personSchema.value) }]
+      : []
+  ),
 })
 </script>
 

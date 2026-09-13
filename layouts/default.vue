@@ -1,16 +1,91 @@
 <script setup lang="ts">
+import { locations } from '~/data/locations'
+
 const prismic = usePrismic()
 const settings = useSettings()
+const route = useRoute()
 const runtimeConfig = useRuntimeConfig()
 const siteUrl = String(runtimeConfig.public.siteUrl || 'https://www.dentaplus.pl').replace(/\/$/, '')
+const rasterImage = `${siteUrl}/denta-mark.png`
 
-const normalizePhone = (phone?: string | null) => normalizePhoneDigits(phone)
+const dentistNode = (
+  location: (typeof locations)['turek'] | (typeof locations)['poddebice'],
+  organizationId: string,
+  phone?: string,
+  coords: { lat: number, lng: number },
+) => ({
+  '@type': 'Dentist',
+  '@id': `${siteUrl}/${location.uid}/#clinic`,
+  name: location.name,
+  url: `${siteUrl}/${location.uid}/`,
+  image: rasterImage,
+  telephone: normalizePhoneDigits(phone),
+  priceRange: '$$',
+  parentOrganization: { '@id': organizationId },
+  areaServed: {
+    '@type': 'City',
+    name: location.addressLocality,
+  },
+  hasMap: location.mapSrc.replace('/maps/embed?', '/maps?'),
+  geo: {
+    '@type': 'GeoCoordinates',
+    latitude: coords.lat,
+    longitude: coords.lng,
+  },
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: location.streetAddress,
+    postalCode: location.postalCode,
+    addressLocality: location.addressLocality,
+    addressCountry: 'PL',
+  },
+  openingHoursSpecification: [
+    {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+      opens: '08:00',
+      closes: '20:00',
+    },
+    {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: 'Saturday',
+      opens: '10:00',
+      closes: '15:00',
+    },
+  ],
+})
+
+const breadcrumbSchema = computed(() => {
+  const segments = route.path.split('/').filter(Boolean)
+  const items = [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      name: 'Strona główna',
+      item: `${siteUrl}/`,
+    },
+    ...segments.map((segment, index) => {
+      const path = `/${segments.slice(0, index + 1).join('/')}/`
+      return {
+        '@type': 'ListItem',
+        position: index + 2,
+        name: decodeURIComponent(segment).replace(/-/g, ' '),
+        item: `${siteUrl}${path}`,
+      }
+    }),
+  ]
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: items,
+  }
+})
 
 const businessSchema = computed(() => {
   const organizationId = `${siteUrl}/#organization`
   const logo = settings.value?.data.logo
     ? prismic.asImageSrc(settings.value.data.logo)
-    : undefined
+    : rasterImage
 
   return {
     '@context': 'https://schema.org',
@@ -20,70 +95,22 @@ const businessSchema = computed(() => {
         '@id': organizationId,
         name: 'DentaPlus+',
         url: `${siteUrl}/`,
-        ...(logo ? { logo } : {}),
+        logo,
+        image: rasterImage,
         sameAs: [
           'https://www.facebook.com/dentaplusturek',
+          'https://www.facebook.com/dentapluspoddebice',
           'https://www.instagram.com/klinika.dentaplus',
         ],
       },
-      {
-        '@type': 'Dentist',
-        '@id': `${siteUrl}/turek/#clinic`,
-        name: 'DentaPlus+ Turek',
-        url: `${siteUrl}/turek/`,
-        telephone: normalizePhone(settings.value?.data.phone_turek),
-        parentOrganization: { '@id': organizationId },
-        address: {
-          '@type': 'PostalAddress',
-          streetAddress: 'ul. Łąkowa 10',
-          postalCode: '62-700',
-          addressLocality: 'Turek',
-          addressCountry: 'PL',
-        },
-        openingHoursSpecification: [
-          {
-            '@type': 'OpeningHoursSpecification',
-            dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-            opens: '08:00',
-            closes: '20:00',
-          },
-          {
-            '@type': 'OpeningHoursSpecification',
-            dayOfWeek: 'Saturday',
-            opens: '10:00',
-            closes: '15:00',
-          },
-        ],
-      },
-      {
-        '@type': 'Dentist',
-        '@id': `${siteUrl}/poddebice/#clinic`,
-        name: 'DentaPlus+ Poddębice',
-        url: `${siteUrl}/poddebice/`,
-        telephone: normalizePhone(settings.value?.data.phone_poddebice),
-        parentOrganization: { '@id': organizationId },
-        address: {
-          '@type': 'PostalAddress',
-          streetAddress: 'Krasickiego 1C',
-          postalCode: '99-200',
-          addressLocality: 'Poddębice',
-          addressCountry: 'PL',
-        },
-        openingHoursSpecification: [
-          {
-            '@type': 'OpeningHoursSpecification',
-            dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-            opens: '08:00',
-            closes: '20:00',
-          },
-          {
-            '@type': 'OpeningHoursSpecification',
-            dayOfWeek: 'Saturday',
-            opens: '10:00',
-            closes: '15:00',
-          },
-        ],
-      },
+      dentistNode(locations.turek, organizationId, settings.value?.data.phone_turek, {
+        lat: 52.010363,
+        lng: 18.49203,
+      }),
+      dentistNode(locations.poddebice, organizationId, settings.value?.data.phone_poddebice, {
+        lat: 51.899086,
+        lng: 18.954593,
+      }),
     ],
   }
 })
@@ -93,6 +120,10 @@ useHead({
     {
       type: 'application/ld+json',
       children: computed(() => JSON.stringify(businessSchema.value)),
+    },
+    {
+      type: 'application/ld+json',
+      children: computed(() => JSON.stringify(breadcrumbSchema.value)),
     },
   ],
 })
