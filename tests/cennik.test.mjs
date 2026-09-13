@@ -27,3 +27,12 @@ test('cennik has a sticky category jump-nav', () => {
   assert.match(source, /slice_type === ['"]pricelist['"]/)
   assert.match(source, /:id="categoryId \|\| undefined"/)
 })
+
+test('cennik stacks name over price on mobile', () => {
+  const source = read('slices/Pricelist/index.vue')
+
+  assert.match(source, /flex flex-col items-start/)
+  assert.match(source, /sm:flex-row sm:items-center sm:justify-between/)
+  assert.match(source, /sm:basis-3\/4/)
+  assert.match(source, /sm:basis-1\/4 sm:flex sm:justify-end/)
+})

@@ -99,13 +99,13 @@ function categoryAnchorId(name: string) {
     <div
       v-for="(item, i) in slice.items"
       :key="`${item.name}-price`"
-      class="w-full flex justify-between p-2 hover:bg-slate-800 hover:text-slate-100"
+      class="w-full flex flex-col items-start p-2 hover:bg-slate-800 hover:text-slate-100 sm:flex-row sm:items-center sm:justify-between"
       :class="i % 2 === 1 ? 'bg-slate-100' : ''"
     >
-      <div class="basis-3/4">
+      <div class="sm:basis-3/4">
         {{ item.name }}
       </div>
-      <div class="basis-1/4 flex justify-end items-center text-no-wrap">
+      <div class="sm:basis-1/4 sm:flex sm:justify-end sm:items-center text-no-wrap">
         {{ item.price?.trim() || 'cena po konsultacji' }}
       </div>
     </div>
