@@ -55,7 +55,7 @@ const telHref = computed(() => normalizeTelHref(phone.value))
       referrerpolicy="no-referrer-when-downgrade"
     />
 
-    <h2 class="font-semibold text-2xl md:text-3xl mb-4">Usługi w {{ location.city }}</h2>
+    <h2 class="font-semibold text-2xl md:text-3xl mb-4">Usługi w {{ location.cityLocative }}</h2>
     <ul class="list-disc pl-5 mb-8">
       <li v-for="item in SERVICE_LINKS" :key="item.to" class="mb-1">
         <NuxtLink class="underline" :to="item.to">{{ item.label }}</NuxtLink>
