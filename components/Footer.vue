@@ -28,6 +28,8 @@ const navigation = useNavigation();
         </PrismicLink>
         <NuxtLink class="basis-1/3 md:basis-1 whitespace-nowrap hover:underline" to="/turek/">Turek</NuxtLink>
         <NuxtLink class="basis-1/3 md:basis-1 whitespace-nowrap hover:underline" to="/poddebice/">Poddębice</NuxtLink>
+        <NuxtLink class="basis-1/3 md:basis-1 whitespace-nowrap hover:underline" to="/polityka-prywatnosci/">Prywatność</NuxtLink>
+        <NuxtLink class="basis-1/3 md:basis-1 whitespace-nowrap hover:underline" to="/cookies/">Cookies</NuxtLink>
         <div class="flex items-center basis-1/3 gap-2 md:basis-1">
           <a
             href="https://www.instagram.com/klinika.dentaplus"

@@ -80,6 +80,8 @@ export default defineNuxtConfig({
       routes: [
         "/turek/",
         "/poddebice/",
+        "/polityka-prywatnosci/",
+        "/cookies/",
         ...sitemapDoctorUids.map((uid) => `/zespol/${encodeURI(uid)}/`),
       ],
     },

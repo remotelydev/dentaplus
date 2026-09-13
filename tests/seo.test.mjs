@@ -69,7 +69,7 @@ test('sitemap contains unique canonical URLs from the SEO route map', () => {
 })
 
 test('every public page uses the shared SEO metadata composable', () => {
-  for (const file of ['pages/index.vue', 'pages/[uid].vue', 'pages/zespol/[uid].vue', 'pages/turek.vue', 'pages/poddebice.vue']) {
+  for (const file of ['pages/index.vue', 'pages/[uid].vue', 'pages/zespol/[uid].vue', 'pages/turek.vue', 'pages/poddebice.vue', 'pages/polityka-prywatnosci.vue', 'pages/cookies.vue']) {
     assert.match(read(file), /usePageSeo\(/, `${file} does not use usePageSeo`)
   }
 

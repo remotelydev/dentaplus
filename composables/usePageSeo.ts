@@ -27,6 +27,8 @@ const descriptions: Record<string, string> = {
   '/endodoncja': 'Endodoncja pod mikroskopem w DentaPlus+. Precyzyjne leczenie kanałowe.',
   '/turek': 'Gabinet stomatologiczny DentaPlus+ w Turku, ul. Łąkowa 10. Implanty, Invisalign, leczenie kanałowe i tomografia 3D.',
   '/poddebice': 'Gabinet stomatologiczny DentaPlus+ w Poddębicach, ul. Krasickiego 1C. Sprawdź adres, telefon i godziny otwarcia.',
+  '/polityka-prywatnosci': 'Polityka prywatności gabinetów stomatologicznych DentaPlus+ w Turku i Poddębicach.',
+  '/cookies': 'Informacja o plikach cookies na stronie DentaPlus+.',
 }
 
 export const TITLE_FALLBACKS: Record<string, string> = {
@@ -126,11 +128,11 @@ export const usePageSeo = (options: {
     ogType: 'website',
     ogLocale: 'pl_PL',
     ogSiteName: 'DentaPlus+',
-    ogImage: () => options.image?.value,
+    ogImage: () => ogImage.value,
     ogImageAlt: () => options.title.value,
     twitterCard: 'summary_large_image',
     twitterTitle: () => options.title.value,
     twitterDescription: () => description.value,
-    twitterImage: () => options.image?.value,
+    twitterImage: () => ogImage.value,
   })
 }
