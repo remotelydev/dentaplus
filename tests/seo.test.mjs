@@ -192,6 +192,13 @@ test('default Open Graph image is always set', () => {
   assert.equal(fs.existsSync(path.join(root, 'public/og-default.png')), true)
 })
 
+test('hero LCP image is width-constrained and Inter is latin subset', () => {
+  assert.match(read('slices/Hero/index.vue'), /NuxtImg/)
+  assert.match(read('slices/Hero/index.vue'), /w: 1400/)
+  assert.match(read('nuxt.config.ts'), /latin-ext-400/)
+  assert.doesNotMatch(read('nuxt.config.ts'), /@fontsource\/inter\/400\.css/)
+})
+
 test('source files do not contain debug console calls', () => {
   const files = ['app', 'components', 'composables', 'layouts', 'pages', 'server', 'slices']
     .flatMap(sourceFiles)

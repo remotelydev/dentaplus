@@ -6,7 +6,7 @@ import {
 
 // The array passed to \`getSliceComponentProps\` is purely optional.
 // Consider it as a visual hint for you when templating your slice.
-defineProps(
+const props = defineProps(
   getSliceComponentProps<Content.HeroSlice>([
     "slice",
     "index",
@@ -15,6 +15,16 @@ defineProps(
   ])
 );
 const prismic = usePrismic();
+const lcpImage = computed(() => {
+  const field = props.slice.primary.backgroundImage
+  if (!field?.url) return undefined
+  return {
+    src: prismic.asImageSrc(field, { auto: ['format', 'compress'], w: 1400 }) || field.url,
+    alt: field.alt || '',
+    width: 1400,
+    height: Math.round(1400 * ((field.dimensions?.height || 900) / (field.dimensions?.width || 1400))),
+  }
+})
 
 const serializer: HTMLRichTextMapSerializer = {
   ...prismic.options.richTextSerializer,
@@ -26,9 +36,15 @@ const serializer: HTMLRichTextMapSerializer = {
 <template>
   <section class="relative bg-slate-800 text-white border-b border-slate-100">
     <figure class="absolute inset-0">
-      <PrismicImage
-        v-if="slice.primary.backgroundImage.url"
-        :field="slice.primary.backgroundImage"
+      <NuxtImg
+        v-if="lcpImage"
+        :src="lcpImage.src"
+        :alt="lcpImage.alt"
+        :width="lcpImage.width"
+        :height="lcpImage.height"
+        sizes="100vw"
+        preload
+        fetchpriority="high"
         class="pointer-events-none select-none object-cover opacity-80 h-full w-full"
       />
     </figure>

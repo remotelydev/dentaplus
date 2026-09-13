@@ -20,7 +20,7 @@ defineProps(getSliceComponentProps<Content.TextWithImageSlice>(
           v-if="slice.primary.image.url"
           class="bg-gray-100"
         >
-          <PrismicImage :field="slice.primary.image" />
+          <PrismicImage :field="slice.primary.image" :imgix-params="{ w: 1000, auto: ['compress', 'format'] }" />
         </div>
       </div>
     </div>
