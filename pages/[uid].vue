@@ -5,9 +5,17 @@ import { components } from '~/slices'
 const prismic = usePrismic()
 const route = useRoute()
 const uid = computed(() => String(route.params.uid || ''))
-const { data: page } = useAsyncData(() => uid.value, () =>
-  prismic.client.getByUID('page', uid.value || 'home')
-)
+const { data: page } = await useAsyncData(() => `page-${uid.value}`, async () => {
+  try {
+    return await prismic.client.getByUID('page', uid.value || 'home')
+  } catch {
+    return null
+  }
+})
+
+if (!page.value) {
+  throw createError({ statusCode: 404, statusMessage: 'Nie znaleziono strony' })
+}
 const settings = useSettings()
 
 const seoData = computed(() => page.value?.data as unknown as SeoDocumentData | undefined)

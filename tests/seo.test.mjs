@@ -199,6 +199,14 @@ test('hero LCP image is width-constrained and Inter is latin subset', () => {
   assert.doesNotMatch(read('nuxt.config.ts'), /@fontsource\/inter\/400\.css/)
 })
 
+test('404 and preview are noindexed', () => {
+  assert.match(read('error.vue'), /noindex/)
+  assert.match(read('error.vue'), /Nie znaleziono strony/)
+  assert.match(read('pages/[uid].vue'), /createError/)
+  assert.match(read('nuxt.config.ts'), /X-Robots-Tag/)
+  assert.match(read('public/robots.txt'), /Disallow: \/api\/preview/)
+})
+
 test('source files do not contain debug console calls', () => {
   const files = ['app', 'components', 'composables', 'layouts', 'pages', 'server', 'slices']
     .flatMap(sourceFiles)

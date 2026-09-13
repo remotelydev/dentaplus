@@ -68,6 +68,12 @@ export default defineNuxtConfig({
     preview: "/api/preview",
   },
 
+  routeRules: {
+    "/api/preview": { headers: { "X-Robots-Tag": "noindex, nofollow" } },
+    "/api/preview/**": { headers: { "X-Robots-Tag": "noindex, nofollow" } },
+    "/slice-simulator": { headers: { "X-Robots-Tag": "noindex, nofollow" } },
+  },
+
   nitro: {
     prerender: {
       crawlLinks: true,
