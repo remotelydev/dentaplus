@@ -3,26 +3,25 @@ import { computed } from 'vue'
 import { formatPageTitle, type SeoDocumentData } from '~/composables/usePageSeo'
 import { components } from '~/slices'
 import { DOCTOR_UID_ALIASES, doctors } from '~/data/doctors'
+import { fullyDecode, toCanonicalUrl } from '~/utils/canonical.mjs'
 
 const prismic = usePrismic()
 const route = useRoute()
-const uid = computed(() => {
-  try {
-    return decodeURIComponent(String(route.params.uid || ''))
-  } catch {
-    return String(route.params.uid || '')
-  }
-})
+const uid = computed(() => fullyDecode(String(route.params.uid || '')))
 const prismicUid = computed(() => DOCTOR_UID_ALIASES[uid.value] || uid.value)
 const stub = computed(() => doctors[uid.value] || doctors[prismicUid.value])
 
-const { data: page } = useAsyncData(() => `bio-${prismicUid.value}`, async () => {
+const { data: page } = await useAsyncData(`bio-${prismicUid.value}`, async () => {
   try {
     return await prismic.client.getByUID('bio', prismicUid.value)
   } catch {
     return null
   }
 })
+
+if (!page.value?.data && !stub.value) {
+  throw createError({ statusCode: 404, statusMessage: 'Nie znaleziono strony' })
+}
 const settings = useSettings()
 
 const seoData = computed(() => page.value?.data as unknown as SeoDocumentData | undefined)
@@ -42,11 +41,12 @@ const description = computed(() =>
   (stub.value ? `${stub.value.name} — ${stub.value.role} w DentaPlus+ (${stub.value.city}).` : undefined)
 )
 const image = computed(() => seoData.value?.meta_image?.url || undefined)
-const hasSlices = computed(() => Boolean(page.value?.data.slices?.length))
+const slices = computed(() => page.value?.data?.slices ?? [])
+const hasSlices = computed(() => slices.value.length > 0)
+const runtimeConfig = useRuntimeConfig()
 
 const personSchema = computed(() => {
   if (!contentTitle.value) return null
-  const runtimeConfig = useRuntimeConfig()
   const origin = String(runtimeConfig.public.siteUrl || 'https://www.dentaplus.pl').replace(/\/$/, '')
   return {
     '@context': 'https://schema.org',
@@ -58,7 +58,7 @@ const personSchema = computed(() => {
       name: 'DentaPlus+',
       url: `${origin}/`,
     },
-    url: `${origin}/zespol/${encodeURI(uid.value)}/`,
+    url: toCanonicalUrl(origin, `/zespol/${uid.value}/`),
   }
 })
 
@@ -83,7 +83,7 @@ useHead({
     v-if="hasSlices"
     wrapper="main"
     class="slice-zone"
-    :slices="page?.data.slices ?? []"
+    :slices="slices"
     :components="components"
   />
   <Bounded

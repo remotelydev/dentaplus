@@ -83,7 +83,7 @@ export default defineNuxtConfig({
         "/poddebice/",
         "/polityka-prywatnosci/",
         "/cookies/",
-        ...sitemapDoctorUids.map((uid) => `/zespol/${encodeURI(uid)}/`),
+        ...sitemapDoctorUids.map((uid) => `/zespol/${uid}/`),
       ],
     },
   },

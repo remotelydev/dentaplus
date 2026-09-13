@@ -6,7 +6,7 @@ import { serviceFaqs } from '~/data/services'
 const prismic = usePrismic()
 const route = useRoute()
 const uid = computed(() => String(route.params.uid || ''))
-const { data: page } = await useAsyncData(() => `page-${uid.value}`, async () => {
+const { data: page } = await useAsyncData(`page-${uid.value}`, async () => {
   try {
     return await prismic.client.getByUID('page', uid.value || 'home')
   } catch {
@@ -14,9 +14,10 @@ const { data: page } = await useAsyncData(() => `page-${uid.value}`, async () =>
   }
 })
 
-if (!page.value) {
+if (!page.value?.data) {
   throw createError({ statusCode: 404, statusMessage: 'Nie znaleziono strony' })
 }
+const slices = computed(() => page.value?.data?.slices ?? [])
 const settings = useSettings()
 
 const seoData = computed(() => page.value?.data as unknown as SeoDocumentData | undefined)
@@ -69,7 +70,7 @@ useHead({
     <SliceZone
       wrapper="main"
       class="slice-zone"
-      :slices="page?.data.slices ?? []"
+      :slices="slices"
       :components="components"
     />
     <ServiceExtras :uid="uid" />
