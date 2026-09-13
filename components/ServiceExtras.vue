@@ -21,9 +21,26 @@ defineProps<{
         <h2 class="border-l-4 border-denta-green bg-slate-800 px-5 py-3 font-semibold text-2xl text-white md:px-6 md:py-4 md:text-3xl">
           {{ block.heading }}
         </h2>
-        <p class="border-l-4 border-denta-green bg-slate-50 px-5 py-5 leading-relaxed text-slate-700 md:px-6 md:py-6">
-          {{ block.body }}
-        </p>
+        <div class="border-l-4 border-denta-green bg-slate-50 px-5 py-5 leading-relaxed text-slate-700 md:px-6 md:py-6">
+          <ol
+            v-if="block.steps?.length"
+            class="mb-4 space-y-3"
+          >
+            <li
+              v-for="(step, stepIndex) in block.steps"
+              :key="step"
+              class="flex gap-3"
+            >
+              <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-denta-green font-semibold text-slate-800">
+                {{ stepIndex + 1 }}
+              </span>
+              <span class="pt-1">{{ step }}</span>
+            </li>
+          </ol>
+          <p v-if="block.body">
+            {{ block.body }}
+          </p>
+        </div>
       </section>
       <p class="mb-4">
         {{ servicePages[uid].cta }}
