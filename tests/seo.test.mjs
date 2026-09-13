@@ -207,6 +207,24 @@ test('404 and preview are noindexed', () => {
   assert.match(read('public/robots.txt'), /Disallow: \/api\/preview/)
 })
 
+test('prerender fetches use a string useAsyncData key and guard missing slices', () => {
+  const uidPage = read('pages/[uid].vue')
+  const bioPage = read('pages/zespol/[uid].vue')
+  const homePage = read('pages/index.vue')
+
+  assert.doesNotMatch(uidPage, /useAsyncData\(\(\)\s*=>/)
+  assert.doesNotMatch(bioPage, /useAsyncData\(\(\)\s*=>/)
+  assert.match(uidPage, /useAsyncData\(`page-\$\{uid\.value\}`/)
+  assert.match(bioPage, /useAsyncData\(`bio-\$\{prismicUid\.value\}`/)
+  assert.match(uidPage, /data\?\.slices/)
+  assert.match(bioPage, /data\?\.slices/)
+  assert.match(homePage, /data\?\.slices/)
+  assert.match(bioPage, /createError/)
+  assert.match(bioPage, /^const runtimeConfig = useRuntimeConfig\(\)$/m)
+  assert.match(bioPage, /fullyDecode/)
+  assert.doesNotMatch(read('nuxt.config.ts'), /encodeURI\(uid\)/)
+})
+
 test('homepage H1 falls back to a local-search heading', () => {
   assert.match(read('slices/Hero/index.vue'), /Gabinety stomatologiczne w Turku i Poddębicach/)
 })

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { locations } from '~/data/locations'
+import { fullyDecode, toCanonicalUrl } from '~/utils/canonical.mjs'
 
 const prismic = usePrismic()
 const settings = useSettings()
@@ -69,8 +70,8 @@ const breadcrumbSchema = computed(() => {
       return {
         '@type': 'ListItem',
         position: index + 2,
-        name: decodeURIComponent(segment).replace(/-/g, ' '),
-        item: `${siteUrl}${path}`,
+        name: fullyDecode(segment).replace(/-/g, ' '),
+        item: toCanonicalUrl(siteUrl, path),
       }
     }),
   ]
