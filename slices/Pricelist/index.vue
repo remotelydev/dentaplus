@@ -1,9 +1,17 @@
 <script setup lang="ts">
 import { type Content } from "@prismicio/client";
 
-// The array passed to `getSliceComponentProps` is purely optional.
-// Consider it as a visual hint for you when templating your slice.
-defineProps(
+const CATEGORY_LINKS: Record<string, string> = {
+  implantologia: '/implanty/',
+  implanty: '/implanty/',
+  endodoncja: '/endodoncja/',
+  ortodoncja: '/invisalign/',
+  invisalign: '/invisalign/',
+  radiologia: '/tomografia/',
+  tomografia: '/tomografia/',
+}
+
+const props = defineProps(
   getSliceComponentProps<Content.PricelistSlice>([
     "slice",
     "index",
@@ -11,6 +19,14 @@ defineProps(
     "context",
   ])
 );
+const prismic = usePrismic()
+const categoryName = computed(() => prismic.asText(props.slice.primary.name).trim())
+const categoryHref = computed(() => {
+  const fromCms = (props.slice.primary as { service_link?: { url?: string } }).service_link?.url
+  if (fromCms) return fromCms
+  const key = categoryName.value.toLowerCase()
+  return CATEGORY_LINKS[key]
+})
 </script>
 
 <template>
@@ -19,11 +35,19 @@ defineProps(
     :data-slice-variation="slice.variation"
     class="container mx-auto max-w-[1280px] last-of-type:mb-16"
   >
-    <PrismicRichText
-      v-if="slice.primary.name"
-      class="mt-8 mb-2 px-2"
-      :field="slice.primary.name"
-    />
+    <h2
+      v-if="categoryName"
+      class="mt-8 mb-2 px-2 font-semibold text-2xl"
+    >
+      <NuxtLink
+        v-if="categoryHref"
+        class="underline"
+        :to="categoryHref"
+      >
+        {{ categoryName }}
+      </NuxtLink>
+      <template v-else>{{ categoryName }}</template>
+    </h2>
     <div
       v-for="(item, i) in slice.items"
       :key="`${item.name}-price`"
@@ -34,7 +58,7 @@ defineProps(
         {{ item.name }}
       </div>
       <div class="basis-1/4 flex justify-end items-center text-no-wrap">
-        {{ item.price }}
+        {{ item.price?.trim() || 'cena po konsultacji' }}
       </div>
     </div>
   </section>
