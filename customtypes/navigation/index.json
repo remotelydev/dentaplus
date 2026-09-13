@@ -30,6 +30,31 @@
             }
           }
         }
+      },
+      "service_links": {
+        "type": "Group",
+        "config": {
+          "label": "Service links",
+          "fields": {
+            "label": {
+              "type": "StructuredText",
+              "config": {
+                "label": "Label",
+                "placeholder": "Usługi item label",
+                "allowTargetBlank": false,
+                "single": "heading3"
+              }
+            },
+            "link": {
+              "type": "Link",
+              "config": {
+                "label": "Link",
+                "placeholder": "Service page",
+                "select": null
+              }
+            }
+          }
+        }
       }
     }
   }

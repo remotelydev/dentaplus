@@ -127,6 +127,20 @@ test('global SEO configuration includes Polish language and local business schem
   assert.match(read('slices/Contact/index.vue'), /locations\.poddebice\.streetAddress/)
 })
 
+test('service pages expose extra copy and Usługi navigation', () => {
+  const services = read('data/services.ts')
+  const header = read('components/Header.vue')
+  const extras = read('pages/[uid].vue')
+
+  for (const uid of ['implanty', 'invisalign', 'endodoncja', 'itero', 'tomografia']) {
+    assert.match(services, new RegExp(`${uid}:`))
+  }
+  assert.match(header, /Usługi/)
+  assert.match(header, /SERVICE_NAV/)
+  assert.match(extras, /ServiceExtras/)
+  assert.match(read('customtypes/navigation/index.json'), /service_links/)
+})
+
 test('source files do not contain debug console calls', () => {
   const files = ['app', 'components', 'composables', 'layouts', 'pages', 'server', 'slices']
     .flatMap(sourceFiles)

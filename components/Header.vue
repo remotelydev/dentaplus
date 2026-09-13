@@ -4,17 +4,20 @@ import BurgerIcon from '../public/burger.svg';
 import CloseIcon from '../public/close.svg';
 import FacebookIcon from '../public/facebook.svg';
 import InstagramIcon from '../public/instagram.svg';
+import { SERVICE_NAV } from '~/data/services'
 
 const navigation = useNavigation();
 const settings = useSettings();
 
 const isMobileMenuOpen = ref(false);
+const isServicesOpen = ref(false);
 
 watch(isMobileMenuOpen, (nextIsMobileMenuOpen) => {
   if (nextIsMobileMenuOpen) {
     document?.body.classList.add('overflow-hidden')
   } else {
     document?.body.classList.remove('overflow-hidden')
+    isServicesOpen.value = false
   }
 })
 </script>
@@ -64,6 +67,14 @@ watch(isMobileMenuOpen, (nextIsMobileMenuOpen) => {
               {{ $prismic.asText(link.label) }}
             </PrismicLink>
           </li>
+          <li class="relative font-semibold tracking-tight text-slate-800 group">
+            <span class="hover:underline">Usługi</span>
+            <ul class="absolute left-0 top-full hidden group-hover:block bg-white shadow-md py-2 min-w-[12rem] z-20">
+              <li v-for="item in SERVICE_NAV" :key="item.uid">
+                <NuxtLink class="block px-4 py-2 hover:bg-slate-100" :to="item.to">{{ item.label }}</NuxtLink>
+              </li>
+            </ul>
+          </li>
           <li class="font-semibold tracking-tight text-slate-800 hover:underline">
             <NuxtLink to="/turek/">Turek</NuxtLink>
           </li>
@@ -96,6 +107,22 @@ watch(isMobileMenuOpen, (nextIsMobileMenuOpen) => {
         >
           {{ $prismic.asText(link.label) }}
         </PrismicLink>
+        <button
+          type="button"
+          class="px-6 py-4 font-bold text-center bg-white"
+          @click.stop="isServicesOpen = !isServicesOpen"
+        >
+          Usługi
+        </button>
+        <NuxtLink
+          v-for="item in SERVICE_NAV"
+          v-show="isServicesOpen"
+          :key="`mobile-service-${item.uid}`"
+          class="px-6 py-3 font-semibold text-center bg-slate-50"
+          :to="item.to"
+        >
+          {{ item.label }}
+        </NuxtLink>
         <NuxtLink class="px-6 py-4 font-bold text-center bg-slate-100" to="/turek/">Turek</NuxtLink>
         <NuxtLink class="px-6 py-4 font-bold text-center" to="/poddebice/">Poddębice</NuxtLink>
         <div class="flex justify-center gap-8 p-8">

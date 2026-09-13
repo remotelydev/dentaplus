@@ -4,8 +4,9 @@ import { components } from '~/slices'
 
 const prismic = usePrismic()
 const route = useRoute()
-const { data: page } = useAsyncData(route.params.uid as string, () =>
-  prismic.client.getByUID('page', route.params.uid as string || 'home')
+const uid = computed(() => String(route.params.uid || ''))
+const { data: page } = useAsyncData(() => uid.value, () =>
+  prismic.client.getByUID('page', uid.value || 'home')
 )
 const settings = useSettings()
 
@@ -17,7 +18,7 @@ const title = computed(() =>
     metaTitle: seoData.value?.meta_title,
     contentTitle: contentTitle.value,
     siteTitle: siteTitle.value,
-    uid: String(route.params.uid || ''),
+    uid: uid.value,
     path: route.path,
   })
 )
@@ -33,12 +34,15 @@ usePageSeo({
 
 
 <template>
-  <SliceZone
-    wrapper="main"
-    class="slice-zone"
-    :slices="page?.data.slices ?? []"
-    :components="components"
-  />
+  <div>
+    <SliceZone
+      wrapper="main"
+      class="slice-zone"
+      :slices="page?.data.slices ?? []"
+      :components="components"
+    />
+    <ServiceExtras :uid="uid" />
+  </div>
 </template>
 
 <style scoped>

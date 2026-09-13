@@ -1,0 +1,98 @@
+export const SERVICE_NAV = [
+  { uid: 'implanty', to: '/implanty/', label: 'Implanty' },
+  { uid: 'invisalign', to: '/invisalign/', label: 'Invisalign' },
+  { uid: 'endodoncja', to: '/endodoncja/', label: 'Endodoncja' },
+  { uid: 'itero', to: '/itero/', label: 'iTero' },
+  { uid: 'tomografia', to: '/tomografia/', label: 'Tomografia 3D' },
+] as const
+
+export const servicePages: Record<string, {
+  h2s: { heading: string, body: string }[]
+  cta: string
+}> = {
+  implanty: {
+    h2s: [
+      {
+        heading: 'Dla kogo są implanty zębów?',
+        body: 'Implant to tytanowa śruba zastępująca korzeń zęba. W DentaPlus+ w Turku i Poddębicach polecamy je osobom, którym brakuje jednego zęba, kilku zębów albo które rozważają protezę opartą na implantach. Warunkiem jest zdrowie ogólne pozwalające na zabieg i wystarczająca ilość kości — to oceniamy na tomografii 3D w Turku.',
+      },
+      {
+        heading: 'Jak wygląda leczenie implantologiczne?',
+        body: 'Najpierw konsultacja i plan: zdjęcie, skan i w razie potrzeby tomograf. Następnie wszczepiamy implant, odczekujemy na osteointegrację i odbudowujemy koronę. Czas zależy od liczby implantów i tego, czy potrzebna jest augmentacja kości. Prowadzimy Cię przez każdy etap — od ekstrakcji po cementowanie korony.',
+      },
+      {
+        heading: 'Implanty w Turku i Poddębicach',
+        body: 'Zabiegi implantologiczne realizujemy w obu gabinetach DentaPlus+, ze wsparciem diagnostyki 3D w Turku. Dojazd jest prosty z Władysławowa, Dobrej, Uniejowa i Łęczycy. Aktualne widełki cenowe znajdziesz w cenniku — po badaniu podajemy indywidualną wycenę na piśmie.',
+      },
+    ],
+    cta: 'Sprawdź ceny implantów i umów konsultację w Turku lub Poddębicach.',
+  },
+  invisalign: {
+    h2s: [
+      {
+        heading: 'Czym jest Invisalign?',
+        body: 'Invisalign to przezroczyste nakładki prostujące zęby bez klasycznego aparatu. W DentaPlus+ skanujemy łuki skanerem iTero, dzięki czemu plan leczenia i wizualizacja efektu powstają cyfrowo — bez wycisków masą.',
+      },
+      {
+        heading: 'Dla kogo nakładki, a kiedy aparat?',
+        body: 'Nakładki sprawdzają się przy stłoczeniach, szparach i wielu wadach zgryzu u nastolatków i dorosłych. Ciężkie wady szkieletowe mogą wymagać innego protokołu — to rozstrzygamy na konsultacji ortodontycznej w Turku lub Poddębicach.',
+      },
+      {
+        heading: 'Przebieg leczenia Invisalign w DentaPlus+',
+        body: 'Konsultacja, skan iTero, akceptacja planu, seria nakładek wymienianych co 1–2 tygodnie i wizyty kontrolne. Higiena jest prostsza niż przy zamkach, bo nakładki zdejmujesz do jedzenia. Po leczeniu stosujemy retainery, żeby efekt został.',
+      },
+    ],
+    cta: 'Zobacz cennik ortodoncji i zapytaj o Invisalign w Turku lub Poddębicach.',
+  },
+  endodoncja: {
+    h2s: [
+      {
+        heading: 'Kiedy potrzebne jest leczenie kanałowe?',
+        body: 'Do endodoncji kierujemy, gdy miazga zęba jest zapalna lub martwa: silny ból, reakcja na ciepło, obrzęk, zmiana na zdjęciu RTG. Celem jest uratować ząb zamiast go usuwać. W DentaPlus+ leczymy kanałowo pod mikroskopem, co zwiększa szansę na odnalezienie wszystkich kanałów.',
+      },
+      {
+        heading: 'Jak przebiega wizyta?',
+        body: 'Po znieczuleniu otwieramy ząb, opracowujemy kanały, dezynfekujemy i wypełniamy. Często wystarcza jedna wizyta, trudniejsze przypadki wymagają dwóch. Potem ząb wzmacniamy wypełnieniem albo koroną — zwłaszcza zęby boczne po leczeniu kanałowym.',
+      },
+      {
+        heading: 'Leczenie kanałowe Turek i Poddębice',
+        body: 'Mikroskop i diagnostyka obrazowa są dostępne w naszych gabinetach. Pacjenci z Turku, Poddębic i okolic nie muszą jechać do dużego miasta na powtórne leczenie kanałowe. Orientacyjne ceny są w cenniku; rewizja i usuwanie złamanych narzędzi wyceniane są po oględzinach.',
+      },
+    ],
+    cta: 'Umów leczenie kanałowe — sprawdź cennik endodoncji.',
+  },
+  itero: {
+    h2s: [
+      {
+        heading: 'Co daje skaner iTero?',
+        body: 'iTero to skaner wewnątrzustny: zamiast wycisku masy robimy trójwymiarowy model zębów w kilka minut. Służy do planowania Invisalign, koron, mostów i kontroli zgryzu. Jest wygodniejszy przy odruchu wymiotnym i dokładniejszy niż klasyczna łyżka.',
+      },
+      {
+        heading: 'Kiedy korzystamy ze skanu?',
+        body: 'Przy starcie Invisalign, przed pracami protetycznymi i implantologicznymi oraz gdy chcemy pokazać pacjentowi stan uzębienia na ekranie. Skan z Turku lub Poddębic można wykorzystać w dalszym leczeniu w drugim gabinecie DentaPlus+.',
+      },
+      {
+        heading: 'Diagnostyka cyfrowa na miejscu',
+        body: 'Łączymy iTero z tomografią 3D, żeby plan implantu albo nakładek opierał się na kości i na zębach. To skraca liczbę wizyt i ogranicza poprawki w laboratorium.',
+      },
+    ],
+    cta: 'Zapytaj o skan iTero przy umawianiu konsultacji — cennik diagnostyki jest na stronie Cennik.',
+  },
+  tomografia: {
+    h2s: [
+      {
+        heading: 'Po co tomografia 3D zębów?',
+        body: 'Tomografia stożkowa (CBCT) pokazuje kość, korzenie i zatoki w trzech wymiarach. Jest standardem przed implantami, trudnym leczeniem kanałowym i oceną ósemek. Zdjęcie pantomograficzne tego nie zastąpi, gdy planujemy nawiert w kości.',
+      },
+      {
+        heading: 'Jak wygląda badanie?',
+        body: 'Stoisz lub siedzisz przy aparacie, badanie trwa kilkanaście sekund, dawka jest znacznie niższa niż w tomografii szpitalnej. Wynik omawiamy od razu albo na zaplanowanej konsultacji implantologicznej / endodontycznej.',
+      },
+      {
+        heading: 'Tomografia 3D w Turku',
+        body: 'Aparat CBCT pracuje w gabinecie DentaPlus+ w Turku przy ul. Łąkowej 10. Pacjenci z Poddębic korzystają z tej diagnostyki w ramach tej samej sieci — nie wysyłamy Cię do obcej pracowni. Cena badania jest w cenniku radiologii.',
+      },
+    ],
+    cta: 'Umów tomografię 3D w Turku i zobacz cennik radiologii.',
+  },
+}

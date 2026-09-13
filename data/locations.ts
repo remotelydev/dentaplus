@@ -1,14 +1,15 @@
+import { SERVICE_NAV } from './services'
+
 export const CLINIC_HOURS = [
   { days: 'Pn–Pt', opens: '8:00', closes: '20:00' },
   { days: 'Sb', opens: '10:00', closes: '15:00' },
 ]
 
 export const SERVICE_LINKS = [
-  { to: '/implanty/', label: 'Implanty zębów' },
-  { to: '/invisalign/', label: 'Invisalign' },
-  { to: '/endodoncja/', label: 'Leczenie kanałowe' },
-  { to: '/itero/', label: 'Skaner iTero' },
-  { to: '/tomografia/', label: 'Tomografia 3D' },
+  ...SERVICE_NAV.map((item) => ({
+    to: item.to,
+    label: item.uid === 'implanty' ? 'Implanty zębów' : item.uid === 'endodoncja' ? 'Leczenie kanałowe' : item.uid === 'itero' ? 'Skaner iTero' : item.label,
+  })),
   { to: '/cennik/', label: 'Cennik' },
 ]
 
