@@ -121,7 +121,17 @@ export default defineNuxtConfig({
         },
         extend: {
           colors: {
-            "denta-green": "#b7d424",
+            "denta-lime": "var(--denta-lime)",
+            "denta-green": "var(--denta-lime)",
+            "denta-ink": "var(--denta-ink)",
+          },
+          spacing: {
+            "denta-section": "var(--denta-section-y)",
+            "denta-section-sm": "var(--denta-section-y-sm)",
+            "denta-section-lg": "var(--denta-section-y-lg)",
+          },
+          maxWidth: {
+            denta: "var(--denta-max-width)",
           },
           screens: {
             xs: "390px",
