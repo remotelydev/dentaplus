@@ -2,6 +2,10 @@ export const DOCTOR_UID_ALIASES: Record<string, string> = {
   'monika-maciejewska': 'monika-maciejeweska',
 }
 
+export const DOCTOR_TYPO_UIDS: Record<string, string> = Object.fromEntries(
+  Object.entries(DOCTOR_UID_ALIASES).map(([canonical, typo]) => [typo, canonical]),
+)
+
 export const doctors: Record<string, {
   name: string
   role: string
@@ -17,7 +21,6 @@ export const doctors: Record<string, {
   'michał-trzos': { name: 'Michał Trzos', role: 'Lekarz dentysta', city: 'Turek i Poddębice', bio: 'Lekarz dentysta w zespole DentaPlus+.' },
   'michal-trzos': { name: 'Michał Trzos', role: 'Lekarz dentysta', city: 'Turek i Poddębice', bio: 'Lekarz dentysta w zespole DentaPlus+.' },
   'monika-maciejewska': { name: 'Monika Maciejewska', role: 'Lekarz dentysta', city: 'Turek i Poddębice', bio: 'Lekarz dentysta w zespole DentaPlus+.' },
-  'monika-maciejeweska': { name: 'Monika Maciejewska', role: 'Lekarz dentysta', city: 'Turek i Poddębice', bio: 'Lekarz dentysta w zespole DentaPlus+.' },
   'natalia-ruszczynska': { name: 'Natalia Ruszczyńska', role: 'Lekarz dentysta', city: 'Turek i Poddębice', bio: 'Lekarz dentysta w zespole DentaPlus+.' },
   'paulina-wilmont': { name: 'Paulina Wilmont', role: 'Lekarz dentysta', city: 'Turek i Poddębice', bio: 'Lekarz dentysta w zespole DentaPlus+.' },
   'pawel-trumpus': { name: 'Paweł Trumpus', role: 'Implantolog', city: 'Turek i Poddębice', bio: 'Implantolog w zespole DentaPlus+ w Turku i Poddębicach.' },

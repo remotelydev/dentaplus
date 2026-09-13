@@ -78,6 +78,10 @@ export default defineNuxtConfig({
   nitro: {
     prerender: {
       crawlLinks: true,
+      ignore: [
+        "/zespol/monika-maciejeweska",
+        "/zespol/monika-maciejeweska/",
+      ],
       routes: [
         "/turek/",
         "/poddebice/",
