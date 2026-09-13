@@ -76,7 +76,7 @@ test('process steps come from existing jak wygląda / przebieg copy', () => {
     )
   }
 
-  const iteroBlock = services.match(/itero: \{[\s\S]*?\n  \},\n  tomografia:/)?.[0] || ''
+  const iteroBlock = services.match(/itero: \{[\s\S]*?\n {2}\},\n {2}tomografia:/)?.[0] || ''
   assert.match(iteroBlock, /itero:/)
   assert.doesNotMatch(iteroBlock, /steps:/)
 })
