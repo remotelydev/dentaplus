@@ -45,11 +45,30 @@ defineProps<{
       <p class="mb-4">
         {{ servicePages[uid].cta }}
       </p>
-      <section v-if="serviceFaqs[uid]?.length" class="mt-12">
-        <h2 class="font-semibold text-2xl md:text-3xl mb-4">Najczęstsze pytania</h2>
-        <div v-for="item in serviceFaqs[uid]" :key="item.q" class="mb-6">
-          <h3 class="font-semibold text-xl mb-2">{{ item.q }}</h3>
-          <p>{{ item.a }}</p>
+      <section
+        v-if="serviceFaqs[uid]?.length"
+        class="mt-12"
+      >
+        <h2 class="mb-4 font-semibold text-2xl md:text-3xl">
+          Najczęstsze pytania
+        </h2>
+        <div class="divide-y divide-slate-200 border-y border-slate-200">
+          <details
+            v-for="item in serviceFaqs[uid]"
+            :key="item.q"
+            class="group py-4"
+          >
+            <summary class="flex cursor-pointer list-none items-center justify-between gap-4 font-semibold text-xl text-slate-800">
+              <span>{{ item.q }}</span>
+              <span
+                class="faq-icon flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-denta-green text-slate-800"
+                aria-hidden="true"
+              />
+            </summary>
+            <p class="mt-3 leading-relaxed text-slate-700">
+              {{ item.a }}
+            </p>
+          </details>
         </div>
       </section>
       <p>
@@ -64,3 +83,23 @@ defineProps<{
     </article>
   </Bounded>
 </template>
+
+<style scoped>
+summary {
+  list-style: none;
+}
+
+summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq-icon::before {
+  content: '+';
+  font-weight: 600;
+  line-height: 1;
+}
+
+details[open] .faq-icon::before {
+  content: '−';
+}
+</style>
