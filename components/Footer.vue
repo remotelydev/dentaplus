@@ -12,7 +12,7 @@ const navigation = useNavigation();
       <div class="mt-6 md:m-0">
         Developed with ❤️ by&nbsp;
         <a
-          href="http://www.trzos.dev"
+          href="https://www.trzos.dev"
           class="hover:underline"
           target="_blank"
         > Bartosz Trzos </a>.
