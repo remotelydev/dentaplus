@@ -89,16 +89,25 @@ watch(isMobileMenuOpen, (nextIsMobileMenuOpen) => {
             class="relative font-semibold tracking-tight text-slate-800"
             @keydown="onDesktopServicesKeydown"
           >
-            <button
-              type="button"
-              class="hover:underline"
-              :aria-expanded="isDesktopServicesOpen"
-              aria-controls="desktop-services-menu"
-              aria-haspopup="true"
-              @click="isDesktopServicesOpen = !isDesktopServicesOpen"
-            >
-              Usługi
-            </button>
+            <div class="flex items-center gap-1">
+              <NuxtLink
+                class="hover:underline"
+                to="/uslugi/"
+              >
+                Usługi
+              </NuxtLink>
+              <button
+                type="button"
+                class="px-1"
+                :aria-expanded="isDesktopServicesOpen"
+                aria-controls="desktop-services-menu"
+                aria-haspopup="true"
+                aria-label="Pokaż listę usług"
+                @click="isDesktopServicesOpen = !isDesktopServicesOpen"
+              >
+                <span aria-hidden="true">▾</span>
+              </button>
+            </div>
             <ul
               v-show="isDesktopServicesOpen"
               id="desktop-services-menu"
@@ -150,13 +159,23 @@ watch(isMobileMenuOpen, (nextIsMobileMenuOpen) => {
         >
           {{ $prismic.asText(link.label) }}
         </PrismicLink>
-        <button
-          type="button"
-          class="px-6 py-4 font-bold text-center bg-white"
-          @click.stop="isServicesOpen = !isServicesOpen"
-        >
-          Usługi
-        </button>
+        <div class="flex bg-white">
+          <NuxtLink
+            class="flex-1 px-6 py-4 font-bold text-center"
+            to="/uslugi/"
+          >
+            Usługi
+          </NuxtLink>
+          <button
+            type="button"
+            class="px-4 py-4 font-bold"
+            :aria-expanded="isServicesOpen"
+            aria-label="Pokaż listę usług"
+            @click.stop="isServicesOpen = !isServicesOpen"
+          >
+            <span aria-hidden="true">▾</span>
+          </button>
+        </div>
         <NuxtLink
           v-for="item in SERVICE_NAV"
           v-show="isServicesOpen"
