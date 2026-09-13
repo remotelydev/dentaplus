@@ -222,8 +222,17 @@ test('404 and preview are noindexed', () => {
   assert.match(read('nuxt.config.ts'), /X-Robots-Tag/)
   assert.match(read('nuxt.config.ts'), /["']\/404\/["']/)
   assert.match(read('nuxt.config.ts'), /prerender:done/)
+  assert.match(read('nuxt.config.ts'), /["']\/api\/preview\/["']/)
   assert.match(read('scripts/verify-generated-site.mjs'), /404\.html/)
+  assert.match(read('scripts/verify-generated-site.mjs'), /api\/preview/)
+  assert.match(read('plugins/preview-robots.ts'), /noindex/)
   assert.match(read('public/robots.txt'), /Disallow: \/api\/preview/)
+
+  const previewHeaders = read('netlify.toml').split('[[headers]]').filter((block) => block.includes('/api/preview'))
+  assert.ok(previewHeaders.length >= 2)
+  for (const block of previewHeaders) {
+    assert.match(block, /X-Robots-Tag = "noindex, nofollow"/)
+  }
 })
 
 test('prerender fetches use a string useAsyncData key and guard missing slices', () => {

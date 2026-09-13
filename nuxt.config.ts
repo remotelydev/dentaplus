@@ -102,6 +102,7 @@ export default defineNuxtConfig({
       ],
       routes: [
         "/404/",
+        "/api/preview/",
         "/turek/",
         "/poddebice/",
         "/polityka-prywatnosci/",

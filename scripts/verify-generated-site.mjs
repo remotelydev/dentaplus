@@ -59,3 +59,23 @@ if (!/<h1\b[^>]*>\s*Nie znaleziono strony\s*<\/h1>/i.test(notFoundHtml)) {
 }
 
 console.log('Generated 404.html is noindexed with a distinct title.')
+
+if (existsSync(new URL('zespol/monika-maciejeweska/index.html', outputDirectory))) {
+  throw new Error('Typo slug HTML was prerendered; Netlify would serve it as 200 without force.')
+}
+
+const previewHtml = existsSync(new URL('api/preview/index.html', outputDirectory))
+  ? await readFile(new URL('api/preview/index.html', outputDirectory), 'utf8')
+  : existsSync(new URL('api/preview.html', outputDirectory))
+    ? await readFile(new URL('api/preview.html', outputDirectory), 'utf8')
+    : null
+
+if (!previewHtml) {
+  throw new Error('Generated /api/preview HTML is missing.')
+}
+
+if (!/noindex/.test(previewHtml)) {
+  throw new Error('Generated /api/preview HTML is missing robots noindex.')
+}
+
+console.log('Generated preview route is noindexed.')
