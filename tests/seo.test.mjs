@@ -263,6 +263,19 @@ test('images get a Polish alt fallback', () => {
   assert.match(read('slices/Hero/index.vue'), /DEFAULT_IMAGE_ALT/)
 })
 
+test('Metamorfozy SSR HTML can render przed/po images before the slider hydrates', () => {
+  const source = read('slices/Metamorphoses/index.vue')
+
+  assert.match(source, /<ClientOnly>/)
+  assert.match(source, /VueCompareImage/)
+  assert.match(source, /#fallback/)
+  assert.match(source, /item\.before\.url/)
+  assert.match(source, /item\.after\.url/)
+  assert.match(source, /:alt="imageAlt\(item\.before\)"/)
+  assert.match(source, /:alt="imageAlt\(item\.after\)"/)
+  assert.match(source, /<img/)
+})
+
 test('maps use Polish locale and controls have accessible names', () => {
   assert.doesNotMatch(read('slices/Contact/index.vue'), /1sen!2spl/)
   assert.match(read('slices/Contact/index.vue'), /1spl!2spl/)

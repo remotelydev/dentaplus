@@ -14,6 +14,9 @@ defineProps(
     "context",
   ]),
 );
+
+const imageAlt = (field: { alt?: string | null } | null | undefined) =>
+  field?.alt?.trim() || DEFAULT_IMAGE_ALT
 </script>
 
 <template>
@@ -39,7 +42,27 @@ defineProps(
           <VueCompareImage
             :left-image="item.before.url"
             :right-image="item.after.url"
+            :left-image-alt="imageAlt(item.before)"
+            :right-image-alt="imageAlt(item.after)"
           />
+          <template #fallback>
+            <div class="w-full">
+              <img
+                v-if="item.before.url"
+                :src="item.before.url"
+                :alt="imageAlt(item.before)"
+                :width="item.before.dimensions?.width || undefined"
+                :height="item.before.dimensions?.height || undefined"
+              >
+              <img
+                v-if="item.after.url"
+                :src="item.after.url"
+                :alt="imageAlt(item.after)"
+                :width="item.after.dimensions?.width || undefined"
+                :height="item.after.dimensions?.height || undefined"
+              >
+            </div>
+          </template>
         </ClientOnly>
       </div>
     </div>
