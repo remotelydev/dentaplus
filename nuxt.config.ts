@@ -107,6 +107,7 @@ export default defineNuxtConfig({
         "/poddebice/",
         "/polityka-prywatnosci/",
         "/cookies/",
+        "/uslugi/",
         ...sitemapDoctorUids.map((uid) => `/zespol/${uid}/`),
       ],
     },
