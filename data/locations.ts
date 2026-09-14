@@ -17,6 +17,7 @@ export const locations = {
   turek: {
     uid: 'turek',
     city: 'Turek',
+    cityLocative: 'Turku',
     name: 'DentaPlus+ Klinika Stomatologii Turek',
     streetAddress: 'ul. Łąkowa 10',
     postalCode: '62-700',
@@ -41,6 +42,7 @@ export const locations = {
   poddebice: {
     uid: 'poddebice',
     city: 'Poddębice',
+    cityLocative: 'Poddębicach',
     name: 'DentaPlus+ Klinika Stomatologii Poddębice',
     streetAddress: 'ul. Krasickiego 1C',
     postalCode: '99-200',

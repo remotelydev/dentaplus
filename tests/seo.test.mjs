@@ -131,6 +131,15 @@ test('global SEO configuration includes Polish language and local business schem
   assert.match(read('slices/Contact/index.vue'), /locations\.poddebice\.streetAddress/)
 })
 
+test('location service headings use locative city names', () => {
+  const component = read('components/ClinicLocation.vue')
+  const data = read('data/locations.ts')
+  assert.match(component, /Usługi w \{\{ location\.cityLocative \}\}/)
+  assert.doesNotMatch(component, /Usługi w \{\{ location\.city \}\}/)
+  assert.match(data, /cityLocative: 'Turku'/)
+  assert.match(data, /cityLocative: 'Poddębicach'/)
+})
+
 test('service pages expose extra copy and Usługi navigation', () => {
   const services = read('data/services.ts')
   const header = read('components/Header.vue')
