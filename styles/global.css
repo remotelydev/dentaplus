@@ -4,6 +4,17 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --denta-lime: #b7d424;
+  --denta-green: var(--denta-lime);
+  /* Softer than Tailwind slate-800 (#1e293b) for body/chrome text. */
+  --denta-ink: #3e4a57;
+  --denta-section-y: 4rem;
+  --denta-section-y-sm: 2.5rem;
+  --denta-section-y-lg: 6rem;
+  --denta-max-width: 72rem;
+}
+
 body {
   @apply overflow-x-hidden antialiased;
 }
