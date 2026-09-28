@@ -28,10 +28,10 @@ watch(isMobileMenuOpen, (nextIsMobileMenuOpen) => {
     as="header"
     y-padding="sm"
   >
-    <div class="flex items-center justify-between leading-none">
-      <div class="dummy invisible basis-8 md:hidden" />
+    <div class="flex items-center justify-between gap-4 leading-none">
       <NuxtLink
         to="/"
+        class="shrink-0"
         @click="isMobileMenuOpen = false"
       >
         <img
@@ -44,7 +44,7 @@ watch(isMobileMenuOpen, (nextIsMobileMenuOpen) => {
       </NuxtLink>
       <button
         type="button"
-        class="md:hidden"
+        class="shrink-0 md:hidden"
         :aria-label="isMobileMenuOpen ? 'Zamknij menu' : 'Otwórz menu'"
         :aria-expanded="isMobileMenuOpen"
         @click="isMobileMenuOpen = !isMobileMenuOpen"
