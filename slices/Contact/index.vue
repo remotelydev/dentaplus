@@ -45,7 +45,7 @@ defineProps(
 
 <template>
   <section
-    id="#kontakt"
+    id="kontakt"
     :data-slice-type="slice.slice_type"
     :data-slice-variation="slice.variation"
   >
