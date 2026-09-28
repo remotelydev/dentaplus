@@ -150,7 +150,8 @@ test('service pages expose extra copy and Usługi navigation', () => {
     assert.match(services, new RegExp(`${uid}:`))
   }
   assert.match(header, /Usługi/)
-  assert.match(header, /SERVICE_NAV/)
+  assert.match(header, /resolveServiceNav/)
+  assert.match(header, /service_links/)
   assert.match(extras, /ServiceExtras/)
   assert.match(read('customtypes/navigation/index.json'), /service_links/)
   assert.match(uslugi, /SERVICE_NAV/)

@@ -6,6 +6,41 @@ export const SERVICE_NAV = [
   { uid: 'tomografia', to: '/tomografia/', label: 'Tomografia 3D' },
 ] as const
 
+export type ServiceNavItem = {
+  uid: string
+  to: string
+  label: string
+}
+
+const withTrailingSlash = (path: string) => {
+  if (!path || path === '/') return path || '/'
+  return path.endsWith('/') ? path : `${path}/`
+}
+
+export const resolveServiceNav = (
+  cmsLinks: Array<{ label?: unknown, link?: unknown }> | null | undefined,
+  asText: (field: unknown) => string,
+  asLink: (field: unknown) => string | null | undefined,
+): ServiceNavItem[] => {
+  const items = (cmsLinks || []).flatMap((item, index) => {
+    const href = asLink(item.link) || ''
+    let path = href
+    try {
+      path = href.startsWith('http') ? new URL(href).pathname : href
+    } catch {
+      path = href
+    }
+    const normalized = path.replace(/\/+$/, '') || path
+    const to = withTrailingSlash(normalized)
+    const label = asText(item.label).trim()
+    if (!to || to === '/' || !label) return []
+    const uid = to.replace(/^\/|\/$/g, '') || `service-${index}`
+    return [{ uid, to, label }]
+  })
+
+  return items.length ? items : SERVICE_NAV.map(item => ({ ...item }))
+}
+
 export const servicePages: Record<string, {
   h2s: { heading: string, body: string }[]
   cta: string

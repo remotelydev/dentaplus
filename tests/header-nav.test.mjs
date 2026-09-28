@@ -23,3 +23,12 @@ test('Galeria is filtered out of the primary header', () => {
   assert.match(header, /isGaleriaItem/)
   assert.match(header, /!isGaleriaItem\(item\)/)
 })
+
+test('service dropdown uses resolveServiceNav from Prismic or SERVICE_NAV', () => {
+  const services = fs.readFileSync(path.join(root, 'data/services.ts'), 'utf8')
+  assert.match(header, /resolveServiceNav/)
+  assert.match(header, /service_links/)
+  assert.match(header, /serviceNavItems/)
+  assert.match(services, /export const resolveServiceNav/)
+  assert.match(services, /SERVICE_NAV\.map/)
+})

@@ -5,7 +5,7 @@ import ChevronIcon from '../public/chevron.svg';
 import CloseIcon from '../public/close.svg';
 import FacebookIcon from '../public/facebook.svg';
 import InstagramIcon from '../public/instagram.svg';
-import { SERVICE_NAV } from '~/data/services'
+import { resolveServiceNav } from '~/data/services'
 
 const navigation = useNavigation();
 const settings = useSettings();
@@ -44,6 +44,13 @@ const kontaktItem = computed(() =>
 )
 const desktopNavLinks = computed(() =>
   (navigation.value?.data.links || []).filter(item => !isKontaktItem(item) && !isGaleriaItem(item))
+)
+const serviceNavItems = computed(() =>
+  resolveServiceNav(
+    navigation.value?.data.service_links,
+    (field) => String(prismic.asText(field as never) || ''),
+    (field) => prismic.asLink(field as never),
+  )
 )
 
 const closeDesktopServices = () => {
@@ -173,7 +180,7 @@ watch(isMobileMenuOpen, (nextIsMobileMenuOpen) => {
               class="absolute left-0 top-full z-20 min-w-[12rem] bg-white py-2 shadow-md"
             >
               <li
-                v-for="item in SERVICE_NAV"
+                v-for="item in serviceNavItems"
                 :key="item.uid"
               >
                 <NuxtLink
@@ -295,7 +302,7 @@ watch(isMobileMenuOpen, (nextIsMobileMenuOpen) => {
           </button>
         </div>
         <NuxtLink
-          v-for="item in SERVICE_NAV"
+          v-for="item in serviceNavItems"
           v-show="isServicesOpen"
           :key="`mobile-service-${item.uid}`"
           class="px-6 py-3 font-semibold text-center bg-slate-50"
