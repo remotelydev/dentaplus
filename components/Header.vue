@@ -132,12 +132,6 @@ watch(isMobileMenuOpen, (nextIsMobileMenuOpen) => {
               </li>
             </ul>
           </li>
-          <li class="font-semibold tracking-tight text-slate-800 hover:underline">
-            <NuxtLink to="/turek/">Turek</NuxtLink>
-          </li>
-          <li class="font-semibold tracking-tight text-slate-800 hover:underline">
-            <NuxtLink to="/poddebice/">Poddębice</NuxtLink>
-          </li>
           <!-- <li>
             <a href="https://www.facebook.com/dentaplusturek" target="_blank">
               <FacebookIcon class="w-6 h-6" />
@@ -194,8 +188,6 @@ watch(isMobileMenuOpen, (nextIsMobileMenuOpen) => {
         >
           {{ item.label }}
         </NuxtLink>
-        <NuxtLink class="px-6 py-4 font-bold text-center bg-slate-100" to="/turek/">Turek</NuxtLink>
-        <NuxtLink class="px-6 py-4 font-bold text-center" to="/poddebice/">Poddębice</NuxtLink>
         <div class="flex justify-center gap-8 p-8">
           <a
             href="https://www.facebook.com/dentaplusturek"
