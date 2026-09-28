@@ -220,6 +220,17 @@ test('hero LCP image is width-constrained and Inter is latin subset', () => {
   assert.doesNotMatch(read('nuxt.config.ts'), /@fontsource\/inter\/400\.css/)
 })
 
+test('hero fits phone widths: fluid H1, stacked photo, sane srcset', () => {
+  const hero = read('slices/Hero/index.vue')
+
+  assert.match(hero, /text-\[length:clamp\(/)
+  assert.match(hero, /break-words/)
+  assert.match(hero, /max-md:aspect-\[3\/2\]/)
+  assert.match(hero, /max-md:max-h-\[40svh\]/)
+  assert.match(hero, /md:absolute md:inset-0/)
+  assert.doesNotMatch(hero, /sizes="100vw"/)
+})
+
 test('404 and preview are noindexed', () => {
   assert.match(read('error.vue'), /noindex/)
   assert.match(read('error.vue'), /Nie znaleziono strony/)
