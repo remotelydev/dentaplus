@@ -127,8 +127,10 @@ test('global SEO configuration includes Polish language and local business schem
   assert.match(layout, /dentapluspoddebice/)
   assert.match(layout, /priceRange/)
   assert.match(read('pages/zespol/[uid].vue'), /Person/)
-  assert.match(read('slices/Contact/index.vue'), /locations\.turek\.streetAddress/)
-  assert.match(read('slices/Contact/index.vue'), /locations\.poddebice\.streetAddress/)
+  assert.match(read('slices/Contact/index.vue'), /ClinicCard/)
+  assert.match(read('slices/Contact/index.vue'), /locations\.turek/)
+  assert.match(read('slices/Contact/index.vue'), /locations\.poddebice/)
+  assert.match(read('components/ClinicCard.vue'), /location\.streetAddress/)
 })
 
 test('location service headings use locative city names', () => {
@@ -166,7 +168,7 @@ test('service pages expose extra copy and Usługi navigation', () => {
 
 test('telephone hrefs are normalized without spaces', () => {
   assert.match(read('composables/usePhoneLink.ts'), /export const normalizeTelHref/)
-  assert.match(read('slices/Contact/index.vue'), /normalizeTelHref/)
+  assert.match(read('components/ClinicCard.vue'), /normalizeTelHref/)
   assert.match(read('components/ContactBar.vue'), /normalizeTelHref/)
   assert.doesNotMatch(read('components/ContactBar.vue'), /tel:\+48\$\{/)
 })
@@ -332,8 +334,9 @@ test('images get a Polish alt fallback', () => {
 })
 
 test('maps use Polish locale and controls have accessible names', () => {
-  assert.doesNotMatch(read('slices/Contact/index.vue'), /1sen!2spl/)
-  assert.match(read('slices/Contact/index.vue'), /1spl!2spl/)
+  assert.doesNotMatch(read('data/locations.ts'), /1sen!2spl/)
+  assert.match(read('data/locations.ts'), /1spl!2spl/)
+  assert.match(read('components/ClinicCard.vue'), /location\.mapSrc/)
   const mapSlice = read('slices/Map/index.vue')
   assert.match(mapSlice, /from '~\/data\/locations'/)
   assert.match(mapSlice, /locations\.turek/)
@@ -345,6 +348,23 @@ test('maps use Polish locale and controls have accessible names', () => {
   assert.doesNotMatch(mapSlice, /Klinika%20Stomatologii%20Turek/)
   assert.match(read('components/Header.vue'), /Otwórz menu/)
   assert.match(read('components/Footer.vue'), /aria-label="Facebook DentaPlus\+ Turek"/)
+})
+
+test('Kontakt uses shared clinic cards that link to city pages', () => {
+  const contact = read('slices/Contact/index.vue')
+
+  assert.match(contact, /id="kontakt"/)
+  assert.doesNotMatch(contact, /id="#kontakt"/)
+  assert.match(contact, /<ClinicCard :location="locations\.turek" \/>/)
+  assert.match(contact, /<ClinicCard :location="locations\.poddebice" \/>/)
+  assert.match(contact, /to="\/turek\/"/)
+  assert.match(contact, /to="\/poddebice\/"/)
+  assert.doesNotMatch(contact, /ul\. Łąkowa 10/)
+  assert.doesNotMatch(contact, /Krasickiego 1C/)
+  assert.doesNotMatch(contact, /google\.com\/maps\/embed/)
+  assert.match(read('components/ClinicCard.vue'), /location\.streetAddress/)
+  assert.match(read('components/ClinicCard.vue'), /CLINIC_HOURS/)
+  assert.match(read('components/ClinicCard.vue'), /location\.mapSrc/)
 })
 
 test('service pages include FAQ copy', () => {
