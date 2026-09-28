@@ -290,6 +290,16 @@ test('hero hides description when it repeats the H1', () => {
   assert.doesNotMatch(hero, /v-if="slice\.primary\.description"/)
 })
 
+test('hero CTA uses a Polish button fallback', () => {
+  const hero = read('slices/Hero/index.vue')
+
+  assert.match(hero, /<PrismicLink/)
+  assert.match(hero, /slice\.primary\.buttonLink/)
+  assert.match(hero, /Umów wizytę/)
+  assert.doesNotMatch(hero, /Learn More/)
+  assert.doesNotMatch(hero, /<!-- <PrismicLink/)
+})
+
 test('images get a Polish alt fallback', () => {
   assert.match(read('composables/useImageAlt.ts'), /withImageAlt/)
   assert.match(read('slices/Image/index.vue'), /withImageAlt/)
