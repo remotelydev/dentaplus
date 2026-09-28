@@ -34,11 +34,16 @@ const isKontaktItem = (item: { label?: unknown, link?: unknown }) => {
   return label.includes('kontakt') || navLinkPath(item.link) === '/kontakt'
 }
 
+const isGaleriaItem = (item: { label?: unknown, link?: unknown }) => {
+  const label = String(prismic.asText(item.label as never) || '').toLowerCase()
+  return label.includes('galeria') || navLinkPath(item.link) === '/galeria'
+}
+
 const kontaktItem = computed(() =>
   (navigation.value?.data.links || []).find(item => isKontaktItem(item))
 )
 const desktopNavLinks = computed(() =>
-  (navigation.value?.data.links || []).filter(item => !isKontaktItem(item))
+  (navigation.value?.data.links || []).filter(item => !isKontaktItem(item) && !isGaleriaItem(item))
 )
 
 const closeDesktopServices = () => {
