@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue';
 import BurgerIcon from '../public/burger.svg';
+import ChevronIcon from '../public/chevron.svg';
 import CloseIcon from '../public/close.svg';
 import FacebookIcon from '../public/facebook.svg';
 import InstagramIcon from '../public/instagram.svg';
@@ -11,6 +12,21 @@ const settings = useSettings();
 
 const isMobileMenuOpen = ref(false);
 const isServicesOpen = ref(false);
+const isDesktopServicesOpen = ref(false);
+const desktopServices = ref<HTMLElement | null>(null);
+
+const closeDesktopServices = () => {
+  isDesktopServicesOpen.value = false
+}
+
+onClickOutside(desktopServices, closeDesktopServices)
+
+const onDesktopServicesKeydown = (event: KeyboardEvent) => {
+  if (event.key === 'Escape') {
+    closeDesktopServices()
+    ;(event.currentTarget as HTMLElement | null)?.querySelector('button')?.focus()
+  }
+}
 
 watch(isMobileMenuOpen, (nextIsMobileMenuOpen) => {
   if (nextIsMobileMenuOpen) {
@@ -69,11 +85,50 @@ watch(isMobileMenuOpen, (nextIsMobileMenuOpen) => {
               {{ $prismic.asText(link.label) }}
             </PrismicLink>
           </li>
-          <li class="relative font-semibold tracking-tight text-slate-800 group">
-            <span class="hover:underline">Usługi</span>
-            <ul class="absolute left-0 top-full hidden group-hover:block bg-white shadow-md py-2 min-w-[12rem] z-20">
-              <li v-for="item in SERVICE_NAV" :key="item.uid">
-                <NuxtLink class="block px-4 py-2 hover:bg-slate-100" :to="item.to">{{ item.label }}</NuxtLink>
+          <li
+            ref="desktopServices"
+            class="relative font-semibold tracking-tight text-slate-800"
+            @keydown="onDesktopServicesKeydown"
+          >
+            <div class="flex items-center gap-1">
+              <NuxtLink
+                class="hover:underline"
+                to="/uslugi/"
+              >
+                Usługi
+              </NuxtLink>
+              <button
+                type="button"
+                class="px-1"
+                :aria-expanded="isDesktopServicesOpen"
+                aria-controls="desktop-services-menu"
+                aria-haspopup="true"
+                aria-label="Pokaż listę usług"
+                @click="isDesktopServicesOpen = !isDesktopServicesOpen"
+              >
+                <ChevronIcon
+                  aria-hidden="true"
+                  class="w-4 h-4 transition-transform"
+                  :class="isDesktopServicesOpen ? '-rotate-90' : 'rotate-90'"
+                />
+              </button>
+            </div>
+            <ul
+              v-show="isDesktopServicesOpen"
+              id="desktop-services-menu"
+              class="absolute left-0 top-full z-20 min-w-[12rem] bg-white py-2 shadow-md"
+            >
+              <li
+                v-for="item in SERVICE_NAV"
+                :key="item.uid"
+              >
+                <NuxtLink
+                  class="block px-4 py-2 hover:bg-slate-100"
+                  :to="item.to"
+                  @click="closeDesktopServices"
+                >
+                  {{ item.label }}
+                </NuxtLink>
               </li>
             </ul>
           </li>
@@ -109,13 +164,27 @@ watch(isMobileMenuOpen, (nextIsMobileMenuOpen) => {
         >
           {{ $prismic.asText(link.label) }}
         </PrismicLink>
-        <button
-          type="button"
-          class="px-6 py-4 font-bold text-center bg-white"
-          @click.stop="isServicesOpen = !isServicesOpen"
-        >
-          Usługi
-        </button>
+        <div class="flex bg-white">
+          <NuxtLink
+            class="flex-1 px-6 py-4 font-bold text-center"
+            to="/uslugi/"
+          >
+            Usługi
+          </NuxtLink>
+          <button
+            type="button"
+            class="px-4 py-4 font-bold"
+            :aria-expanded="isServicesOpen"
+            aria-label="Pokaż listę usług"
+            @click.stop="isServicesOpen = !isServicesOpen"
+          >
+            <ChevronIcon
+              aria-hidden="true"
+              class="w-4 h-4 transition-transform"
+              :class="isServicesOpen ? '-rotate-90' : 'rotate-90'"
+            />
+          </button>
+        </div>
         <NuxtLink
           v-for="item in SERVICE_NAV"
           v-show="isServicesOpen"
