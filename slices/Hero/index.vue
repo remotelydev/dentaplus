@@ -29,31 +29,38 @@ const lcpImage = computed(() => {
 const serializer: HTMLRichTextMapSerializer = {
   ...prismic.options.richTextSerializer,
   heading1: ({ children }) =>
-    /* html */ `<h1 class="font-semibold leading-tight tracking-tight md:leading-tight text-5xl md:text-7xl mb-4 mt-12 first:mt-0 last:mb-0">${children}</h1>`,
+    /* html */ `<h1 class="font-semibold leading-tight tracking-tight md:leading-tight text-[length:clamp(1.75rem,0.75rem+5vw,3rem)] md:text-7xl break-words hyphens-auto mb-4 mt-12 first:mt-0 last:mb-0">${children}</h1>`,
 };
 </script>
 
 <template>
-  <section class="relative bg-slate-800 text-white border-b border-slate-100">
-    <figure class="absolute inset-0">
+  <section class="relative flex flex-col bg-slate-800 text-white border-b border-slate-100 md:block">
+    <!-- No `sizes` prop: @nuxt/image 1.2 turns 100vw into 1w/2w srcset descriptors, which iOS Safari reads as a ~273000px-wide image. -->
+    <figure
+      v-if="lcpImage"
+      class="w-full max-md:relative max-md:order-last max-md:aspect-[3/2] max-md:max-h-[40svh] md:absolute md:inset-0"
+    >
       <NuxtImg
-        v-if="lcpImage"
         :src="lcpImage.src"
         :alt="lcpImage.alt"
         :width="lcpImage.width"
         :height="lcpImage.height"
-        sizes="100vw"
+        densities="x1"
         preload
         fetchpriority="high"
-        class="pointer-events-none select-none object-cover opacity-80 h-full w-full"
+        class="pointer-events-none select-none object-cover h-full w-full md:opacity-80"
+      />
+      <div
+        aria-hidden="true"
+        class="absolute inset-0 hidden bg-gradient-to-b from-slate-900/70 via-slate-900/40 to-slate-900/0 md:block"
       />
     </figure>
     <Bounded
       y-padding="lg"
-      class="relative"
+      class="relative max-md:py-8"
     >
       <div class="grid justify-items-center">
-        <div class="pb-8">
+        <div class="w-full max-w-2xl md:pb-8">
           <PrismicRichText
             :field="slice.primary.text"
             :html-serializer="serializer"
@@ -62,7 +69,7 @@ const serializer: HTMLRichTextMapSerializer = {
           />
           <p
             v-if="slice.primary.description"
-            class="text-2xl text-center"
+            class="text-lg text-center md:text-2xl"
           >
             {{ slice.primary.description }}
           </p>
