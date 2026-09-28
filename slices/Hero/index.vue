@@ -31,6 +31,33 @@ const serializer: HTMLRichTextMapSerializer = {
   heading1: ({ children }) =>
     /* html */ `<h1 class="font-semibold leading-tight tracking-tight md:leading-tight text-[length:clamp(1.75rem,0.75rem+5vw,3rem)] md:text-7xl break-words hyphens-auto mb-4 mt-12 first:mt-0 last:mb-0">${children}</h1>`,
 };
+
+const normalizeCopy = (value: string | null | undefined) =>
+  String(value || "").replace(/\s+/g, " ").trim();
+
+const headingPlain = computed(() => {
+  const field = props.slice.primary.text;
+  if (Array.isArray(field)) {
+    const heading = field.find((block) => block.type === "heading1");
+    const fromHeading = normalizeCopy(
+      heading && "text" in heading ? heading.text : ""
+    );
+    if (fromHeading) return fromHeading;
+  }
+  return normalizeCopy(prismic.asText(field));
+});
+
+const descriptionPlain = computed(() =>
+  normalizeCopy(props.slice.primary.description)
+);
+
+const showDescription = computed(
+  () =>
+    Boolean(descriptionPlain.value) &&
+    descriptionPlain.value.localeCompare(headingPlain.value, "pl", {
+      sensitivity: "accent",
+    }) !== 0
+);
 </script>
 
 <template>
@@ -68,7 +95,7 @@ const serializer: HTMLRichTextMapSerializer = {
             wrapper="div"
           />
           <p
-            v-if="slice.primary.description"
+            v-if="showDescription"
             class="text-lg text-center md:text-2xl"
           >
             {{ slice.primary.description }}

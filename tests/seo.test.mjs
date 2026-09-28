@@ -281,6 +281,15 @@ test('hero does not rewrite a DentaPlus H1', () => {
   assert.doesNotMatch(hero, /\^DentaPlus/)
 })
 
+test('hero hides description when it repeats the H1', () => {
+  const hero = read('slices/Hero/index.vue')
+
+  assert.match(hero, /showDescription/)
+  assert.match(hero, /localeCompare/)
+  assert.match(hero, /v-if="showDescription"/)
+  assert.doesNotMatch(hero, /v-if="slice\.primary\.description"/)
+})
+
 test('images get a Polish alt fallback', () => {
   assert.match(read('composables/useImageAlt.ts'), /withImageAlt/)
   assert.match(read('slices/Image/index.vue'), /withImageAlt/)
