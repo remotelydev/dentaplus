@@ -83,7 +83,7 @@ const showDescription = computed(
       />
     </figure>
     <Bounded
-      y-padding="lg"
+      y-padding="hero"
       class="relative max-md:py-8"
     >
       <div class="grid justify-items-center">
