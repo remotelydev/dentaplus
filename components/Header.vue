@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue';
 import BurgerIcon from '../public/burger.svg';
+import ChevronIcon from '../public/chevron.svg';
 import CloseIcon from '../public/close.svg';
 import FacebookIcon from '../public/facebook.svg';
 import InstagramIcon from '../public/instagram.svg';
@@ -105,7 +106,11 @@ watch(isMobileMenuOpen, (nextIsMobileMenuOpen) => {
                 aria-label="Pokaż listę usług"
                 @click="isDesktopServicesOpen = !isDesktopServicesOpen"
               >
-                <span aria-hidden="true">▾</span>
+                <ChevronIcon
+                  aria-hidden="true"
+                  class="w-4 h-4 transition-transform"
+                  :class="isDesktopServicesOpen ? '-rotate-90' : 'rotate-90'"
+                />
               </button>
             </div>
             <ul
@@ -173,7 +178,11 @@ watch(isMobileMenuOpen, (nextIsMobileMenuOpen) => {
             aria-label="Pokaż listę usług"
             @click.stop="isServicesOpen = !isServicesOpen"
           >
-            <span aria-hidden="true">▾</span>
+            <ChevronIcon
+              aria-hidden="true"
+              class="w-4 h-4 transition-transform"
+              :class="isServicesOpen ? '-rotate-90' : 'rotate-90'"
+            />
           </button>
         </div>
         <NuxtLink
