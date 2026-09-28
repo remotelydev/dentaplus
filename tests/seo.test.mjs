@@ -69,7 +69,7 @@ test('sitemap contains unique canonical URLs from the SEO route map', () => {
 })
 
 test('every public page uses the shared SEO metadata composable', () => {
-  for (const file of ['pages/index.vue', 'pages/[uid].vue', 'pages/zespol/[uid].vue', 'pages/turek.vue', 'pages/poddebice.vue', 'pages/polityka-prywatnosci.vue', 'pages/cookies.vue']) {
+  for (const file of ['pages/index.vue', 'pages/[uid].vue', 'pages/zespol/[uid].vue', 'pages/turek.vue', 'pages/poddebice.vue', 'pages/polityka-prywatnosci.vue', 'pages/cookies.vue', 'pages/uslugi.vue']) {
     assert.match(read(file), /usePageSeo\(/, `${file} does not use usePageSeo`)
   }
 
@@ -91,7 +91,7 @@ test('inner pages never fall back to a duplicated brand title', () => {
   assert.match(seoSource, /export const formatPageTitle/)
   assert.match(seoSource, /export const TITLE_FALLBACKS/)
 
-  for (const pathKey of ['/cennik', '/kontakt', '/zespol', '/implanty', '/invisalign', '/endodoncja', '/itero', '/tomografia']) {
+  for (const pathKey of ['/cennik', '/kontakt', '/zespol', '/implanty', '/invisalign', '/endodoncja', '/itero', '/tomografia', '/uslugi']) {
     assert.ok(seoSource.includes(`'${pathKey}':`), `${pathKey} is missing a unique title fallback`)
   }
 })
@@ -144,6 +144,7 @@ test('service pages expose extra copy and Usługi navigation', () => {
   const services = read('data/services.ts')
   const header = read('components/Header.vue')
   const extras = read('pages/[uid].vue')
+  const uslugi = read('pages/uslugi.vue')
 
   for (const uid of ['implanty', 'invisalign', 'endodoncja', 'itero', 'tomografia']) {
     assert.match(services, new RegExp(`${uid}:`))
@@ -152,6 +153,14 @@ test('service pages expose extra copy and Usługi navigation', () => {
   assert.match(header, /SERVICE_NAV/)
   assert.match(extras, /ServiceExtras/)
   assert.match(read('customtypes/navigation/index.json'), /service_links/)
+  assert.match(uslugi, /SERVICE_NAV/)
+  assert.match(uslugi, /serviceCardBlurb/)
+  assert.match(uslugi, /text_with_image/)
+  assert.match(uslugi, /PrismicImage/)
+  assert.match(uslugi, /denta-green/)
+  assert.match(services, /export const firstSentence/)
+  assert.match(services, /export const serviceCardBlurb/)
+  assert.match(read('nuxt.config.ts'), /["']\/uslugi\/["']/)
 })
 
 test('telephone hrefs are normalized without spaces', () => {
@@ -259,11 +268,14 @@ test('prerender fetches use a string useAsyncData key and guard missing slices',
   const uidPage = read('pages/[uid].vue')
   const bioPage = read('pages/zespol/[uid].vue')
   const homePage = read('pages/index.vue')
+  const uslugiPage = read('pages/uslugi.vue')
 
   assert.doesNotMatch(uidPage, /useAsyncData\(\(\)\s*=>/)
   assert.doesNotMatch(bioPage, /useAsyncData\(\(\)\s*=>/)
+  assert.doesNotMatch(uslugiPage, /useAsyncData\(\(\)\s*=>/)
   assert.match(uidPage, /useAsyncData\(`page-\$\{uid\.value\}`/)
   assert.match(bioPage, /useAsyncData\(`bio-\$\{prismicUid\.value\}`/)
+  assert.match(uslugiPage, /useAsyncData\('uslugi-cards'/)
   assert.match(uidPage, /data\?\.slices/)
   assert.match(bioPage, /data\?\.slices/)
   assert.match(homePage, /data\?\.slices/)
