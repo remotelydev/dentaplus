@@ -210,7 +210,11 @@ watch(isMobileMenuOpen, (nextIsMobileMenuOpen) => {
                 aria-label="Pokaż gabinety"
                 @click="toggleDesktopKontakt"
               >
-                <span aria-hidden="true">▾</span>
+                <ChevronIcon
+                  aria-hidden="true"
+                  class="w-4 h-4 transition-transform"
+                  :class="isDesktopKontaktOpen ? '-rotate-90' : 'rotate-90'"
+                />
               </button>
             </div>
             <ul
@@ -316,7 +320,11 @@ watch(isMobileMenuOpen, (nextIsMobileMenuOpen) => {
             aria-label="Pokaż gabinety"
             @click.stop="isKontaktOpen = !isKontaktOpen"
           >
-            <span aria-hidden="true">▾</span>
+            <ChevronIcon
+              aria-hidden="true"
+              class="w-4 h-4 transition-transform"
+              :class="isKontaktOpen ? '-rotate-90' : 'rotate-90'"
+            />
           </button>
         </div>
         <NuxtLink
