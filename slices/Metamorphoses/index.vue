@@ -1,11 +1,7 @@
 <script setup lang="ts">
 import { type Content } from "@prismicio/client";
 import { VueCompareImage } from 'vue3-compare-image'
-// import VueCompareImage from 'vue-compare-image';
 
-
-// The array passed to `getSliceComponentProps` is purely optional.
-// Consider it as a visual hint for you when templating your slice.
 defineProps(
   getSliceComponentProps<Content.MetamorphosisSlice>([
     "slice",
@@ -23,21 +19,14 @@ const imageAlt = (field: { alt?: string | null } | null | undefined) =>
   <section
     :data-slice-type="slice.slice_type"
     :data-slice-variation="slice.variation"
-    class="container mx-auto flex flex-wrap gap-x-4 gap-y-8 items-start justify-center mt-8 mb-20"
+    class="container mx-auto mt-8 mb-20 grid justify-items-center gap-8 sm:grid-cols-2 lg:grid-cols-3"
   >
-    <div
+    <article
       v-for="item in slice.items"
       :key="item.title"
-      class="flex flex-col-reverse items-center"
-    > 
-      <div class="min-w-0 w-full max-w-sm px-6 py-4 lg:p-8 border border-t-0">
-        <PrismicRichText :field="item.title" />
-        <PrismicRichText
-          class="mt-4 text-sm sm:text-base"
-          :field="item.description"
-        />
-      </div>
-      <div class="flex justify-center items-center min-w-0 w-full max-w-sm">
+      class="flex w-full max-w-sm flex-col overflow-hidden rounded-xl border border-slate-200 bg-white"
+    >
+      <div class="aspect-[4/3] w-full bg-slate-100">
         <ClientOnly>
           <VueCompareImage
             :left-image="item.before.url"
@@ -46,9 +35,10 @@ const imageAlt = (field: { alt?: string | null } | null | undefined) =>
             :right-image-alt="imageAlt(item.after)"
           />
           <template #fallback>
-            <div class="w-full">
+            <div class="grid h-full grid-cols-2">
               <img
                 v-if="item.before.url"
+                class="h-full w-full object-cover"
                 :src="item.before.url"
                 :alt="imageAlt(item.before)"
                 :width="item.before.dimensions?.width || undefined"
@@ -56,6 +46,7 @@ const imageAlt = (field: { alt?: string | null } | null | undefined) =>
               >
               <img
                 v-if="item.after.url"
+                class="h-full w-full object-cover"
                 :src="item.after.url"
                 :alt="imageAlt(item.after)"
                 :width="item.after.dimensions?.width || undefined"
@@ -65,6 +56,13 @@ const imageAlt = (field: { alt?: string | null } | null | undefined) =>
           </template>
         </ClientOnly>
       </div>
-    </div>
+      <div class="px-6 py-4">
+        <PrismicRichText :field="item.title" />
+        <PrismicRichText
+          class="mt-3 text-sm sm:text-base"
+          :field="item.description"
+        />
+      </div>
+    </article>
   </section>
 </template>
