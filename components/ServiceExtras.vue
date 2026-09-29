@@ -16,10 +16,14 @@ defineProps<{
       <section
         v-for="block in servicePages[uid].h2s"
         :key="block.heading"
-        class="mb-8"
+        class="mb-6 overflow-hidden"
       >
-        <h2 class="font-semibold text-2xl md:text-3xl mb-3">{{ block.heading }}</h2>
-        <p>{{ block.body }}</p>
+        <h2 class="border-l-4 border-denta-green bg-slate-800 px-5 py-3 font-semibold text-2xl text-white md:px-6 md:py-4 md:text-3xl">
+          {{ block.heading }}
+        </h2>
+        <p class="border-l-4 border-denta-green bg-slate-50 px-5 py-5 leading-relaxed text-slate-700 md:px-6 md:py-6">
+          {{ block.body }}
+        </p>
       </section>
       <p class="mb-4">
         {{ servicePages[uid].cta }}
