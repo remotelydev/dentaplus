@@ -27,13 +27,61 @@ const categoryHref = computed(() => {
   const key = categoryName.value.toLowerCase()
   return CATEGORY_LINKS[key]
 })
+
+const categoryId = computed(() => categoryAnchorId(categoryName.value))
+
+const pricelistCategories = computed(() =>
+  (props.slices ?? [])
+    .filter((slice): slice is Content.PricelistSlice => slice.slice_type === 'pricelist')
+    .map((slice) => {
+      const name = prismic.asText(slice.primary.name).trim()
+      return { name, id: categoryAnchorId(name) }
+    })
+    .filter((item) => item.name && item.id)
+)
+
+const isFirstPricelist = computed(() => {
+  const firstIndex = (props.slices ?? []).findIndex((slice) => slice.slice_type === 'pricelist')
+  return firstIndex !== -1 && props.index === firstIndex
+})
+
+const showJumpNav = computed(() => isFirstPricelist.value && pricelistCategories.value.length > 1)
+
+function categoryAnchorId(name: string) {
+  const slug = name
+    .toLowerCase()
+    .replace(/ł/g, 'l')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+  return slug ? `cennik-${slug}` : ''
+}
 </script>
 
 <template>
+  <nav
+    v-if="showJumpNav"
+    class="sticky top-0 z-30 border-b border-slate-200 bg-white sm:top-14"
+    aria-label="Kategorie cennika"
+  >
+    <ul class="container mx-auto flex max-w-[1280px] gap-x-4 overflow-x-auto px-2 py-3 text-sm font-semibold">
+      <li
+        v-for="item in pricelistCategories"
+        :key="item.id"
+      >
+        <a
+          class="whitespace-nowrap hover:underline"
+          :href="`#${item.id}`"
+        >{{ item.name }}</a>
+      </li>
+    </ul>
+  </nav>
   <section
+    :id="categoryId || undefined"
     :data-slice-type="slice.slice_type"
     :data-slice-variation="slice.variation"
-    class="container mx-auto max-w-[1280px] last-of-type:mb-16"
+    class="container mx-auto max-w-[1280px] scroll-mt-16 last-of-type:mb-16 sm:scroll-mt-32"
   >
     <h2
       v-if="categoryName"
