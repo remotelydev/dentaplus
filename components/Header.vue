@@ -267,8 +267,8 @@ watch(isMobileMenuOpen, (nextIsMobileMenuOpen) => {
                     :key="item.uid"
                   >
                     <NuxtLink
-                      class="group flex items-center justify-between gap-6 rounded-xl border-l-4 border-transparent px-4 py-3 text-base transition-colors hover:border-denta-green hover:bg-slate-50 focus-visible:border-denta-green focus-visible:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-slate-800"
-                      exact-active-class="border-denta-green bg-slate-50"
+                      class="group flex items-center justify-between gap-6 rounded-xl px-4 py-3 text-base transition-colors hover:bg-slate-100 focus-visible:bg-slate-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-slate-800"
+                      exact-active-class="bg-slate-50"
                       :to="item.to"
                       @click="closeDesktopMenu"
                     >
@@ -342,8 +342,8 @@ watch(isMobileMenuOpen, (nextIsMobileMenuOpen) => {
                     :key="clinic.to"
                   >
                     <NuxtLink
-                      class="group flex items-center justify-between gap-6 rounded-xl border-l-4 border-transparent px-4 py-3 transition-colors hover:border-denta-green hover:bg-slate-50 focus-visible:border-denta-green focus-visible:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-slate-800"
-                      exact-active-class="border-denta-green bg-slate-50"
+                      class="group flex items-center justify-between gap-6 rounded-xl px-4 py-3 transition-colors hover:bg-slate-100 focus-visible:bg-slate-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-slate-800"
+                      exact-active-class="bg-slate-50"
                       :to="clinic.to"
                       @click="closeDesktopMenu"
                     >
@@ -389,29 +389,24 @@ watch(isMobileMenuOpen, (nextIsMobileMenuOpen) => {
         </PrismicLink>
         <div class="flex items-center bg-white">
           <NuxtLink
-            class="flex-1 py-4 pl-16 font-bold text-center"
+            class="flex-1 py-4 pl-[4.5rem] font-bold text-center"
             to="/uslugi/"
           >
             Usługi
           </NuxtLink>
           <button
             type="button"
-            class="flex h-14 w-16 items-center justify-center"
+            class="mr-2 flex h-14 w-16 items-center justify-center"
             :aria-expanded="isServicesOpen"
             aria-controls="mobile-services-menu"
             aria-label="Pokaż listę usług"
             @click.stop="isServicesOpen = !isServicesOpen"
           >
-            <span
-              class="flex h-9 w-9 items-center justify-center rounded-full transition-colors"
-              :class="isServicesOpen ? 'bg-denta-green' : 'bg-slate-100'"
-            >
-              <ChevronIcon
-                aria-hidden="true"
-                class="w-4 h-4 transition-transform duration-200"
-                :class="isServicesOpen ? '-rotate-90' : 'rotate-90'"
-              />
-            </span>
+            <ChevronIcon
+              aria-hidden="true"
+              class="w-3.5 h-3.5 text-slate-800 transition-transform duration-200"
+              :class="isServicesOpen ? '-rotate-90' : 'rotate-90'"
+            />
           </button>
         </div>
         <div
@@ -423,7 +418,7 @@ watch(isMobileMenuOpen, (nextIsMobileMenuOpen) => {
             v-for="item in serviceNavItems"
             :key="`mobile-service-${item.uid}`"
             class="block rounded-xl px-4 py-3.5 text-base font-semibold text-center active:bg-white"
-            exact-active-class="bg-white ring-1 ring-denta-green"
+            exact-active-class="bg-white"
             :to="item.to"
           >
             {{ item.label }}
@@ -432,36 +427,31 @@ watch(isMobileMenuOpen, (nextIsMobileMenuOpen) => {
         <div class="flex items-center bg-slate-100">
           <PrismicLink
             v-if="kontaktItem"
-            class="flex-1 py-4 pl-16 font-bold text-center"
+            class="flex-1 py-4 pl-[4.5rem] font-bold text-center"
             :field="kontaktItem.link"
           >
             {{ $prismic.asText(kontaktItem.label) }}
           </PrismicLink>
           <NuxtLink
             v-else
-            class="flex-1 py-4 pl-16 font-bold text-center"
+            class="flex-1 py-4 pl-[4.5rem] font-bold text-center"
             to="/kontakt/"
           >
             Kontakt
           </NuxtLink>
           <button
             type="button"
-            class="flex h-14 w-16 items-center justify-center"
+            class="mr-2 flex h-14 w-16 items-center justify-center"
             :aria-expanded="isKontaktOpen"
             aria-controls="mobile-kontakt-menu"
             aria-label="Pokaż gabinety"
             @click.stop="isKontaktOpen = !isKontaktOpen"
           >
-            <span
-              class="flex h-9 w-9 items-center justify-center rounded-full transition-colors"
-              :class="isKontaktOpen ? 'bg-denta-green' : 'bg-white'"
-            >
-              <ChevronIcon
-                aria-hidden="true"
-                class="w-4 h-4 transition-transform duration-200"
-                :class="isKontaktOpen ? '-rotate-90' : 'rotate-90'"
-              />
-            </span>
+            <ChevronIcon
+              aria-hidden="true"
+              class="w-3.5 h-3.5 text-slate-800 transition-transform duration-200"
+              :class="isKontaktOpen ? '-rotate-90' : 'rotate-90'"
+            />
           </button>
         </div>
         <div
@@ -473,7 +463,7 @@ watch(isMobileMenuOpen, (nextIsMobileMenuOpen) => {
             v-for="clinic in clinics"
             :key="`mobile-clinic-${clinic.to}`"
             class="flex flex-col items-center gap-1 rounded-xl px-4 py-3.5 text-center active:bg-white"
-            exact-active-class="bg-white ring-1 ring-denta-green"
+            exact-active-class="bg-white"
             :to="clinic.to"
           >
             <span class="text-base font-semibold">{{ clinic.city }}</span>
