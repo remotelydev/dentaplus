@@ -61,7 +61,7 @@ const showDescription = computed(
 </script>
 
 <template>
-  <section class="relative flex flex-col bg-slate-800 text-white border-b border-slate-100 md:block">
+  <section class="relative flex flex-col bg-slate-800 text-white border-b border-slate-100 md:block md:min-h-[clamp(30rem,40vw,48rem)]">
     <!-- No `sizes` prop: @nuxt/image 1.2 turns 100vw into 1w/2w srcset descriptors, which iOS Safari reads as a ~273000px-wide image. -->
     <figure
       v-if="lcpImage"
@@ -75,11 +75,12 @@ const showDescription = computed(
         densities="x1"
         preload
         fetchpriority="high"
-        class="pointer-events-none select-none object-cover h-full w-full md:opacity-80"
+        class="pointer-events-none select-none object-cover h-full w-full md:object-[50%_30%]"
       />
+      <!-- Heads start ~45% down the desktop crop; the scrim must clear by then so faces stay undimmed. -->
       <div
         aria-hidden="true"
-        class="absolute inset-0 hidden bg-gradient-to-b from-slate-900/70 via-slate-900/40 to-slate-900/0 md:block"
+        class="absolute inset-0 hidden bg-gradient-to-b from-slate-900/75 via-slate-900/45 via-25% to-slate-900/0 to-45% md:block"
       />
     </figure>
     <Bounded
@@ -87,7 +88,7 @@ const showDescription = computed(
       class="relative max-md:py-8"
     >
       <div class="grid justify-items-center">
-        <div class="w-full max-w-2xl md:pb-8">
+        <div class="w-full max-w-2xl md:pb-8 md:[text-shadow:0_1px_12px_rgb(15_23_42/0.55)]">
           <PrismicRichText
             :field="slice.primary.text"
             :html-serializer="serializer"
