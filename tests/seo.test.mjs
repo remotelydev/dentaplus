@@ -346,6 +346,17 @@ test('Metamorfozy SSR HTML can render przed/po images before the slider hydrates
   assert.match(source, /<img/)
 })
 
+test('Metamorfozy grid shares the Header slice content column and keeps 4:3 frames', () => {
+  const source = read('slices/Metamorphoses/index.vue')
+
+  assert.match(source, /class="mt-8 mb-20 px-4"/)
+  assert.match(source, /class="container mx-auto"/)
+  assert.match(source, /mx-auto grid max-w-6xl gap-8 sm:grid-cols-2 lg:grid-cols-3/)
+  assert.doesNotMatch(source, /justify-items-center/)
+  assert.doesNotMatch(source, /max-w-sm/)
+  assert.match(source, /aspect-\[4\/3\] w-full bg-slate-100 \[&>\*\]:!h-full/)
+})
+
 test('maps use Polish locale and controls have accessible names', () => {
   assert.doesNotMatch(read('data/locations.ts'), /1sen!2spl/)
   assert.match(read('data/locations.ts'), /1spl!2spl/)
