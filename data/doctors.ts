@@ -1,11 +1,3 @@
-export const DOCTOR_UID_ALIASES: Record<string, string> = {
-  'monika-maciejewska': 'monika-maciejeweska',
-}
-
-export const DOCTOR_TYPO_UIDS: Record<string, string> = Object.fromEntries(
-  Object.entries(DOCTOR_UID_ALIASES).map(([canonical, typo]) => [typo, canonical]),
-)
-
 export const doctors: Record<string, {
   name: string
   role: string
