@@ -324,7 +324,16 @@ test('hero uses a tighter padding size without changing Bounded lg', () => {
   assert.match(bounded, /yPadding === 'lg'/)
   assert.match(bounded, /md:pb-96/)
   assert.match(bounded, /yPadding === 'hero'/)
-  assert.match(bounded, /py-12 sm:py-16 md:py-24/)
+  assert.match(bounded, /py-12 sm:py-16 md:pt-\[5\.5vw\] md:pb-16/)
+})
+
+test('desktop hero keeps the copy above the team and faces undimmed', () => {
+  const hero = read('slices/Hero/index.vue')
+
+  assert.match(hero, /md:min-h-\[clamp\(30rem,40vw,48rem\)\]/)
+  assert.match(hero, /md:object-\[50%_30%\]/)
+  assert.match(hero, /to-slate-900\/0 to-45%/)
+  assert.doesNotMatch(hero, /md:opacity-80/)
 })
 
 test('images get a Polish alt fallback', () => {
