@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { ImageField } from '@prismicio/client'
-import { SERVICE_LINKS, type locations } from '~/data/locations'
+import { SERVICE_LINKS, locations } from '~/data/locations'
 import PhoneIcon from '../public/phone.svg'
 
 const props = defineProps<{
@@ -11,6 +11,7 @@ const prismic = usePrismic()
 const settings = useSettings()
 const phone = computed(() => settings.value?.data[props.location.phoneSetting] as string | undefined)
 const telHref = computed(() => normalizeTelHref(phone.value))
+const otherLocation = computed(() => (props.location.uid === 'turek' ? locations.poddebice : locations.turek))
 
 // Galeria groups photos under a "Gabinety {city}" text slice followed by that clinic's gallery slice.
 const { data: photo } = await useAsyncData(`city-photo-${props.location.uid}`, async () => {
@@ -90,11 +91,8 @@ const { data: photo } = await useAsyncData(`city-photo-${props.location.uid}`, a
         </p>
       </div>
 
-      <h2 id="adres" class="font-semibold text-2xl md:text-3xl mt-12 mb-4 scroll-mt-16">Adres i godziny</h2>
-      <ClinicCard :location="location" />
-
-      <h2 class="font-semibold text-2xl md:text-3xl mb-4">Usługi w {{ location.cityLocative }}</h2>
-      <ul class="list-disc pl-5 mb-8">
+      <h2 class="font-semibold text-2xl md:text-3xl mt-12 mb-4">Usługi w {{ location.cityLocative }}</h2>
+      <ul class="list-disc pl-5 mb-4">
         <li
           v-for="item in SERVICE_LINKS"
           :key="item.to"
@@ -103,25 +101,43 @@ const { data: photo } = await useAsyncData(`city-photo-${props.location.uid}`, a
           <NuxtLink class="underline" :to="item.to">{{ item.label }}</NuxtLink>
         </li>
       </ul>
-
-      <p>
-        Zespół lekarzy obu gabinetów: <NuxtLink class="underline" to="/zespol/">Zespół DentaPlus+</NuxtLink>.
-        Druga lokalizacja:
-        <NuxtLink
-          v-if="location.uid === 'turek'"
-          class="underline"
-          to="/poddebice/"
-        >
-          gabinet w Poddębicach
-        </NuxtLink>
-        <NuxtLink
-          v-else
-          class="underline"
-          to="/turek/"
-        >
-          gabinet w Turku
-        </NuxtLink>.
-      </p>
     </Bounded>
+
+    <section class="bg-slate-50 py-8 md:py-12">
+      <Bounded y-padding="sm">
+        <h2 id="adres" class="font-semibold text-2xl md:text-3xl mb-6 scroll-mt-16">Adres i godziny</h2>
+        <ClinicCard :location="location" split />
+
+        <ul class="mt-6 grid gap-6 md:grid-cols-2">
+          <li>
+            <NuxtLink
+              class="group flex h-full flex-col border border-slate-200 bg-white p-6 transition hover:border-denta-green focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-denta-green"
+              :to="`/${otherLocation.uid}/`"
+            >
+              <span class="text-sm text-slate-600">Druga lokalizacja</span>
+              <span class="mt-1 text-xl font-semibold text-slate-800 group-hover:underline">
+                Gabinet w {{ otherLocation.cityLocative }}
+              </span>
+              <span class="mt-3 block h-1 w-10 bg-denta-green" aria-hidden="true" />
+              <span class="mt-3 text-slate-600">
+                {{ otherLocation.streetAddress }}, {{ otherLocation.postalCode }} {{ otherLocation.addressLocality }}
+              </span>
+            </NuxtLink>
+          </li>
+          <li>
+            <NuxtLink
+              class="group flex h-full flex-col border border-slate-200 bg-white p-6 transition hover:border-denta-green focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-denta-green"
+              to="/zespol/"
+            >
+              <span class="text-sm text-slate-600">Zespół lekarzy obu gabinetów</span>
+              <span class="mt-1 text-xl font-semibold text-slate-800 group-hover:underline">
+                Zespół DentaPlus+
+              </span>
+              <span class="mt-3 block h-1 w-10 bg-denta-green" aria-hidden="true" />
+            </NuxtLink>
+          </li>
+        </ul>
+      </Bounded>
+    </section>
   </div>
 </template>
