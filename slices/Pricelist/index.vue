@@ -47,6 +47,47 @@ const isFirstPricelist = computed(() => {
 
 const showJumpNav = computed(() => isFirstPricelist.value && pricelistCategories.value.length > 1)
 
+const jumpNav = ref<HTMLElement | null>(null)
+const activeCategoryId = ref('')
+let frame = 0
+
+function updateActiveCategory() {
+  frame = 0
+  const navBottom = jumpNav.value?.getBoundingClientRect().bottom ?? 0
+  let current = pricelistCategories.value[0]?.id ?? ''
+  for (const item of pricelistCategories.value) {
+    const section = document.getElementById(item.id)
+    if (!section) continue
+    const threshold = Math.max(navBottom, parseFloat(getComputedStyle(section).scrollMarginTop) || 0)
+    if (section.getBoundingClientRect().top <= threshold + 1) current = item.id
+  }
+  activeCategoryId.value = current
+}
+
+function onScroll() {
+  if (!frame) frame = requestAnimationFrame(updateActiveCategory)
+}
+
+watch(activeCategoryId, async (id) => {
+  await nextTick()
+  const chip = jumpNav.value?.querySelector<HTMLElement>(`a[href="#${id}"]`)
+  const list = chip?.closest('ul')
+  if (chip && list && list.scrollWidth > list.clientWidth) {
+    list.scrollTo({ left: chip.offsetLeft - (list.clientWidth - chip.offsetWidth) / 2, behavior: 'smooth' })
+  }
+})
+
+onMounted(() => {
+  if (!showJumpNav.value) return
+  updateActiveCategory()
+  window.addEventListener('scroll', onScroll, { passive: true })
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('scroll', onScroll)
+  if (frame) cancelAnimationFrame(frame)
+})
+
 function categoryAnchorId(name: string) {
   const slug = name
     .toLowerCase()
@@ -62,16 +103,20 @@ function categoryAnchorId(name: string) {
 <template>
   <nav
     v-if="showJumpNav"
+    ref="jumpNav"
     class="sticky top-0 z-30 border-b border-slate-200 bg-white sm:top-14"
     aria-label="Kategorie cennika"
   >
-    <ul class="container mx-auto flex max-w-[1280px] gap-x-4 overflow-x-auto px-2 py-3 text-sm font-semibold">
+    <ul class="container mx-auto flex max-w-[1280px] gap-2 overflow-x-auto px-2 py-3 text-sm font-semibold lg:flex-wrap">
       <li
         v-for="item in pricelistCategories"
         :key="item.id"
+        class="shrink-0"
       >
         <a
-          class="whitespace-nowrap hover:underline"
+          class="inline-flex items-center whitespace-nowrap rounded-full border px-3 py-1 text-slate-800 transition hover:border-denta-green hover:bg-denta-green focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-denta-green"
+          :class="activeCategoryId === item.id ? 'border-denta-green bg-denta-green' : 'border-slate-300 bg-white'"
+          :aria-current="activeCategoryId === item.id ? 'true' : undefined"
           :href="`#${item.id}`"
         >{{ item.name }}</a>
       </li>
@@ -81,7 +126,7 @@ function categoryAnchorId(name: string) {
     :id="categoryId || undefined"
     :data-slice-type="slice.slice_type"
     :data-slice-variation="slice.variation"
-    class="container mx-auto max-w-[1280px] scroll-mt-16 last-of-type:mb-16 sm:scroll-mt-32"
+    class="container mx-auto max-w-[1280px] scroll-mt-16 last-of-type:mb-16 sm:scroll-mt-32 lg:scroll-mt-44"
   >
     <h2
       v-if="categoryName"
