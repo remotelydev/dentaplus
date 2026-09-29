@@ -19,8 +19,8 @@ const serviceNavItems = computed(() =>
 </script>
 
 <template>
-  <footer class="bg-slate-700 px-4 py-10 mb-16 text-gray-100 sm:mb-0">
-    <div class="container mx-auto grid gap-10 md:grid-cols-3">
+  <footer class="bg-slate-700 px-6 py-10 mb-16 text-gray-100 sm:mb-0">
+    <div class="mx-auto grid w-full max-w-6xl gap-10 md:grid-cols-3">
       <nav aria-label="Usługi">
         <p class="mb-3 font-semibold tracking-tight">Usługi</p>
         <ul class="space-y-2">
@@ -125,7 +125,7 @@ const serviceNavItems = computed(() =>
         </div>
       </nav>
     </div>
-    <p class="container mx-auto mt-10 text-sm text-gray-200">
+    <p class="mx-auto mt-10 w-full max-w-6xl text-sm text-gray-200">
       Developed with ❤️ by&nbsp;
       <a
         href="https://www.trzos.dev"
