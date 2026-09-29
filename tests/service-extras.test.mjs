@@ -82,9 +82,16 @@ test('process steps come from existing jak wygląda / przebieg copy', () => {
 })
 
 test('FAQ copy stays in extras and JSON-LD stays on the page', () => {
-  assert.match(read('components/ServiceExtras.vue'), /Najczęstsze pytania/)
-  assert.match(read('components/ServiceExtras.vue'), /serviceFaqs/)
-  assert.match(read('pages/[uid].vue'), /FAQPage/)
-  assert.match(read('pages/[uid].vue'), /serviceFaqs/)
-  assert.match(read('pages/[uid].vue'), /<ServiceExtras :uid="uid" \/>/)
+  const extras = read('components/ServiceExtras.vue')
+  const uidPage = read('pages/[uid].vue')
+
+  assert.match(extras, /Najczęstsze pytania/)
+  assert.match(extras, /serviceFaqs/)
+  assert.match(extras, /<details/)
+  assert.match(extras, /<summary/)
+  assert.match(uidPage, /FAQPage/)
+  assert.match(uidPage, /serviceFaqs/)
+  assert.match(uidPage, /application\/ld\+json/)
+  assert.match(uidPage, /<ServiceExtras :uid="uid" \/>/)
+  assert.doesNotMatch(uidPage, /<details/)
 })
