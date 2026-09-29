@@ -113,3 +113,20 @@ test('service CTA row uses buttons instead of middot links', () => {
   assert.doesNotMatch(extras, /Cennik DentaPlus\+/)
   assert.doesNotMatch(extras, /Gabinet Turek/)
 })
+
+test('mid-page Umów wizytę uses settings phones and normalizeTelHref', () => {
+  const extras = read('components/ServiceExtras.vue')
+
+  assert.match(extras, /id="service-book-heading"/)
+  assert.match(extras, /Umów wizytę/)
+  assert.match(extras, /servicePages\[uid\]\.cta/)
+  assert.match(extras, /phone_turek/)
+  assert.match(extras, /phone_poddebice/)
+  assert.match(extras, /normalizeTelHref/)
+  assert.match(extras, /:href="turekTel"/)
+  assert.match(extras, /:href="poddebiceTel"/)
+  assert.doesNotMatch(extras, /690\s*649/)
+  assert.doesNotMatch(extras, /690\s*512/)
+  assert.doesNotMatch(extras, /tel:\+48\$\{/)
+  assert.doesNotMatch(extras, /\d+\s*zł/i)
+})

@@ -1,9 +1,14 @@
 <script setup lang="ts">
+import PhoneIcon from '../public/phone.svg'
 import { serviceFaqs, servicePages } from '~/data/services'
 
 defineProps<{
   uid: string
 }>()
+
+const settings = useSettings()
+const turekTel = computed(() => normalizeTelHref(settings.value?.data.phone_turek))
+const poddebiceTel = computed(() => normalizeTelHref(settings.value?.data.phone_poddebice))
 </script>
 
 <template>
@@ -42,9 +47,38 @@ defineProps<{
           </p>
         </div>
       </section>
-      <p class="mb-4">
-        {{ servicePages[uid].cta }}
-      </p>
+      <section
+        class="my-10 border-l-4 border-denta-green bg-slate-800 px-5 py-8 text-white md:px-8"
+        aria-labelledby="service-book-heading"
+      >
+        <h2
+          id="service-book-heading"
+          class="mb-3 font-semibold text-2xl md:text-3xl"
+        >
+          Umów wizytę
+        </h2>
+        <p class="mb-6 text-slate-100">
+          {{ servicePages[uid].cta }}
+        </p>
+        <div class="flex flex-wrap gap-3">
+          <a
+            v-if="turekTel"
+            class="inline-flex items-center justify-center gap-2 rounded-full bg-denta-green px-5 py-2.5 font-semibold text-slate-800"
+            :href="turekTel"
+          >
+            <PhoneIcon class="h-4 w-4" />
+            Turek {{ settings?.data.phone_turek }}
+          </a>
+          <a
+            v-if="poddebiceTel"
+            class="inline-flex items-center justify-center gap-2 rounded-full bg-white px-5 py-2.5 font-semibold text-slate-800"
+            :href="poddebiceTel"
+          >
+            <PhoneIcon class="h-4 w-4" />
+            Poddębice {{ settings?.data.phone_poddebice }}
+          </a>
+        </div>
+      </section>
       <section
         v-if="serviceFaqs[uid]?.length"
         class="mt-12"
