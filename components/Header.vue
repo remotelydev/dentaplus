@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { nextTick, onBeforeUnmount, ref, watch } from 'vue';
 import BurgerIcon from '../public/burger.svg';
 import ChevronIcon from '../public/chevron.svg';
 import CloseIcon from '../public/close.svg';
 import FacebookIcon from '../public/facebook.svg';
 import InstagramIcon from '../public/instagram.svg';
 import { resolveServiceNav } from '~/data/services'
+import { locations } from '~/data/locations'
 
 const navigation = useNavigation();
 const settings = useSettings();
@@ -14,10 +15,111 @@ const prismic = usePrismic()
 const isMobileMenuOpen = ref(false);
 const isServicesOpen = ref(false);
 const isKontaktOpen = ref(false);
-const isDesktopServicesOpen = ref(false);
-const isDesktopKontaktOpen = ref(false);
 const desktopServices = ref<HTMLElement | null>(null);
 const desktopKontakt = ref<HTMLElement | null>(null);
+
+const clinics = [locations.turek, locations.poddebice].map(location => ({
+  to: `/${location.uid}/`,
+  city: location.city,
+  address: location.streetAddress,
+}))
+
+type DesktopMenu = 'services' | 'kontakt'
+
+const HOVER_OPEN_DELAY = 120
+const HOVER_CLOSE_DELAY = 220
+
+const openDesktopMenu = ref<DesktopMenu | null>(null)
+// A menu opened by click or keyboard stays open when the pointer leaves it.
+const isDesktopMenuPinned = ref(false)
+const isDesktopServicesOpen = computed(() => openDesktopMenu.value === 'services')
+const isDesktopKontaktOpen = computed(() => openDesktopMenu.value === 'kontakt')
+let hoverTimer: ReturnType<typeof setTimeout> | undefined
+
+const clearHoverTimer = () => {
+  clearTimeout(hoverTimer)
+  hoverTimer = undefined
+}
+
+const closeDesktopMenu = () => {
+  clearHoverTimer()
+  openDesktopMenu.value = null
+  isDesktopMenuPinned.value = false
+}
+
+const closeDesktopServices = () => {
+  if (isDesktopServicesOpen.value) closeDesktopMenu()
+}
+
+const closeDesktopKontakt = () => {
+  if (isDesktopKontaktOpen.value) closeDesktopMenu()
+}
+
+const onDesktopMenuPointerEnter = (menu: DesktopMenu, event: PointerEvent) => {
+  if (event.pointerType !== 'mouse') return
+  clearHoverTimer()
+  if (openDesktopMenu.value === menu) return
+  const delay = openDesktopMenu.value ? 0 : HOVER_OPEN_DELAY
+  hoverTimer = setTimeout(() => {
+    openDesktopMenu.value = menu
+    isDesktopMenuPinned.value = false
+  }, delay)
+}
+
+const onDesktopMenuPointerLeave = (menu: DesktopMenu, event: PointerEvent) => {
+  if (event.pointerType !== 'mouse') return
+  clearHoverTimer()
+  if (isDesktopMenuPinned.value) return
+  hoverTimer = setTimeout(() => {
+    if (openDesktopMenu.value === menu) closeDesktopMenu()
+  }, HOVER_CLOSE_DELAY)
+}
+
+const toggleDesktopMenu = (menu: DesktopMenu) => {
+  clearHoverTimer()
+  if (openDesktopMenu.value === menu && isDesktopMenuPinned.value) {
+    closeDesktopMenu()
+    return
+  }
+  openDesktopMenu.value = menu
+  isDesktopMenuPinned.value = true
+}
+
+const menuLinks = (container: EventTarget | null) =>
+  Array.from((container as HTMLElement | null)?.querySelectorAll<HTMLElement>('[data-submenu] a') || [])
+
+const onDesktopMenuKeydown = (menu: DesktopMenu, event: KeyboardEvent) => {
+  const container = event.currentTarget as HTMLElement | null
+  if (event.key === 'Escape' && openDesktopMenu.value === menu) {
+    closeDesktopMenu()
+    container?.querySelector('button')?.focus()
+    return
+  }
+  if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp') return
+  event.preventDefault()
+  if (openDesktopMenu.value !== menu) {
+    openDesktopMenu.value = menu
+    isDesktopMenuPinned.value = true
+  }
+  nextTick(() => {
+    const links = menuLinks(container)
+    if (!links.length) return
+    const current = links.indexOf(document.activeElement as HTMLElement)
+    const step = event.key === 'ArrowDown' ? 1 : -1
+    const next = current === -1
+      ? (step === 1 ? 0 : links.length - 1)
+      : (current + step + links.length) % links.length
+    links[next]?.focus()
+  })
+}
+
+const onDesktopMenuFocusout = (menu: DesktopMenu, event: FocusEvent) => {
+  const container = event.currentTarget as HTMLElement | null
+  if (container?.contains(event.relatedTarget as Node | null)) return
+  if (openDesktopMenu.value === menu) closeDesktopMenu()
+}
+
+onBeforeUnmount(clearHoverTimer)
 
 const navLinkPath = (link: unknown) => {
   const href = prismic.asLink(link as never) || ''
@@ -53,40 +155,8 @@ const serviceNavItems = computed(() =>
   )
 )
 
-const closeDesktopServices = () => {
-  isDesktopServicesOpen.value = false
-}
-
-const closeDesktopKontakt = () => {
-  isDesktopKontaktOpen.value = false
-}
-
-const toggleDesktopServices = () => {
-  isDesktopServicesOpen.value = !isDesktopServicesOpen.value
-  if (isDesktopServicesOpen.value) closeDesktopKontakt()
-}
-
-const toggleDesktopKontakt = () => {
-  isDesktopKontaktOpen.value = !isDesktopKontaktOpen.value
-  if (isDesktopKontaktOpen.value) closeDesktopServices()
-}
-
 onClickOutside(desktopServices, closeDesktopServices)
 onClickOutside(desktopKontakt, closeDesktopKontakt)
-
-const onDesktopServicesKeydown = (event: KeyboardEvent) => {
-  if (event.key === 'Escape') {
-    closeDesktopServices()
-    ;(event.currentTarget as HTMLElement | null)?.querySelector('button')?.focus()
-  }
-}
-
-const onDesktopKontaktKeydown = (event: KeyboardEvent) => {
-  if (event.key === 'Escape') {
-    closeDesktopKontakt()
-    ;(event.currentTarget as HTMLElement | null)?.querySelector('button')?.focus()
-  }
-}
 
 watch(isMobileMenuOpen, (nextIsMobileMenuOpen) => {
   if (nextIsMobileMenuOpen) {
@@ -149,7 +219,10 @@ watch(isMobileMenuOpen, (nextIsMobileMenuOpen) => {
           <li
             ref="desktopServices"
             class="relative font-semibold tracking-tight text-slate-800"
-            @keydown="onDesktopServicesKeydown"
+            @pointerenter="onDesktopMenuPointerEnter('services', $event)"
+            @pointerleave="onDesktopMenuPointerLeave('services', $event)"
+            @keydown="onDesktopMenuKeydown('services', $event)"
+            @focusout="onDesktopMenuFocusout('services', $event)"
           >
             <div class="flex items-center gap-1">
               <NuxtLink
@@ -160,43 +233,63 @@ watch(isMobileMenuOpen, (nextIsMobileMenuOpen) => {
               </NuxtLink>
               <button
                 type="button"
-                class="px-1"
+                class="p-1 rounded-full hover:bg-slate-100"
                 :aria-expanded="isDesktopServicesOpen"
                 aria-controls="desktop-services-menu"
                 aria-haspopup="true"
                 aria-label="Pokaż listę usług"
-                @click="toggleDesktopServices"
+                @click="toggleDesktopMenu('services')"
               >
                 <ChevronIcon
                   aria-hidden="true"
-                  class="w-4 h-4 transition-transform"
+                  class="w-4 h-4 transition-transform duration-200"
                   :class="isDesktopServicesOpen ? '-rotate-90' : 'rotate-90'"
                 />
               </button>
             </div>
-            <ul
-              v-show="isDesktopServicesOpen"
-              id="desktop-services-menu"
-              class="absolute left-0 top-full z-20 min-w-[12rem] bg-white py-2 shadow-md"
+            <Transition
+              enter-active-class="transition duration-150 ease-out"
+              enter-from-class="opacity-0 translate-y-1"
+              leave-active-class="transition duration-100 ease-in"
+              leave-to-class="opacity-0 translate-y-1"
             >
-              <li
-                v-for="item in serviceNavItems"
-                :key="item.uid"
+              <div
+                v-show="isDesktopServicesOpen"
+                class="absolute -right-4 top-full z-20 pt-3 xl:right-auto xl:-left-4"
               >
-                <NuxtLink
-                  class="block px-4 py-2 hover:bg-slate-100"
-                  :to="item.to"
-                  @click="closeDesktopServices"
+                <ul
+                  id="desktop-services-menu"
+                  data-submenu
+                  class="min-w-[16rem] rounded-2xl bg-white p-2 shadow-xl shadow-slate-900/10 ring-1 ring-slate-900/5"
                 >
-                  {{ item.label }}
-                </NuxtLink>
-              </li>
-            </ul>
+                  <li
+                    v-for="item in serviceNavItems"
+                    :key="item.uid"
+                  >
+                    <NuxtLink
+                      class="group flex items-center justify-between gap-6 rounded-xl px-4 py-3 text-base transition-colors hover:bg-slate-100 focus-visible:bg-slate-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-slate-800"
+                      exact-active-class="bg-slate-50"
+                      :to="item.to"
+                      @click="closeDesktopMenu"
+                    >
+                      {{ item.label }}
+                      <ChevronIcon
+                        aria-hidden="true"
+                        class="w-3 h-3 text-slate-400 opacity-0 -translate-x-1 transition group-hover:opacity-100 group-hover:translate-x-0 group-focus-visible:opacity-100 group-focus-visible:translate-x-0"
+                      />
+                    </NuxtLink>
+                  </li>
+                </ul>
+              </div>
+            </Transition>
           </li>
           <li
             ref="desktopKontakt"
             class="relative font-semibold tracking-tight text-slate-800"
-            @keydown="onDesktopKontaktKeydown"
+            @pointerenter="onDesktopMenuPointerEnter('kontakt', $event)"
+            @pointerleave="onDesktopMenuPointerLeave('kontakt', $event)"
+            @keydown="onDesktopMenuKeydown('kontakt', $event)"
+            @focusout="onDesktopMenuFocusout('kontakt', $event)"
           >
             <div class="flex items-center gap-1">
               <PrismicLink
@@ -215,44 +308,58 @@ watch(isMobileMenuOpen, (nextIsMobileMenuOpen) => {
               </NuxtLink>
               <button
                 type="button"
-                class="px-1"
+                class="p-1 rounded-full hover:bg-slate-100"
                 :aria-expanded="isDesktopKontaktOpen"
                 aria-controls="desktop-kontakt-menu"
                 aria-haspopup="true"
                 aria-label="Pokaż gabinety"
-                @click="toggleDesktopKontakt"
+                @click="toggleDesktopMenu('kontakt')"
               >
                 <ChevronIcon
                   aria-hidden="true"
-                  class="w-4 h-4 transition-transform"
+                  class="w-4 h-4 transition-transform duration-200"
                   :class="isDesktopKontaktOpen ? '-rotate-90' : 'rotate-90'"
                 />
               </button>
             </div>
-            <ul
-              v-show="isDesktopKontaktOpen"
-              id="desktop-kontakt-menu"
-              class="absolute left-0 top-full z-20 min-w-[12rem] bg-white py-2 shadow-md"
+            <Transition
+              enter-active-class="transition duration-150 ease-out"
+              enter-from-class="opacity-0 translate-y-1"
+              leave-active-class="transition duration-100 ease-in"
+              leave-to-class="opacity-0 translate-y-1"
             >
-              <li>
-                <NuxtLink
-                  class="block px-4 py-2 hover:bg-slate-100"
-                  to="/turek/"
-                  @click="closeDesktopKontakt"
+              <div
+                v-show="isDesktopKontaktOpen"
+                class="absolute -right-4 top-full z-20 pt-3"
+              >
+                <ul
+                  id="desktop-kontakt-menu"
+                  data-submenu
+                  class="min-w-[16rem] rounded-2xl bg-white p-2 shadow-xl shadow-slate-900/10 ring-1 ring-slate-900/5"
                 >
-                  Turek
-                </NuxtLink>
-              </li>
-              <li>
-                <NuxtLink
-                  class="block px-4 py-2 hover:bg-slate-100"
-                  to="/poddebice/"
-                  @click="closeDesktopKontakt"
-                >
-                  Poddębice
-                </NuxtLink>
-              </li>
-            </ul>
+                  <li
+                    v-for="clinic in clinics"
+                    :key="clinic.to"
+                  >
+                    <NuxtLink
+                      class="group flex items-center justify-between gap-6 rounded-xl px-4 py-3 transition-colors hover:bg-slate-100 focus-visible:bg-slate-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-slate-800"
+                      exact-active-class="bg-slate-50"
+                      :to="clinic.to"
+                      @click="closeDesktopMenu"
+                    >
+                      <span class="flex flex-col gap-1">
+                        <span class="text-base">{{ clinic.city }}</span>
+                        <span class="text-sm font-normal tracking-normal text-slate-500">{{ clinic.address }}</span>
+                      </span>
+                      <ChevronIcon
+                        aria-hidden="true"
+                        class="w-3 h-3 text-slate-400 opacity-0 -translate-x-1 transition group-hover:opacity-100 group-hover:translate-x-0 group-focus-visible:opacity-100 group-focus-visible:translate-x-0"
+                      />
+                    </NuxtLink>
+                  </li>
+                </ul>
+              </div>
+            </Transition>
           </li>
           <!-- <li>
             <a href="https://www.facebook.com/dentaplusturek" target="_blank">
@@ -268,7 +375,7 @@ watch(isMobileMenuOpen, (nextIsMobileMenuOpen) => {
       </nav>
       <nav
         :class="isMobileMenuOpen ? 'block' : 'hidden'"
-        class="absolute right-0 top-full w-screen h-screen flex flex-col z-10 bg-white"
+        class="absolute right-0 top-full w-screen h-screen flex flex-col z-10 overflow-y-auto overscroll-contain bg-white pb-48"
         @click="isMobileMenuOpen = false"
       >
         <PrismicLink
@@ -280,79 +387,89 @@ watch(isMobileMenuOpen, (nextIsMobileMenuOpen) => {
         >
           {{ $prismic.asText(link.label) }}
         </PrismicLink>
-        <div class="flex bg-white">
+        <div class="flex items-center bg-white">
           <NuxtLink
-            class="flex-1 px-6 py-4 font-bold text-center"
+            class="flex-1 py-4 pl-[4.5rem] font-bold text-center"
             to="/uslugi/"
           >
             Usługi
           </NuxtLink>
           <button
             type="button"
-            class="px-4 py-4 font-bold"
+            class="mr-2 flex h-14 w-16 items-center justify-center"
             :aria-expanded="isServicesOpen"
+            aria-controls="mobile-services-menu"
             aria-label="Pokaż listę usług"
             @click.stop="isServicesOpen = !isServicesOpen"
           >
             <ChevronIcon
               aria-hidden="true"
-              class="w-4 h-4 transition-transform"
+              class="w-3.5 h-3.5 text-slate-800 transition-transform duration-200"
               :class="isServicesOpen ? '-rotate-90' : 'rotate-90'"
             />
           </button>
         </div>
-        <NuxtLink
-          v-for="item in serviceNavItems"
+        <div
           v-show="isServicesOpen"
-          :key="`mobile-service-${item.uid}`"
-          class="px-6 py-3 font-semibold text-center bg-slate-50"
-          :to="item.to"
+          id="mobile-services-menu"
+          class="mx-4 mb-3 rounded-2xl bg-slate-50 p-2"
         >
-          {{ item.label }}
-        </NuxtLink>
-        <div class="flex bg-slate-100">
+          <NuxtLink
+            v-for="item in serviceNavItems"
+            :key="`mobile-service-${item.uid}`"
+            class="block rounded-xl px-4 py-3.5 text-base font-semibold text-center active:bg-white"
+            exact-active-class="bg-white"
+            :to="item.to"
+          >
+            {{ item.label }}
+          </NuxtLink>
+        </div>
+        <div class="flex items-center bg-slate-100">
           <PrismicLink
             v-if="kontaktItem"
-            class="flex-1 px-6 py-4 font-bold text-center"
+            class="flex-1 py-4 pl-[4.5rem] font-bold text-center"
             :field="kontaktItem.link"
           >
             {{ $prismic.asText(kontaktItem.label) }}
           </PrismicLink>
           <NuxtLink
             v-else
-            class="flex-1 px-6 py-4 font-bold text-center"
+            class="flex-1 py-4 pl-[4.5rem] font-bold text-center"
             to="/kontakt/"
           >
             Kontakt
           </NuxtLink>
           <button
             type="button"
-            class="px-4 py-4 font-bold"
+            class="mr-2 flex h-14 w-16 items-center justify-center"
             :aria-expanded="isKontaktOpen"
+            aria-controls="mobile-kontakt-menu"
             aria-label="Pokaż gabinety"
             @click.stop="isKontaktOpen = !isKontaktOpen"
           >
             <ChevronIcon
               aria-hidden="true"
-              class="w-4 h-4 transition-transform"
+              class="w-3.5 h-3.5 text-slate-800 transition-transform duration-200"
               :class="isKontaktOpen ? '-rotate-90' : 'rotate-90'"
             />
           </button>
         </div>
-        <NuxtLink
+        <div
           v-show="isKontaktOpen"
-          class="px-6 py-3 font-semibold text-center bg-slate-50"
-          to="/turek/"
+          id="mobile-kontakt-menu"
+          class="mx-4 my-3 rounded-2xl bg-slate-50 p-2"
         >
-          Turek
-        </NuxtLink>
-        <NuxtLink
-          v-show="isKontaktOpen"
-          class="px-6 py-3 font-semibold text-center bg-slate-50"
-          to="/poddebice/"
-        >
-          Poddębice
-        </NuxtLink>
+          <NuxtLink
+            v-for="clinic in clinics"
+            :key="`mobile-clinic-${clinic.to}`"
+            class="flex flex-col items-center gap-1 rounded-xl px-4 py-3.5 text-center active:bg-white"
+            exact-active-class="bg-white"
+            :to="clinic.to"
+          >
+            <span class="text-base font-semibold">{{ clinic.city }}</span>
+            <span class="text-sm text-slate-500">{{ clinic.address }}</span>
+          </NuxtLink>
+        </div>
         <div class="flex justify-center gap-8 p-8">
           <a
             href="https://www.facebook.com/dentaplusturek"
