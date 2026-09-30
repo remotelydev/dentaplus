@@ -146,11 +146,12 @@ test('clinic hours are per clinic and Saturday is appointment-only', () => {
   assert.match(read('components/ClinicCard.vue'), /SATURDAY_NOTE/)
 })
 
-test('location service headings use locative city names', () => {
+test('city pages do not repeat the service nav and keep locative city names', () => {
   const component = read('components/ClinicLocation.vue')
   const data = read('data/locations.ts')
-  assert.match(component, /Usługi w \{\{ location\.cityLocative \}\}/)
-  assert.doesNotMatch(component, /Usługi w \{\{ location\.city \}\}/)
+  assert.doesNotMatch(component, /Usługi w/)
+  assert.doesNotMatch(component, /SERVICE_LINKS|SERVICE_NAV/)
+  assert.doesNotMatch(read('slices/Contact/index.vue'), /SERVICE_LINKS|SERVICE_NAV/)
   assert.match(data, /cityLocative: 'Turku'/)
   assert.match(data, /cityLocative: 'Poddębicach'/)
 })

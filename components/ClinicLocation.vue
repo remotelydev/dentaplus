@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { ImageField } from '@prismicio/client'
-import { SERVICE_LINKS, locations } from '~/data/locations'
+import { locations } from '~/data/locations'
 import PhoneIcon from '../public/phone.svg'
 
 const props = defineProps<{
@@ -90,17 +90,6 @@ const { data: photo } = await useAsyncData(`city-photo-${props.location.uid}`, a
           {{ paragraph }}
         </p>
       </div>
-
-      <h2 class="font-semibold text-2xl md:text-3xl mt-12 mb-4">Usługi w {{ location.cityLocative }}</h2>
-      <ul class="list-disc pl-5 mb-4">
-        <li
-          v-for="item in SERVICE_LINKS"
-          :key="item.to"
-          class="mb-1"
-        >
-          <NuxtLink class="underline" :to="item.to">{{ item.label }}</NuxtLink>
-        </li>
-      </ul>
     </Bounded>
 
     <section class="bg-slate-50 py-8 md:py-12">

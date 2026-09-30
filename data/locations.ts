@@ -1,13 +1,3 @@
-import { SERVICE_NAV } from './services'
-
-export const SERVICE_LINKS = [
-  ...SERVICE_NAV.map((item) => ({
-    to: item.to,
-    label: item.uid === 'implanty' ? 'Implanty zębów' : item.uid === 'endodoncja' ? 'Leczenie kanałowe' : item.uid === 'itero' ? 'Skaner iTero' : item.label,
-  })),
-  { to: '/cennik/', label: 'Cennik' },
-]
-
 const WEEKDAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
 
 type HoursRow =
