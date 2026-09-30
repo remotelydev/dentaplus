@@ -27,3 +27,39 @@ test('cennik has a sticky category jump-nav', () => {
   assert.match(source, /slice_type === ['"]pricelist['"]/)
   assert.match(source, /:id="categoryId \|\| undefined"/)
 })
+
+test('cennik jump-nav renders as lime-active chips', () => {
+  const source = read('slices/Pricelist/index.vue')
+
+  assert.match(source, /rounded-full border px-3 py-1/)
+  assert.match(source, /hover:bg-denta-green/)
+  assert.match(source, /'border-denta-green bg-denta-green' : 'border-slate-200 bg-slate-100'/)
+  assert.match(source, /:aria-current=/)
+  assert.match(source, /focus-visible:outline-denta-green/)
+  assert.doesNotMatch(source, /serviceChips|SERVICE_NAV/)
+})
+
+test('cennik jump-nav chips wrap at every width without a scrollbar', () => {
+  const source = read('slices/Pricelist/index.vue')
+  const list = source.match(/<ul class="([^"]+)"/)?.[1] ?? ''
+
+  assert.match(list, /(^| )flex-wrap( |$)/)
+  assert.doesNotMatch(list, /overflow-x-(auto|scroll)|:flex-wrap|flex-nowrap/)
+  assert.doesNotMatch(source, /whitespace-nowrap rounded-full|scrollTo\(/)
+})
+
+test('cennik headings clear the wrapped jump-nav after a jump', () => {
+  const source = read('slices/Pricelist/index.vue')
+
+  assert.match(source, /--cennik-jump-offset/)
+  assert.match(source, /ResizeObserver/)
+  assert.match(source, /scroll-mt-\[var\(--cennik-jump-offset,/)
+})
+
+test('cennik rows keep main layout and hover', () => {
+  const source = read('slices/Pricelist/index.vue')
+
+  assert.match(source, /class="w-full flex justify-between p-2 hover:bg-slate-800 hover:text-slate-100"/)
+  assert.match(source, /class="basis-3\/4"/)
+  assert.doesNotMatch(source, /flex-col items-start/)
+})
