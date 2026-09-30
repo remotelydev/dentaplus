@@ -51,10 +51,6 @@ export const locations = {
       'Gabinet stomatologiczny DentaPlus+ w Turku, ul. Łąkowa 10. Implanty, Invisalign, leczenie kanałowe i tomografia 3D. Umów wizytę.',
     intro:
       'DentaPlus+ w Turku to pełnoprofilowy gabinet stomatologiczny przy ul. Łąkowej 10. Leczymy dorosłych i dzieci: od higienizacji i stomatologii zachowawczej po implanty, leczenie kanałowe pod mikroskopem i nakładki Invisalign.',
-    paragraphs: [
-      'Gabinet w Turku jest jednym z dwóch punktów DentaPlus+ (drugi działa w Poddębicach). Pacjenci z Turku, Władysławowa, Dobrej i okolic umawiają się tutaj na diagnostykę 3D, skan iTero oraz zabiegi implantologiczne.',
-      'Na miejscu wykonujemy zdjęcia RTG i tomografię, więc plan leczenia — w tym implanty i endodoncja — powstaje bez odsyłania do zewnętrznej pracowni. Cennik jest wspólny dla obu klinik.',
-    ],
   },
   poddebice: {
     uid: 'poddebice',
@@ -76,9 +72,5 @@ export const locations = {
       'Gabinet stomatologiczny DentaPlus+ w Poddębicach, ul. Krasickiego 1C. Implanty, Invisalign, leczenie kanałowe. Sprawdź godziny i umów wizytę.',
     intro:
       'DentaPlus+ w Poddębicach przy ul. Krasickiego 1C to drugi gabinet sieci. Oferujemy leczenie zachowawcze, protetykę, implantologię, Invisalign i diagnostykę, w ścisłej współpracy z kliniką w Turku.',
-    paragraphs: [
-      'Pacjenci z Poddębic, Uniejowa, Łęczycy i okolic mogą leczyć się lokalnie, a na tomografię 3D lub bardziej złożone zabiegi korzystać z zaplecza turskiego gabinetu.',
-      'Gabinet w Poddębicach jest czynny od poniedziałku do piątku w godzinach 10:00–18:00, a w soboty przyjmujemy po wcześniejszym umówieniu. Aktualny cennik i zespół lekarzy znajdziesz na wspólnych podstronach DentaPlus+.',
-    ],
   },
 } as const

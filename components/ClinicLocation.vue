@@ -80,18 +80,6 @@ const { data: photo } = await useAsyncData(`city-photo-${props.location.uid}`, a
       </Bounded>
     </section>
 
-    <Bounded as="section" y-padding="base">
-      <div class="max-w-prose">
-        <p
-          v-for="paragraph in location.paragraphs"
-          :key="paragraph"
-          class="mb-4 leading-relaxed"
-        >
-          {{ paragraph }}
-        </p>
-      </div>
-    </Bounded>
-
     <section class="bg-slate-50 py-8 md:py-12">
       <Bounded y-padding="sm">
         <h2 id="adres" class="font-semibold text-2xl md:text-3xl mb-6 scroll-mt-16">Adres i godziny</h2>
