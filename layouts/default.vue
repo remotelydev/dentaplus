@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { locations } from '~/data/locations'
+import { locations, openingHoursSpecification } from '~/data/locations'
 import { fullyDecode, toCanonicalUrl } from '~/utils/canonical.mjs'
 
 const prismic = usePrismic()
@@ -40,20 +40,7 @@ const dentistNode = (
     addressLocality: location.addressLocality,
     addressCountry: 'PL',
   },
-  openingHoursSpecification: [
-    {
-      '@type': 'OpeningHoursSpecification',
-      dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-      opens: '08:00',
-      closes: '20:00',
-    },
-    {
-      '@type': 'OpeningHoursSpecification',
-      dayOfWeek: 'Saturday',
-      opens: '10:00',
-      closes: '15:00',
-    },
-  ],
+  openingHoursSpecification: openingHoursSpecification(location.uid),
 })
 
 const breadcrumbSchema = computed(() => {

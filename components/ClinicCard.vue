@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { CLINIC_HOURS, type locations } from '~/data/locations'
+import { CLINIC_HOURS, SATURDAY_NOTE, type locations } from '~/data/locations'
 
 const props = defineProps<{
   location: (typeof locations)[keyof typeof locations]
@@ -10,6 +10,7 @@ const settings = useSettings()
 const phone = computed(() => settings.value?.data[props.location.phoneSetting] as string | undefined)
 const email = computed(() => settings.value?.data[props.location.emailSetting] as string | undefined)
 const telHref = computed(() => normalizeTelHref(phone.value))
+const hours = computed(() => CLINIC_HOURS[props.location.uid])
 </script>
 
 <template>
@@ -21,18 +22,19 @@ const telHref = computed(() => normalizeTelHref(phone.value))
       </address>
       <p v-if="telHref" class="mb-1">
         <a class="font-semibold underline" :href="telHref">+48 {{ phone }}</a>
+        <span class="block text-sm text-slate-600">{{ SATURDAY_NOTE }}</span>
       </p>
       <p v-if="email" class="mb-6">
         <a class="underline" :href="`mailto:${email}`">{{ email }}</a>
       </p>
       <dl class="divide-y divide-slate-200 border-y border-slate-200">
         <div
-          v-for="row in CLINIC_HOURS"
+          v-for="row in hours"
           :key="row.days"
           class="flex justify-between gap-4 py-2"
         >
           <dt class="font-semibold">{{ row.days }}</dt>
-          <dd>{{ row.opens }}–{{ row.closes }}</dd>
+          <dd>{{ row.closed ? 'nieczynne' : `${row.opens}–${row.closes}` }}</dd>
         </div>
       </dl>
     </div>
@@ -54,16 +56,17 @@ const telHref = computed(() => normalizeTelHref(phone.value))
     </address>
     <p v-if="telHref" class="mb-1">
       <a class="underline" :href="telHref">+48 {{ phone }}</a>
+      <span class="block text-sm">{{ SATURDAY_NOTE }}</span>
     </p>
     <p v-if="email" class="mb-4">
       <a class="underline" :href="`mailto:${email}`">{{ email }}</a>
     </p>
     <ul class="mb-8">
       <li
-        v-for="row in CLINIC_HOURS"
+        v-for="row in hours"
         :key="row.days"
       >
-        {{ row.days }}: {{ row.opens }}–{{ row.closes }}
+        {{ row.days }}: {{ row.closed ? 'nieczynne' : `${row.opens}–${row.closes}` }}
       </li>
     </ul>
     <iframe

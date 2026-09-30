@@ -1,10 +1,5 @@
 import { SERVICE_NAV } from './services'
 
-export const CLINIC_HOURS = [
-  { days: 'Pn–Pt', opens: '8:00', closes: '20:00' },
-  { days: 'Sb', opens: '10:00', closes: '15:00' },
-]
-
 export const SERVICE_LINKS = [
   ...SERVICE_NAV.map((item) => ({
     to: item.to,
@@ -12,6 +7,38 @@ export const SERVICE_LINKS = [
   })),
   { to: '/cennik/', label: 'Cennik' },
 ]
+
+const WEEKDAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
+
+type HoursRow =
+  | { days: string, dayOfWeek: string[], opens: string, closes: string, closed?: false }
+  | { days: string, closed: true }
+
+// Saturday is appointment-only, so it is shown as closed and never emitted as open hours in JSON-LD.
+export const CLINIC_HOURS: Record<'turek' | 'poddebice', HoursRow[]> = {
+  turek: [
+    { days: 'Pn–Pt', dayOfWeek: WEEKDAYS, opens: '8:00', closes: '20:00' },
+    { days: 'Sb', closed: true },
+  ],
+  poddebice: [
+    { days: 'Pn–Pt', dayOfWeek: WEEKDAYS, opens: '10:00', closes: '18:00' },
+    { days: 'Sb', closed: true },
+  ],
+}
+
+export const SATURDAY_NOTE = 'Sobota: po wcześniejszym umówieniu'
+
+export const openingHoursSpecification = (uid: keyof typeof CLINIC_HOURS) =>
+  CLINIC_HOURS[uid].flatMap((row) =>
+    row.closed
+      ? []
+      : [{
+          '@type': 'OpeningHoursSpecification',
+          dayOfWeek: row.dayOfWeek,
+          opens: row.opens.padStart(5, '0'),
+          closes: row.closes.padStart(5, '0'),
+        }],
+  )
 
 export const locations = {
   turek: {
@@ -61,7 +88,7 @@ export const locations = {
       'DentaPlus+ w Poddębicach przy ul. Krasickiego 1C to drugi gabinet sieci. Oferujemy leczenie zachowawcze, protetykę, implantologię, Invisalign i diagnostykę, w ścisłej współpracy z kliniką w Turku.',
     paragraphs: [
       'Pacjenci z Poddębic, Uniejowa, Łęczycy i okolic mogą leczyć się lokalnie, a na tomografię 3D lub bardziej złożone zabiegi korzystać z zaplecza turskiego gabinetu.',
-      'Godziny otwarcia są takie same jak w Turku: poniedziałek–piątek 8:00–20:00 i sobota 10:00–15:00. Aktualny cennik i zespół lekarzy znajdziesz na wspólnych podstronach DentaPlus+.',
+      'Gabinet w Poddębicach jest czynny od poniedziałku do piątku w godzinach 10:00–18:00, a w soboty przyjmujemy po wcześniejszym umówieniu. Aktualny cennik i zespół lekarzy znajdziesz na wspólnych podstronach DentaPlus+.',
     ],
   },
 } as const
