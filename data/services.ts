@@ -42,7 +42,7 @@ export const resolveServiceNav = (
 }
 
 export const servicePages: Record<string, {
-  h2s: { heading: string, body: string }[]
+  h2s: { heading: string, body: string, steps?: string[] }[]
   cta: string
 }> = {
   implanty: {
@@ -53,7 +53,13 @@ export const servicePages: Record<string, {
       },
       {
         heading: 'Jak wygląda leczenie implantologiczne?',
-        body: 'Najpierw konsultacja i plan: zdjęcie, skan i w razie potrzeby tomograf. Następnie wszczepiamy implant, odczekujemy na osteointegrację i odbudowujemy koronę. Czas zależy od liczby implantów i tego, czy potrzebna jest augmentacja kości. Prowadzimy Cię przez każdy etap — od ekstrakcji po cementowanie korony.',
+        steps: [
+          'Konsultacja i plan: zdjęcie, skan i w razie potrzeby tomograf',
+          'Wszczepiamy implant',
+          'Odczekujemy na osteointegrację',
+          'Odbudowujemy koronę',
+        ],
+        body: 'Czas zależy od liczby implantów i tego, czy potrzebna jest augmentacja kości. Prowadzimy Cię przez każdy etap — od ekstrakcji po cementowanie korony.',
       },
       {
         heading: 'Implanty w Turku i Poddębicach',
@@ -74,7 +80,14 @@ export const servicePages: Record<string, {
       },
       {
         heading: 'Przebieg leczenia Invisalign w DentaPlus+',
-        body: 'Konsultacja, skan iTero, akceptacja planu, seria nakładek wymienianych co 1–2 tygodnie i wizyty kontrolne. Higiena jest prostsza niż przy zamkach, bo nakładki zdejmujesz do jedzenia. Po leczeniu stosujemy retainery, żeby efekt został.',
+        steps: [
+          'Konsultacja',
+          'Skan iTero',
+          'Akceptacja planu',
+          'Seria nakładek wymienianych co 1–2 tygodnie',
+          'Wizyty kontrolne',
+        ],
+        body: 'Higiena jest prostsza niż przy zamkach, bo nakładki zdejmujesz do jedzenia. Po leczeniu stosujemy retainery, żeby efekt został.',
       },
     ],
     cta: 'Zobacz cennik ortodoncji i zapytaj o Invisalign w Turku lub Poddębicach.',
@@ -87,7 +100,13 @@ export const servicePages: Record<string, {
       },
       {
         heading: 'Jak przebiega wizyta?',
-        body: 'Po znieczuleniu otwieramy ząb, opracowujemy kanały, dezynfekujemy i wypełniamy. Często wystarcza jedna wizyta, trudniejsze przypadki wymagają dwóch. Potem ząb wzmacniamy wypełnieniem albo koroną — zwłaszcza zęby boczne po leczeniu kanałowym.',
+        steps: [
+          'Po znieczuleniu otwieramy ząb',
+          'Opracowujemy kanały',
+          'Dezynfekujemy',
+          'Wypełniamy',
+        ],
+        body: 'Często wystarcza jedna wizyta, trudniejsze przypadki wymagają dwóch. Potem ząb wzmacniamy wypełnieniem albo koroną — zwłaszcza zęby boczne po leczeniu kanałowym.',
       },
       {
         heading: 'Leczenie kanałowe Turek i Poddębice',
@@ -121,7 +140,12 @@ export const servicePages: Record<string, {
       },
       {
         heading: 'Jak wygląda badanie?',
-        body: 'Stoisz lub siedzisz przy aparacie, badanie trwa kilkanaście sekund, dawka jest znacznie niższa niż w tomografii szpitalnej. Wynik omawiamy od razu albo na zaplanowanej konsultacji implantologicznej / endodontycznej.',
+        steps: [
+          'Stoisz lub siedzisz przy aparacie',
+          'Badanie trwa kilkanaście sekund',
+          'Wynik omawiamy od razu albo na zaplanowanej konsultacji implantologicznej / endodontycznej',
+        ],
+        body: 'Dawka jest znacznie niższa niż w tomografii szpitalnej.',
       },
       {
         heading: 'Tomografia 3D w Turku',

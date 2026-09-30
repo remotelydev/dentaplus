@@ -170,7 +170,9 @@ test('telephone hrefs are normalized without spaces', () => {
   assert.match(read('composables/usePhoneLink.ts'), /export const normalizeTelHref/)
   assert.match(read('components/ClinicCard.vue'), /normalizeTelHref/)
   assert.match(read('components/ContactBar.vue'), /normalizeTelHref/)
+  assert.match(read('components/ServiceExtras.vue'), /normalizeTelHref/)
   assert.doesNotMatch(read('components/ContactBar.vue'), /tel:\+48\$\{/)
+  assert.doesNotMatch(read('components/ServiceExtras.vue'), /tel:\+48\$\{/)
 })
 
 test('canonical URLs encode unicode slugs once', async () => {
