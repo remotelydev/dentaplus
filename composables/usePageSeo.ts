@@ -1,5 +1,5 @@
 import type { ComputedRef, Ref } from 'vue'
-import { toCanonicalUrl } from '~/utils/canonical.mjs'
+import { toCanonicalUrl } from '../utils/canonical.mjs'
 
 type SeoValue<T> = Ref<T> | ComputedRef<T>
 

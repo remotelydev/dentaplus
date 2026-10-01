@@ -3,6 +3,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import test from 'node:test'
 import { fileURLToPath } from 'node:url'
+import { resolveServiceNav, SERVICE_NAV } from '../data/services.ts'
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const header = fs.readFileSync(path.join(root, 'components/Header.vue'), 'utf8')
@@ -49,10 +50,26 @@ test('Galeria is filtered out of the primary header', () => {
 })
 
 test('service dropdown uses resolveServiceNav from Prismic or SERVICE_NAV', () => {
-  const services = fs.readFileSync(path.join(root, 'data/services.ts'), 'utf8')
   assert.match(header, /resolveServiceNav/)
   assert.match(header, /service_links/)
   assert.match(header, /serviceNavItems/)
-  assert.match(services, /export const resolveServiceNav/)
-  assert.match(services, /SERVICE_NAV\.map/)
+})
+
+test('service nav falls back to SERVICE_NAV and normalizes CMS links', () => {
+  const fallback = resolveServiceNav(null, () => '', () => null)
+  assert.deepEqual(fallback.map((item) => item.to), SERVICE_NAV.map((item) => item.to))
+
+  const cms = resolveServiceNav(
+    [{ label: 'Implanty', link: 'https://www.dentaplus.pl/implanty' }],
+    (field) => field,
+    (field) => field,
+  )
+  assert.deepEqual(cms, [{ uid: 'implanty', to: '/implanty/', label: 'Implanty' }])
+
+  const blank = resolveServiceNav(
+    [{ label: '  ', link: '/implanty' }],
+    (field) => field,
+    (field) => field,
+  )
+  assert.deepEqual(blank.map((item) => item.to), SERVICE_NAV.map((item) => item.to))
 })

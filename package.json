@@ -14,7 +14,7 @@
     "postinstall": "nuxt prepare",
     "slicemachine": "start-slicemachine",
     "lint": "eslint .",
-    "test:seo": "node --test tests/seo.test.mjs"
+    "test:seo": "node --experimental-strip-types --test tests/*.test.mjs"
   },
   "dependencies": {
     "@fontsource/inter": "^5.0.15",
