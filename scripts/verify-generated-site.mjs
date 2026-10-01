@@ -50,6 +50,28 @@ for (const error of dataErrors) {
 
 console.log('Generated homepage contains Prismic content.')
 
+const images = [...html.matchAll(/<img\b[^>]*>/gi)].map((match) => match[0])
+if (images.length < 5) {
+  throw new Error(`Generated homepage has too few images (${images.length}).`)
+}
+for (const image of images) {
+  if (!/\swidth="\d+"/.test(image) || !/\sheight="\d+"/.test(image)) {
+    throw new Error(`Generated homepage image is missing width and height: ${image.slice(0, 220)}`)
+  }
+}
+if (!/rel="preload" as="font"[^>]*fetchpriority="low"/.test(html)) {
+  throw new Error('Generated homepage is missing low-priority font preloads.')
+}
+const preloadedFonts = html.match(/rel="preload" as="font"[^>]*>/g) || []
+if (preloadedFonts.some((link) => link.includes('-500-'))) {
+  throw new Error('Weight 500 Inter was preloaded; it is not on the first-paint chain.')
+}
+if (!preloadedFonts.some((link) => link.includes('latin-ext-600'))) {
+  throw new Error('latin-ext 600 was not preloaded.')
+}
+
+console.log('Generated homepage images have dimensions and critical fonts are preloaded.')
+
 if (!/noindex/.test(notFoundHtml) || !/Nie znaleziono strony/.test(notFoundHtml)) {
   throw new Error('Generated 404.html is missing noindex or the not-found title.')
 }

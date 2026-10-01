@@ -2,6 +2,7 @@
 import type { ImageField } from '@prismicio/client'
 import { locations } from '~/data/locations'
 import PhoneIcon from '../public/phone.svg'
+import { buildResponsiveImage } from '~/utils/responsiveImage.mjs'
 
 const props = defineProps<{
   location: (typeof locations)[keyof typeof locations]
@@ -30,6 +31,12 @@ const { data: photo } = await useAsyncData(`city-photo-${props.location.uid}`, a
   }
   return null
 })
+
+const cityImage = computed(() => buildResponsiveImage(prismic.asImageSrc, photo.value, {
+  widths: [640, 960, 1200],
+  cap: 1200,
+  sizes: '(min-width: 1280px) 34rem, (min-width: 768px) 46vw, 100vw',
+}))
 </script>
 
 <template>
@@ -69,11 +76,17 @@ const { data: photo } = await useAsyncData(`city-photo-${props.location.uid}`, a
             v-if="photo?.url"
             class="aspect-[4/3] overflow-hidden bg-slate-700"
           >
-            <PrismicImage
-              :field="photo"
+            <img
+              v-if="cityImage"
+              :src="cityImage.src"
+              :srcset="cityImage.srcset"
+              :sizes="cityImage.sizes"
+              :width="cityImage.width"
+              :height="cityImage.height"
+              :alt="photo.alt || ''"
               class="h-full w-full object-cover"
-              :imgix-params="{ w: 1000, auto: ['compress', 'format'] }"
               fetchpriority="high"
+              decoding="async"
             />
           </figure>
         </div>

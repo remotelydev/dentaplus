@@ -185,6 +185,8 @@ watch(isMobileMenuOpen, (nextIsMobileMenuOpen) => {
           v-if="settings?.data?.logo"
           class="h-16 md:h-16"
           :src="$prismic.asImageSrc(settings.data.logo)"
+          :width="settings.data.logo.dimensions?.width || 366"
+          :height="settings.data.logo.dimensions?.height || 89"
           alt="DentaPlus+"
         >
         <span v-else class="text-xl font-semibold tracking-tight text-slate-800">DentaPlus+</span>

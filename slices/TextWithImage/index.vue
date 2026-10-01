@@ -19,7 +19,12 @@ const image = computed(() => withImageAlt(props.slice.primary.image))
           v-if="image?.url"
           class="bg-gray-100"
         >
-          <PrismicImage :field="image" :imgix-params="{ w: 1000, auto: ['compress', 'format'] }" />
+          <PrismicImage
+            :field="image"
+            :width="image.dimensions?.width"
+            :height="image.dimensions?.height"
+            :imgix-params="{ w: 1000, auto: ['compress', 'format'] }"
+          />
         </div>
       </div>
     </div>
