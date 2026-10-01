@@ -3,6 +3,8 @@ import fs from 'node:fs'
 import path from 'node:path'
 import test from 'node:test'
 import { fileURLToPath } from 'node:url'
+import { buildResponsiveImage } from '../utils/responsiveImage.mjs'
+import { preloadCriticalFonts } from '../utils/preloadFonts.mjs'
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const siteOrigin = 'https://www.dentaplus.pl'
@@ -270,11 +272,47 @@ test('hero fits phone widths: fluid H1, stacked photo, sane srcset', () => {
 test('homepage tiles stay off the hero download', () => {
   const tile = read('components/TileImage.vue')
   const tiles = read('slices/Tiles/index.vue')
+  const images = read('utils/responsiveImage.mjs')
   assert.match(tile, /loading="lazy"/)
   assert.match(tile, /fetchpriority="low"/)
-  assert.match(tile, /w: width/)
+  assert.match(tile, /buildResponsiveImage/)
+  assert.match(tile, /:width="tile\.width"/)
+  assert.match(tile, /:height="tile\.height"/)
+  assert.match(tile, /:srcset="tile\.srcset"/)
+  assert.match(images, /w: width/)
+  assert.match(images, /Math\.min\(cap, intrinsicWidth\)/)
   assert.match(tiles, /:image="item\.image"/)
   assert.doesNotMatch(tiles, /:image="item\.image\.url"/)
+})
+
+test('shared images declare dimensions and capped srcsets', () => {
+  assert.match(read('components/Header.vue'), /logo\.dimensions\?\.width/)
+  assert.match(read('components/Header.vue'), /logo\.dimensions\?\.height/)
+  assert.match(read('components/Portrait.vue'), /:width="image\.width"/)
+  assert.match(read('components/Portrait.vue'), /:height="image\.height"/)
+  assert.match(read('components/ClinicLocation.vue'), /:width="cityImage\.width"/)
+  assert.match(read('components/ClinicLocation.vue'), /:height="cityImage\.height"/)
+  assert.match(read('components/ClinicLocation.vue'), /:srcset="cityImage\.srcset"/)
+  assert.match(read('slices/Image/index.vue'), /image\.dimensions\?\.width/)
+  assert.match(read('slices/TextWithImage/index.vue'), /image\.dimensions\?\.height/)
+  assert.doesNotMatch(read('slices/Portraits/index.vue'), /portrait\.url/)
+})
+
+test('critical Inter files are preloaded off the font chain', () => {
+  const config = read('nuxt.config.ts')
+  const fonts = read('utils/preloadFonts.mjs')
+  assert.match(config, /preloadCriticalFonts/)
+  assert.match(config, /manualChunks/)
+  assert.match(fonts, /rel="preload" as="font"/)
+  assert.match(fonts, /fetchpriority="low"/)
+  assert.match(fonts, /inter-latin\(\?:-ext\)\?-\(\?:400\|600\)/)
+
+  const html = '<head><link rel="icon" href="/denta.ico"><link rel="preload" as="image" href="/hero.jpg"><style>@font-face{src:url(/_nuxt/inter-latin-400-normal.aaa.woff2)}@font-face{src:url(/_nuxt/inter-latin-ext-600-normal.bbb.woff2)}@font-face{src:url(/_nuxt/inter-latin-500-normal.ccc.woff2)}</style></head>'
+  const preloaded = preloadCriticalFonts(html)
+  assert.match(preloaded, /href="\/_nuxt\/inter-latin-400-normal\.aaa\.woff2"/)
+  assert.match(preloaded, /href="\/_nuxt\/inter-latin-ext-600-normal\.bbb\.woff2"/)
+  assert.doesNotMatch(preloaded, /inter-latin-500-normal\.ccc\.woff2" fetchpriority/)
+  assert.ok(preloaded.indexOf('as="image"') < preloaded.indexOf('as="font"'))
 })
 
 test('404 and preview are noindexed', () => {
@@ -438,6 +476,31 @@ test('service pages include FAQ copy', () => {
   assert.match(read('data/services.ts'), /serviceFaqs/)
   assert.match(read('components/ServiceExtras.vue'), /Najczęstsze pytania/)
   assert.match(read('pages/[uid].vue'), /FAQPage/)
+})
+
+test('responsive images cap at the source width and keep its ratio', () => {
+  const calls = []
+  const asImageSrc = (field, params) => {
+    calls.push(params)
+    return `${field.url}?w=${params.w}&h=${params.h || ''}`
+  }
+  const field = {
+    url: 'https://images.example/tile.jpg',
+    dimensions: { width: 720, height: 360 },
+  }
+  const image = buildResponsiveImage(asImageSrc, field, {
+    widths: [480, 800, 1200],
+    cap: 1400,
+    sizes: '(min-width: 768px) 50vw, 100vw',
+  })
+
+  assert.deepEqual(calls.map((params) => params.w), [480, 720])
+  assert.equal(image.width, 720)
+  assert.equal(image.height, 360)
+  assert.match(image.srcset, /480w/)
+  assert.match(image.srcset, /720w/)
+  assert.doesNotMatch(image.srcset, /800w/)
+  assert.equal(image.sizes, '(min-width: 768px) 50vw, 100vw')
 })
 
 test('source files do not contain debug console calls', () => {

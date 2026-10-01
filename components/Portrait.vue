@@ -1,5 +1,7 @@
 <script setup>
-defineProps([
+import { buildResponsiveImage } from '~/utils/responsiveImage.mjs'
+
+const props = defineProps([
   'name',
   'role',
   'portrait',
@@ -8,6 +10,16 @@ defineProps([
   'link',
   'isLeader'
 ]);
+
+const prismic = usePrismic()
+// Mobile portraits are full width; leaders stay larger, the rest shrink from sm up.
+const image = computed(() => buildResponsiveImage(prismic.asImageSrc, props.portrait, {
+  widths: props.isLeader ? [480, 800, 1200] : [320, 480, 800],
+  cap: props.isLeader ? 1200 : 800,
+  sizes: props.isLeader
+    ? '(min-width: 640px) 33vw, 100vw'
+    : '(min-width: 1024px) 16vw, (min-width: 768px) 20vw, (min-width: 640px) 25vw, 100vw',
+}))
 </script>
 
 <template>
@@ -16,10 +28,17 @@ defineProps([
     :field="link"
   >
     <div class="aspect-w-1 aspect-h-1 w-full overflow-hidden">
-      <NuxtImg
+      <img
+        v-if="image"
         class="object-cover object-top"
-        :src="portrait"
-        :alt="alt"
+        :src="image.src"
+        :srcset="image.srcset"
+        :sizes="image.sizes"
+        :width="image.width"
+        :height="image.height"
+        :alt="alt || ''"
+        :loading="isLeader ? 'eager' : 'lazy'"
+        decoding="async"
       />
     </div>
     <div :class="isLeader ? 'p-2 mb-8' : 'p-1'">

@@ -3,6 +3,7 @@ import { join } from "node:path";
 import tailwindAspectRatio from "@tailwindcss/aspect-ratio";
 import svgLoader from "vite-svg-loader";
 import { sitemapDoctorUids } from "./data/doctors";
+import { preloadCriticalFonts } from "./utils/preloadFonts.mjs";
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -59,6 +60,20 @@ export default defineNuxtConfig({
     resolve: {
       dedupe: ["vue", "@prismicio/vue", "@prismicio/client"],
     },
+    build: {
+      rollupOptions: {
+        output: {
+          // Lighthouse flags unused JavaScript per file, and the homepage entry
+          // sits just over the 20 KiB cutoff. Split the frameworks that hold
+          // the unused code so no one file stays over that line.
+          manualChunks(id) {
+            if (id.includes("node_modules/vue/") || id.includes("node_modules/@vue/")) return "vue";
+            if (id.includes("node_modules/vue-router/")) return "vue-router";
+            if (id.includes("node_modules/@prismicio/")) return "prismic";
+          },
+        },
+      },
+    },
   },
 
   image: {
@@ -79,6 +94,10 @@ export default defineNuxtConfig({
 
   hooks: {
     "nitro:init"(nitro) {
+      nitro.hooks.hook("prerender:generate", (route) => {
+        if (typeof route.contents !== "string" || !route.contents.includes("<head")) return;
+        route.contents = preloadCriticalFonts(route.contents);
+      });
       nitro.hooks.hook("prerender:done", () => {
         const publicDir = nitro.options.output.publicDir;
         const generatedNotFound = join(publicDir, "404", "index.html");
