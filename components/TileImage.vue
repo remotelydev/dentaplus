@@ -5,14 +5,33 @@
       :class="`${
         fit === 'cover' ? 'w-full' : ''
       } max-w-1/2 object-${fit}`"
-      :src="image"
-      :alt="alt" />
+      :src="src"
+      :alt="alt || ''"
+      loading="lazy"
+      decoding="async"
+      fetchpriority="low"
+    />
   </div>
 </template>
 <script setup>
-defineProps({
-  image: String | null,
-  alt: String | null,
+const props = defineProps({
+  image: Object,
+  alt: String,
   fit: String,
 });
+
+const prismic = usePrismic()
+const src = computed(() => {
+  const field = props.image
+  if (!field?.url) return ''
+  const width = 1400
+  const height = field.dimensions?.width
+    ? Math.round(width * (field.dimensions.height / field.dimensions.width))
+    : undefined
+  return prismic.asImageSrc(field, {
+    auto: ['format', 'compress'],
+    w: width,
+    ...(height ? { h: height } : {}),
+  }) || field.url
+})
 </script>

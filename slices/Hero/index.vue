@@ -15,14 +15,46 @@ const props = defineProps(
   ])
 );
 const prismic = usePrismic();
+
+// Hand-written widths. @nuxt/image 1.2 turns sizes="100vw" into 1w/2w srcset
+// descriptors, which iOS Safari treats as a huge image. 800 covers a phone at
+// ~2x, 1200 covers a 3x phone, 1400 covers the desktop hero.
+const HERO_WIDTHS = [800, 1200, 1400] as const
+
 const lcpImage = computed(() => {
   const field = props.slice.primary.backgroundImage
   if (!field?.url) return undefined
+  const ratio = (field.dimensions?.height || 900) / (field.dimensions?.width || 1400)
+  const sources = HERO_WIDTHS.map((width) => {
+    const height = Math.round(width * ratio)
+    return {
+      width,
+      height,
+      src: prismic.asImageSrc(field, { auto: ['format', 'compress'], w: width, h: height }) || field.url,
+    }
+  })
+  const desktop = sources[sources.length - 1]
   return {
-    src: prismic.asImageSrc(field, { auto: ['format', 'compress'], w: 1400 }) || field.url,
+    src: desktop.src,
+    srcset: sources.map((source) => `${source.src} ${source.width}w`).join(', '),
     alt: field.alt?.trim() || DEFAULT_IMAGE_ALT,
-    width: 1400,
-    height: Math.round(1400 * ((field.dimensions?.height || 900) / (field.dimensions?.width || 1400))),
+    width: desktop.width,
+    height: desktop.height,
+  }
+})
+
+useHead(() => {
+  const image = lcpImage.value
+  if (!image) return {}
+  return {
+    link: [{
+      key: 'hero-lcp',
+      rel: 'preload',
+      as: 'image',
+      imageSrcset: image.srcset,
+      imageSizes: '100vw',
+      fetchpriority: 'high',
+    }],
   }
 })
 
@@ -62,18 +94,17 @@ const showDescription = computed(
 
 <template>
   <section class="relative flex flex-col bg-slate-800 text-white border-b border-slate-100 md:block md:min-h-[clamp(30rem,40vw,48rem)]">
-    <!-- No `sizes` prop: @nuxt/image 1.2 turns 100vw into 1w/2w srcset descriptors, which iOS Safari reads as a ~273000px-wide image. -->
     <figure
       v-if="lcpImage"
       class="w-full max-md:relative max-md:order-last max-md:aspect-[3/2] max-md:max-h-[40svh] md:absolute md:inset-0"
     >
-      <NuxtImg
+      <img
         :src="lcpImage.src"
+        :srcset="lcpImage.srcset"
+        sizes="100vw"
         :alt="lcpImage.alt"
         :width="lcpImage.width"
         :height="lcpImage.height"
-        densities="x1"
-        preload
         fetchpriority="high"
         class="pointer-events-none select-none object-cover h-full w-full md:object-[50%_30%]"
       />

@@ -244,8 +244,11 @@ test('default Open Graph image is always set', () => {
 })
 
 test('hero LCP image is width-constrained and Inter is latin subset', () => {
-  assert.match(read('slices/Hero/index.vue'), /NuxtImg/)
-  assert.match(read('slices/Hero/index.vue'), /w: 1400/)
+  const hero = read('slices/Hero/index.vue')
+  assert.match(hero, /HERO_WIDTHS = \[800, 1200, 1400\]/)
+  assert.match(hero, /imageSrcset/)
+  assert.match(hero, /fetchpriority="high"/)
+  assert.doesNotMatch(hero, /NuxtImg/)
   assert.match(read('nuxt.config.ts'), /latin-ext-400/)
   assert.doesNotMatch(read('nuxt.config.ts'), /@fontsource\/inter\/400\.css/)
 })
@@ -258,7 +261,20 @@ test('hero fits phone widths: fluid H1, stacked photo, sane srcset', () => {
   assert.match(hero, /max-md:aspect-\[3\/2\]/)
   assert.match(hero, /max-md:max-h-\[40svh\]/)
   assert.match(hero, /md:absolute md:inset-0/)
-  assert.doesNotMatch(hero, /sizes="100vw"/)
+  assert.match(hero, /sizes="100vw"/)
+  assert.match(hero, /\$\{source\.width\}w/)
+  assert.doesNotMatch(hero, /NuxtImg/)
+  assert.doesNotMatch(hero, /\b1w\b/)
+})
+
+test('homepage tiles stay off the hero download', () => {
+  const tile = read('components/TileImage.vue')
+  const tiles = read('slices/Tiles/index.vue')
+  assert.match(tile, /loading="lazy"/)
+  assert.match(tile, /fetchpriority="low"/)
+  assert.match(tile, /w: width/)
+  assert.match(tiles, /:image="item\.image"/)
+  assert.doesNotMatch(tiles, /:image="item\.image\.url"/)
 })
 
 test('404 and preview are noindexed', () => {

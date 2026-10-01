@@ -36,7 +36,7 @@ const tilesOrder = (idx: number) => {
       :key="`tile-${item.header}`">
       <TileImage
         v-if="item.image.url"
-        :image="item.image.url"
+        :image="item.image"
         :fit="item.image_fit"
         :alt="item.image.alt" />
       <TileLink
