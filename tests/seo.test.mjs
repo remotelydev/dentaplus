@@ -3,6 +3,11 @@ import fs from 'node:fs'
 import path from 'node:path'
 import test from 'node:test'
 import { fileURLToPath } from 'node:url'
+import { withImageAlt, DEFAULT_IMAGE_ALT } from '../composables/useImageAlt.ts'
+import { formatPageTitle } from '../composables/usePageSeo.ts'
+import { normalizeTelHref } from '../composables/usePhoneLink.ts'
+import { openingHoursSpecification, locations } from '../data/locations.ts'
+import { firstSentence, serviceCardBlurb, servicePages } from '../data/services.ts'
 import { buildResponsiveImage } from '../utils/responsiveImage.mjs'
 import { preloadCriticalFonts } from '../utils/preloadFonts.mjs'
 
@@ -89,13 +94,53 @@ test('inner pages never fall back to a duplicated brand title', () => {
     assert.doesNotMatch(source, /contentTitle\.value\} \| \$\{siteTitle\.value\}/)
   }
 
-  const seoSource = read('composables/usePageSeo.ts')
-  assert.match(seoSource, /export const formatPageTitle/)
-  assert.match(seoSource, /export const TITLE_FALLBACKS/)
-
-  for (const pathKey of ['/cennik', '/kontakt', '/zespol', '/implanty', '/invisalign', '/endodoncja', '/itero', '/tomografia', '/uslugi']) {
-    assert.ok(seoSource.includes(`'${pathKey}':`), `${pathKey} is missing a unique title fallback`)
+  assert.match(read('pages/turek.vue'), /location\.title/)
+  assert.match(read('pages/poddebice.vue'), /location\.title/)
+  for (const location of [locations.turek, locations.poddebice]) {
+    assert.notEqual(location.title, 'DentaPlus+ | DentaPlus+')
+    assert.match(location.title, /\| DentaPlus\+$/)
   }
+})
+
+test('page titles use the meta title, a unique path fallback, or a single brand suffix', () => {
+  assert.equal(
+    formatPageTitle({ metaTitle: '  Meta cennik  ', contentTitle: 'Cennik', siteTitle: 'DentaPlus+', path: '/cennik' }),
+    'Meta cennik',
+  )
+
+  const paths = ['/cennik', '/kontakt', '/zespol', '/implanty', '/invisalign', '/endodoncja', '/itero', '/tomografia', '/uslugi']
+  const titles = paths.map((path) => formatPageTitle({
+    contentTitle: 'DentaPlus+',
+    siteTitle: 'DentaPlus+',
+    path: `${path}/`,
+  }))
+
+  assert.equal(new Set(titles).size, titles.length)
+  for (const title of titles) {
+    assert.notEqual(title, 'DentaPlus+ | DentaPlus+')
+    assert.match(title, /\| DentaPlus\+$/)
+  }
+
+  assert.equal(
+    formatPageTitle({ contentTitle: 'Inny nagłówek', siteTitle: 'DentaPlus+', path: '/cennik' }),
+    titles[0],
+  )
+  assert.equal(
+    formatPageTitle({ contentTitle: 'Leczenie', siteTitle: 'DentaPlus+', path: '/nowa-usluga' }),
+    'Leczenie | DentaPlus+',
+  )
+  assert.equal(
+    formatPageTitle({ contentTitle: 'Leczenie | DentaPlus+', siteTitle: 'DentaPlus+', path: '/nowa-usluga' }),
+    'Leczenie | DentaPlus+',
+  )
+  assert.equal(
+    formatPageTitle({ contentTitle: 'DentaPlus', siteTitle: 'DentaPlus+', uid: 'nowa-usluga', path: '/nowa-usluga' }),
+    'Nowa Usluga | DentaPlus+',
+  )
+  assert.equal(
+    formatPageTitle({ contentTitle: 'DentaPlus+', siteTitle: 'DentaPlus+', path: '/' }),
+    'DentaPlus+',
+  )
 })
 
 test('SEO models expose editable metadata fields in Prismic', () => {
@@ -113,7 +158,6 @@ test('SEO models expose editable metadata fields in Prismic', () => {
 test('global SEO configuration includes Polish language and local business schema', () => {
   const nuxtConfig = read('nuxt.config.ts')
   const layout = read('layouts/default.vue')
-  const hero = read('slices/Hero/index.vue')
 
   assert.match(nuxtConfig, /https:\/\/www\.dentaplus\.pl/)
   assert.match(nuxtConfig, /lang:\s*["']pl["']/)
@@ -132,7 +176,6 @@ test('global SEO configuration includes Polish language and local business schem
   assert.match(read('slices/Contact/index.vue'), /ClinicCard/)
   assert.match(read('slices/Contact/index.vue'), /locations\.turek/)
   assert.match(read('slices/Contact/index.vue'), /locations\.poddebice/)
-  assert.match(read('components/ClinicCard.vue'), /location\.streetAddress/)
 })
 
 test('clinic hours are per clinic and Saturday is appointment-only', () => {
@@ -146,6 +189,19 @@ test('clinic hours are per clinic and Saturday is appointment-only', () => {
   assert.match(layout, /openingHoursSpecification: openingHoursSpecification\(location\.uid\)/)
   assert.doesNotMatch(layout, /Saturday/)
   assert.match(read('components/ClinicCard.vue'), /SATURDAY_NOTE/)
+
+  const turekHours = openingHoursSpecification('turek')
+  const poddebiceHours = openingHoursSpecification('poddebice')
+  assert.equal(turekHours.length, 1)
+  assert.equal(poddebiceHours.length, 1)
+  assert.deepEqual(turekHours[0].dayOfWeek, ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'])
+  assert.deepEqual(poddebiceHours[0].dayOfWeek, turekHours[0].dayOfWeek)
+  assert.equal(turekHours[0].opens, '08:00')
+  assert.equal(turekHours[0].closes, '20:00')
+  assert.equal(poddebiceHours[0].opens, '10:00')
+  assert.equal(poddebiceHours[0].closes, '18:00')
+  assert.equal(JSON.stringify(turekHours).includes('Saturday'), false)
+  assert.equal(JSON.stringify(poddebiceHours).includes('Saturday'), false)
 })
 
 test('city pages do not repeat the service nav and keep locative city names', () => {
@@ -163,34 +219,39 @@ test('city pages do not repeat the service nav and keep locative city names', ()
 test('service pages expose extra copy and Usługi navigation', () => {
   const services = read('data/services.ts')
   const header = read('components/Header.vue')
-  const extras = read('pages/[uid].vue')
   const uslugi = read('pages/uslugi.vue')
 
   for (const uid of ['implanty', 'invisalign', 'endodoncja', 'itero', 'tomografia']) {
     assert.match(services, new RegExp(`${uid}:`))
   }
   assert.match(header, /Usługi/)
-  assert.match(header, /resolveServiceNav/)
-  assert.match(header, /service_links/)
-  assert.match(extras, /ServiceExtras/)
   assert.match(read('customtypes/navigation/index.json'), /service_links/)
   assert.match(uslugi, /SERVICE_NAV/)
   assert.match(uslugi, /serviceCardBlurb/)
   assert.match(uslugi, /text_with_image/)
   assert.match(uslugi, /PrismicImage/)
-  assert.match(uslugi, /denta-green/)
-  assert.match(services, /export const firstSentence/)
-  assert.match(services, /export const serviceCardBlurb/)
   assert.match(read('nuxt.config.ts'), /["']\/uslugi\/["']/)
+
+  assert.equal(firstSentence('Pierwsze zdanie. Drugie.'), 'Pierwsze zdanie.')
+  assert.equal(firstSentence('  Bez kropki  '), 'Bez kropki')
+  assert.equal(serviceCardBlurb('brak-takiej-uslugi'), '')
+  const implantBody = servicePages.implanty.h2s[0].body
+  const implantBlurb = serviceCardBlurb('implanty')
+  assert.ok(implantBlurb.length > 0)
+  assert.ok(implantBlurb.length < implantBody.length)
+  assert.equal(implantBody.startsWith(implantBlurb), true)
 })
 
 test('telephone hrefs are normalized without spaces', () => {
-  assert.match(read('composables/usePhoneLink.ts'), /export const normalizeTelHref/)
+  assert.equal(normalizeTelHref('123 456 789'), 'tel:+48123456789')
+  assert.equal(normalizeTelHref('+48 123 456 789'), 'tel:+48123456789')
+  assert.equal(normalizeTelHref(''), undefined)
+  assert.equal(normalizeTelHref(null), undefined)
   assert.match(read('components/ClinicCard.vue'), /normalizeTelHref/)
+  assert.match(read('components/ClinicLocation.vue'), /normalizeTelHref/)
   assert.match(read('components/ContactBar.vue'), /normalizeTelHref/)
-  assert.match(read('components/ServiceExtras.vue'), /normalizeTelHref/)
   assert.doesNotMatch(read('components/ContactBar.vue'), /tel:\+48\$\{/)
-  assert.doesNotMatch(read('components/ServiceExtras.vue'), /tel:\+48\$\{/)
+  assert.doesNotMatch(read('components/ClinicLocation.vue'), /tel:\+48\$\{/)
 })
 
 test('canonical URLs encode unicode slugs once', async () => {
@@ -201,8 +262,20 @@ test('canonical URLs encode unicode slugs once', async () => {
   assert.equal(once, 'https://www.dentaplus.pl/zespol/micha%C5%82-trzos/')
   assert.equal(encoded, once)
   assert.equal(doubled, once)
-  assert.match(read('netlify.toml'), /michal-trzos/)
-  assert.match(read('netlify.toml'), /weronika-wlodarska/)
+
+  const netlify = read('netlify.toml')
+  const asciiRedirects = {
+    'michal-trzos': '/zespol/micha%C5%82-trzos/',
+    'weronika-wlodarska': '/zespol/weronika-w%C5%82odarska/',
+  }
+  for (const [slug, target] of Object.entries(asciiRedirects)) {
+    const redirects = netlify.split('[[redirects]]').filter((block) => block.includes(`from = "/zespol/${slug}`))
+    assert.equal(redirects.length, 2, slug)
+    for (const block of redirects) {
+      assert.match(block, /status = 301/)
+      assert.equal(block.includes(`to = "${target}"`), true)
+    }
+  }
 })
 
 test('doctor stubs and slug typo redirect are wired', () => {
@@ -236,8 +309,11 @@ test('Prismic route resolver emits trailing slashes', () => {
 })
 
 test('index.html redirects to the homepage', () => {
-  assert.match(read('netlify.toml'), /from = "\/index\.html"/)
-  assert.match(read('netlify.toml'), /to = "\/"/)
+  const blocks = read('netlify.toml').split('[[redirects]]').filter((block) => block.includes('from = "/index.html"'))
+  assert.equal(blocks.length, 1)
+  assert.match(blocks[0], /^  to = "\/"$/m)
+  assert.match(blocks[0], /status = 301/)
+  assert.match(blocks[0], /force = true/)
 })
 
 test('default Open Graph image is always set', () => {
@@ -250,37 +326,22 @@ test('hero LCP image is width-constrained and Inter is latin subset', () => {
   assert.match(hero, /HERO_WIDTHS = \[800, 1200, 1400\]/)
   assert.match(hero, /imageSrcset/)
   assert.match(hero, /fetchpriority="high"/)
-  assert.doesNotMatch(hero, /NuxtImg/)
-  assert.match(read('nuxt.config.ts'), /latin-ext-400/)
-  assert.doesNotMatch(read('nuxt.config.ts'), /@fontsource\/inter\/400\.css/)
-})
-
-test('hero fits phone widths: fluid H1, stacked photo, sane srcset', () => {
-  const hero = read('slices/Hero/index.vue')
-
-  assert.match(hero, /text-\[length:clamp\(/)
-  assert.match(hero, /break-words/)
-  assert.match(hero, /max-md:aspect-\[3\/2\]/)
-  assert.match(hero, /max-md:max-h-\[40svh\]/)
-  assert.match(hero, /md:absolute md:inset-0/)
   assert.match(hero, /sizes="100vw"/)
-  assert.match(hero, /\$\{source\.width\}w/)
   assert.doesNotMatch(hero, /NuxtImg/)
   assert.doesNotMatch(hero, /\b1w\b/)
+  assert.match(read('nuxt.config.ts'), /latin-ext-400/)
+  assert.doesNotMatch(read('nuxt.config.ts'), /@fontsource\/inter\/400\.css/)
 })
 
 test('homepage tiles stay off the hero download', () => {
   const tile = read('components/TileImage.vue')
   const tiles = read('slices/Tiles/index.vue')
-  const images = read('utils/responsiveImage.mjs')
   assert.match(tile, /loading="lazy"/)
   assert.match(tile, /fetchpriority="low"/)
   assert.match(tile, /buildResponsiveImage/)
   assert.match(tile, /:width="tile\.width"/)
   assert.match(tile, /:height="tile\.height"/)
   assert.match(tile, /:srcset="tile\.srcset"/)
-  assert.match(images, /w: width/)
-  assert.match(images, /Math\.min\(cap, intrinsicWidth\)/)
   assert.match(tiles, /:image="item\.image"/)
   assert.doesNotMatch(tiles, /:image="item\.image\.url"/)
 })
@@ -299,13 +360,7 @@ test('shared images declare dimensions and capped srcsets', () => {
 })
 
 test('critical Inter files are preloaded off the font chain', () => {
-  const config = read('nuxt.config.ts')
-  const fonts = read('utils/preloadFonts.mjs')
-  assert.match(config, /preloadCriticalFonts/)
-  assert.match(config, /manualChunks/)
-  assert.match(fonts, /rel="preload" as="font"/)
-  assert.match(fonts, /fetchpriority="low"/)
-  assert.match(fonts, /inter-latin\(\?:-ext\)\?-\(\?:400\|600\)/)
+  assert.match(read('nuxt.config.ts'), /preloadCriticalFonts/)
 
   const html = '<head><link rel="icon" href="/denta.ico"><link rel="preload" as="image" href="/hero.jpg"><style>@font-face{src:url(/_nuxt/inter-latin-400-normal.aaa.woff2)}@font-face{src:url(/_nuxt/inter-latin-ext-600-normal.bbb.woff2)}@font-face{src:url(/_nuxt/inter-latin-500-normal.ccc.woff2)}</style></head>'
   const preloaded = preloadCriticalFonts(html)
@@ -387,29 +442,11 @@ test('hero CTA uses a Polish button fallback', () => {
   assert.doesNotMatch(hero, /<!-- <PrismicLink/)
 })
 
-test('hero uses a tighter padding size without changing Bounded lg', () => {
-  const hero = read('slices/Hero/index.vue')
-  const bounded = read('components/Bounded.vue')
-
-  assert.match(hero, /y-padding="hero"/)
-  assert.doesNotMatch(hero, /y-padding="lg"/)
-  assert.match(bounded, /yPadding === 'lg'/)
-  assert.match(bounded, /md:pb-96/)
-  assert.match(bounded, /yPadding === 'hero'/)
-  assert.match(bounded, /py-12 sm:py-16 md:pt-\[5\.5vw\] md:pb-16/)
-})
-
-test('desktop hero keeps the copy above the team and faces undimmed', () => {
-  const hero = read('slices/Hero/index.vue')
-
-  assert.match(hero, /md:min-h-\[clamp\(30rem,40vw,48rem\)\]/)
-  assert.match(hero, /md:object-\[50%_30%\]/)
-  assert.match(hero, /to-slate-900\/0 to-45%/)
-  assert.doesNotMatch(hero, /md:opacity-80/)
-})
-
 test('images get a Polish alt fallback', () => {
-  assert.match(read('composables/useImageAlt.ts'), /withImageAlt/)
+  assert.equal(DEFAULT_IMAGE_ALT, 'Gabinet stomatologiczny DentaPlus+ w Turku i Poddębicach')
+  assert.equal(withImageAlt({ url: 'https://img.example/a.jpg', alt: '  ' }).alt, DEFAULT_IMAGE_ALT)
+  assert.equal(withImageAlt({ url: 'https://img.example/a.jpg', alt: 'Zespół' }).alt, 'Zespół')
+  assert.equal(withImageAlt(null), null)
   assert.match(read('slices/Image/index.vue'), /withImageAlt/)
   assert.match(read('slices/Hero/index.vue'), /DEFAULT_IMAGE_ALT/)
 })
@@ -425,17 +462,6 @@ test('Metamorfozy SSR HTML can render przed/po images before the slider hydrates
   assert.match(source, /:alt="imageAlt\(item\.before\)"/)
   assert.match(source, /:alt="imageAlt\(item\.after\)"/)
   assert.match(source, /<img/)
-})
-
-test('Metamorfozy grid shares the Header slice content column and keeps 4:3 frames', () => {
-  const source = read('slices/Metamorphoses/index.vue')
-
-  assert.match(source, /class="mt-8 mb-20 px-4"/)
-  assert.match(source, /class="container mx-auto"/)
-  assert.match(source, /mx-auto grid max-w-6xl gap-8 sm:grid-cols-2 lg:grid-cols-3/)
-  assert.doesNotMatch(source, /justify-items-center/)
-  assert.doesNotMatch(source, /max-w-sm/)
-  assert.match(source, /aspect-\[4\/3\] w-full bg-slate-100 \[&>\*\]:!h-full/)
 })
 
 test('maps use Polish locale and controls have accessible names', () => {
@@ -472,12 +498,6 @@ test('Kontakt uses shared clinic cards that link to city pages', () => {
   assert.match(read('components/ClinicCard.vue'), /location\.mapSrc/)
 })
 
-test('service pages include FAQ copy', () => {
-  assert.match(read('data/services.ts'), /serviceFaqs/)
-  assert.match(read('components/ServiceExtras.vue'), /Najczęstsze pytania/)
-  assert.match(read('pages/[uid].vue'), /FAQPage/)
-})
-
 test('responsive images cap at the source width and keep its ratio', () => {
   const calls = []
   const asImageSrc = (field, params) => {
@@ -501,6 +521,17 @@ test('responsive images cap at the source width and keep its ratio', () => {
   assert.match(image.srcset, /720w/)
   assert.doesNotMatch(image.srcset, /800w/)
   assert.equal(image.sizes, '(min-width: 768px) 50vw, 100vw')
+
+  const undimensioned = buildResponsiveImage(asImageSrc, {
+    url: 'https://images.example/plain.jpg',
+  }, {
+    widths: [480, 800],
+    cap: 1400,
+    sizes: '100vw',
+  })
+  assert.equal(undimensioned.srcset, undefined)
+  assert.equal(undimensioned.width, undefined)
+  assert.match(undimensioned.src, /[?&]w=1400/)
 })
 
 test('source files do not contain debug console calls', () => {

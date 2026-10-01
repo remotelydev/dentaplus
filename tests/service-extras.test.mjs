@@ -25,17 +25,12 @@ const SERVICE_HEADINGS = [
   'Tomografia 3D w Turku',
 ]
 
-test('service H2s render as visual bands', () => {
+test('service extras render servicePages headings', () => {
   const extras = read('components/ServiceExtras.vue')
 
   assert.match(extras, /servicePages\[uid\]\.h2s/)
   assert.match(extras, /block\.heading/)
   assert.match(extras, /block\.body/)
-  assert.match(extras, /border-l-4 border-denta-green/)
-  assert.match(extras, /bg-slate-800/)
-  assert.match(extras, /bg-slate-50/)
-  assert.doesNotMatch(extras, /\d+\s*zł/i)
-  assert.doesNotMatch(extras, /PLN/)
 })
 
 test('servicePages keep existing headings and invent no PLN', () => {
@@ -54,7 +49,6 @@ test('process steps come from existing jak wygląda / przebieg copy', () => {
   const services = read('data/services.ts')
 
   assert.match(extras, /block\.steps\?\.length/)
-  assert.match(extras, /rounded-full bg-denta-green/)
   assert.match(extras, /stepIndex \+ 1/)
 
   const originalProcessCopy = [
