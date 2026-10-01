@@ -24,7 +24,9 @@ const prismic = usePrismic()
 const src = computed(() => {
   const field = props.image
   if (!field?.url) return ''
-  const width = 1400
+  const cap = 1400
+  const intrinsic = field.dimensions?.width || cap
+  const width = Math.min(cap, intrinsic)
   const height = field.dimensions?.width
     ? Math.round(width * (field.dimensions.height / field.dimensions.width))
     : undefined

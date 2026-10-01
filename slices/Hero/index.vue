@@ -16,9 +16,9 @@ const props = defineProps(
 );
 const prismic = usePrismic();
 
-// Hand-written widths. @nuxt/image 1.2 turns sizes="100vw" into 1w/2w srcset
-// descriptors, which iOS Safari treats as a huge image. 800 covers a phone at
-// ~2x, 1200 covers a 3x phone, 1400 covers the desktop hero.
+// Hand-written widths. @nuxt/image 1.2 turns sizes="100vw" into single-pixel
+// srcset descriptors, which iOS Safari treats as a huge image. 800 covers a
+// phone at about 2x, 1200 covers a 3x phone, 1400 covers the desktop hero.
 const HERO_WIDTHS = [800, 1200, 1400] as const
 
 const lcpImage = computed(() => {
