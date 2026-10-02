@@ -262,20 +262,67 @@ test('canonical URLs encode unicode slugs once', async () => {
   assert.equal(once, 'https://www.dentaplus.pl/zespol/micha%C5%82-trzos/')
   assert.equal(encoded, once)
   assert.equal(doubled, once)
+})
 
+test('retired unicode doctor slugs redirect to the ascii Prismic uids', () => {
   const netlify = read('netlify.toml')
-  const asciiRedirects = {
-    'michal-trzos': '/zespol/micha%C5%82-trzos/',
-    'weronika-wlodarska': '/zespol/weronika-w%C5%82odarska/',
+  const blocks = netlify.split('[[redirects]]').slice(1)
+  const targets = {
+    michal: '/zespol/michal-trzos/',
+    weronika: '/zespol/weronika-wlodarska/',
   }
-  for (const [slug, target] of Object.entries(asciiRedirects)) {
-    const redirects = netlify.split('[[redirects]]').filter((block) => block.includes(`from = "/zespol/${slug}`))
-    assert.equal(redirects.length, 2, slug)
-    for (const block of redirects) {
-      assert.match(block, /status = 301/)
-      assert.equal(block.includes(`to = "${target}"`), true)
+  const sources = {
+    michal: [
+      '/zespol/michał-trzos',
+      '/zespol/michał-trzos/',
+      '/zespol/micha%C5%82-trzos',
+      '/zespol/micha%C5%82-trzos/',
+      '/zespol/micha%c5%82-trzos',
+      '/zespol/micha%c5%82-trzos/',
+      '/zespol/micha%25C5%2582-trzos',
+      '/zespol/micha%25C5%2582-trzos/',
+      '/zespol/micha%25c5%2582-trzos',
+      '/zespol/micha%25c5%2582-trzos/',
+    ],
+    weronika: [
+      '/zespol/weronika-włodarska',
+      '/zespol/weronika-włodarska/',
+      '/zespol/weronika-w%C5%82odarska',
+      '/zespol/weronika-w%C5%82odarska/',
+      '/zespol/weronika-w%c5%82odarska',
+      '/zespol/weronika-w%c5%82odarska/',
+      '/zespol/weronika-w%25C5%2582odarska',
+      '/zespol/weronika-w%25C5%2582odarska/',
+      '/zespol/weronika-w%25c5%2582odarska',
+      '/zespol/weronika-w%25c5%2582odarska/',
+    ],
+  }
+
+  for (const [doctor, paths] of Object.entries(sources)) {
+    for (const from of paths) {
+      const matches = blocks.filter((block) => block.includes(`from = "${from}"`))
+      assert.equal(matches.length, 1, from)
+      assert.match(matches[0], /status = 301/)
+      assert.match(matches[0], /force = true/)
+      assert.equal(matches[0].includes(`to = "${targets[doctor]}"`), true, from)
     }
   }
+
+  for (const slug of ['michal-trzos', 'weronika-wlodarska']) {
+    assert.equal(blocks.some((block) => block.includes(`from = "/zespol/${slug}"`)), false, slug)
+    assert.equal(blocks.some((block) => block.includes(`from = "/zespol/${slug}/"`)), false, slug)
+  }
+
+  const sitemap = read('public/sitemap.xml')
+  const doctors = read('data/doctors.ts')
+  assert.match(sitemap, /https:\/\/www\.dentaplus\.pl\/zespol\/michal-trzos\/</)
+  assert.match(sitemap, /https:\/\/www\.dentaplus\.pl\/zespol\/weronika-wlodarska\/</)
+  assert.doesNotMatch(sitemap, /micha(?:%C5%82|%c5%82|ł)-trzos|weronika-w(?:%C5%82|%c5%82|ł)odarska/)
+  assert.match(doctors, /'michal-trzos': \{/)
+  assert.match(doctors, /'weronika-wlodarska': \{/)
+  assert.match(doctors, /'michal-trzos',/)
+  assert.match(doctors, /'weronika-wlodarska',/)
+  assert.doesNotMatch(doctors, /'michał-trzos'|'weronika-włodarska'/)
 })
 
 test('doctor stubs and slug typo redirect are wired', () => {

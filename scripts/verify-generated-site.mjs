@@ -86,6 +86,12 @@ if (existsSync(new URL('zespol/monika-maciejeweska/index.html', outputDirectory)
   throw new Error('Typo slug HTML was prerendered; Netlify would serve it as 200 without force.')
 }
 
+for (const retiredSlug of ['michał-trzos', 'micha%C5%82-trzos', 'weronika-włodarska', 'weronika-w%C5%82odarska']) {
+  if (existsSync(new URL(`zespol/${retiredSlug}/index.html`, outputDirectory))) {
+    throw new Error(`Retired slug HTML was prerendered at /zespol/${retiredSlug}/; Netlify would serve it as 200 without force.`)
+  }
+}
+
 const previewHtml = existsSync(new URL('api/preview/index.html', outputDirectory))
   ? await readFile(new URL('api/preview/index.html', outputDirectory), 'utf8')
   : existsSync(new URL('api/preview.html', outputDirectory))

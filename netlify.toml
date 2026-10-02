@@ -11,25 +11,127 @@
   status = 301
   force = true
 
+# Retired Prismic uids that contained ł. The live documents are michal-trzos and weronika-wlodarska.
+# force shadows any previously published unicode HTML.
 [[redirects]]
-  from = "/zespol/michal-trzos"
-  to = "/zespol/micha%C5%82-trzos/"
+  from = "/zespol/michał-trzos"
+  to = "/zespol/michal-trzos/"
   status = 301
+  force = true
 
 [[redirects]]
-  from = "/zespol/michal-trzos/"
-  to = "/zespol/micha%C5%82-trzos/"
+  from = "/zespol/michał-trzos/"
+  to = "/zespol/michal-trzos/"
   status = 301
+  force = true
 
 [[redirects]]
-  from = "/zespol/weronika-wlodarska"
-  to = "/zespol/weronika-w%C5%82odarska/"
+  from = "/zespol/micha%C5%82-trzos"
+  to = "/zespol/michal-trzos/"
   status = 301
+  force = true
 
 [[redirects]]
-  from = "/zespol/weronika-wlodarska/"
-  to = "/zespol/weronika-w%C5%82odarska/"
+  from = "/zespol/micha%C5%82-trzos/"
+  to = "/zespol/michal-trzos/"
   status = 301
+  force = true
+
+[[redirects]]
+  from = "/zespol/micha%c5%82-trzos"
+  to = "/zespol/michal-trzos/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/zespol/micha%c5%82-trzos/"
+  to = "/zespol/michal-trzos/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/zespol/micha%25C5%2582-trzos"
+  to = "/zespol/michal-trzos/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/zespol/micha%25C5%2582-trzos/"
+  to = "/zespol/michal-trzos/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/zespol/micha%25c5%2582-trzos"
+  to = "/zespol/michal-trzos/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/zespol/micha%25c5%2582-trzos/"
+  to = "/zespol/michal-trzos/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/zespol/weronika-włodarska"
+  to = "/zespol/weronika-wlodarska/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/zespol/weronika-włodarska/"
+  to = "/zespol/weronika-wlodarska/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/zespol/weronika-w%C5%82odarska"
+  to = "/zespol/weronika-wlodarska/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/zespol/weronika-w%C5%82odarska/"
+  to = "/zespol/weronika-wlodarska/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/zespol/weronika-w%c5%82odarska"
+  to = "/zespol/weronika-wlodarska/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/zespol/weronika-w%c5%82odarska/"
+  to = "/zespol/weronika-wlodarska/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/zespol/weronika-w%25C5%2582odarska"
+  to = "/zespol/weronika-wlodarska/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/zespol/weronika-w%25C5%2582odarska/"
+  to = "/zespol/weronika-wlodarska/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/zespol/weronika-w%25c5%2582odarska"
+  to = "/zespol/weronika-wlodarska/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/zespol/weronika-w%25c5%2582odarska/"
+  to = "/zespol/weronika-wlodarska/"
+  status = 301
+  force = true
 
 [[redirects]]
   from = "/zespol/monika-maciejeweska"
