@@ -178,12 +178,12 @@ watch(isMobileMenuOpen, (nextIsMobileMenuOpen) => {
     <div class="flex items-center justify-between gap-4 leading-none">
       <NuxtLink
         to="/"
-        class="shrink-0"
+        class="min-w-0"
         @click="isMobileMenuOpen = false"
       >
         <img
           v-if="settings?.data?.logo"
-          class="h-16 md:h-16"
+          class="h-12 w-auto max-w-full object-contain object-left sm:h-16"
           :src="$prismic.asImageSrc(settings.data.logo)"
           :width="settings.data.logo.dimensions?.width || 366"
           :height="settings.data.logo.dimensions?.height || 89"
@@ -193,7 +193,7 @@ watch(isMobileMenuOpen, (nextIsMobileMenuOpen) => {
       </NuxtLink>
       <button
         type="button"
-        class="shrink-0 md:hidden"
+        class="-mr-1.5 flex h-11 w-11 shrink-0 items-center justify-center md:hidden"
         :aria-label="isMobileMenuOpen ? 'Zamknij menu' : 'Otwórz menu'"
         :aria-expanded="isMobileMenuOpen"
         @click="isMobileMenuOpen = !isMobileMenuOpen"
