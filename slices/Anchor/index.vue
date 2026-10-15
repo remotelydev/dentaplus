@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import { type Content } from "@prismicio/client";
 
-// The array passed to `getSliceComponentProps` is purely optional.
-// Consider it as a visual hint for you when templating your slice.
 defineProps(
   getSliceComponentProps<Content.AnchorSlice>([
     "slice",
@@ -14,7 +12,6 @@ defineProps(
 
 const anchorId = computed(() => {
   return "anchor-id";
-  // return slice.primary.anchor.replace(/\s+/g, "-").toLowerCase();
 });
 </script>
 

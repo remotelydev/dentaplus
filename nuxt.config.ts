@@ -5,7 +5,6 @@ import svgLoader from "vite-svg-loader";
 import { sitemapDoctorUids } from "./data/doctors";
 import { preloadCriticalFonts } from "./utils/preloadFonts.mjs";
 
-// https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: true,
 
@@ -56,16 +55,12 @@ export default defineNuxtConfig({
 
   vite: {
     plugins: [svgLoader()],
-    // Keep Vue's injection symbols shared when pnpm dependencies resolve through symlinks.
     resolve: {
       dedupe: ["vue", "@prismicio/vue", "@prismicio/client"],
     },
     build: {
       rollupOptions: {
         output: {
-          // Lighthouse flags unused JavaScript per file, and the homepage entry
-          // sits just over the 20 KiB cutoff. Split the frameworks that hold
-          // the unused code so no one file stays over that line.
           manualChunks(id) {
             if (id.includes("node_modules/vue/") || id.includes("node_modules/@vue/")) return "vue";
             if (id.includes("node_modules/vue-router/")) return "vue-router";

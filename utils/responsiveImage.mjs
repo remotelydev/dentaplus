@@ -1,6 +1,3 @@
-// Build a width-capped Prismic srcset. Callers pass the widths a layout
-// actually needs; the largest candidate stays at the image's own width so
-// Imgix is not asked to upscale.
 export function buildResponsiveImage(asImageSrc, field, { widths, cap, sizes }) {
   if (!field?.url || typeof asImageSrc !== 'function') return undefined
 

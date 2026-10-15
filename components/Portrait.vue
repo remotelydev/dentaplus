@@ -12,7 +12,6 @@ const props = defineProps([
 ]);
 
 const prismic = usePrismic()
-// Mobile portraits are full width; leaders stay larger, the rest shrink from sm up.
 const image = computed(() => buildResponsiveImage(prismic.asImageSrc, props.portrait, {
   widths: props.isLeader ? [480, 800, 1200] : [320, 480, 800],
   cap: props.isLeader ? 1200 : 800,

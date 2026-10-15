@@ -14,7 +14,6 @@ const phone = computed(() => settings.value?.data[props.location.phoneSetting] a
 const telHref = computed(() => normalizeTelHref(phone.value))
 const otherLocation = computed(() => (props.location.uid === 'turek' ? locations.poddebice : locations.turek))
 
-// Galeria groups photos under a "Gabinety {city}" text slice followed by that clinic's gallery slice.
 const { data: photo } = await useAsyncData(`city-photo-${props.location.uid}`, async () => {
   const galeria = await prismic.client.getByUID('page', 'galeria').catch(() => null)
   const slices = galeria?.data.slices ?? []

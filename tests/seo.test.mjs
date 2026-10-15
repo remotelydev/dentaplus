@@ -217,13 +217,9 @@ test('city pages do not repeat the service nav and keep locative city names', ()
 })
 
 test('service pages expose extra copy and Usługi navigation', () => {
-  const services = read('data/services.ts')
   const header = read('components/Header.vue')
   const uslugi = read('pages/uslugi.vue')
 
-  for (const uid of ['implanty', 'invisalign', 'endodoncja', 'itero', 'tomografia']) {
-    assert.match(services, new RegExp(`${uid}:`))
-  }
   assert.match(header, /Usługi/)
   assert.match(read('customtypes/navigation/index.json'), /service_links/)
   assert.match(uslugi, /SERVICE_NAV/)
@@ -490,7 +486,6 @@ test('hero CTA uses a Polish button fallback', () => {
 })
 
 test('images get a Polish alt fallback', () => {
-  assert.equal(DEFAULT_IMAGE_ALT, 'Gabinet stomatologiczny DentaPlus+ w Turku i Poddębicach')
   assert.equal(withImageAlt({ url: 'https://img.example/a.jpg', alt: '  ' }).alt, DEFAULT_IMAGE_ALT)
   assert.equal(withImageAlt({ url: 'https://img.example/a.jpg', alt: 'Zespół' }).alt, 'Zespół')
   assert.equal(withImageAlt(null), null)

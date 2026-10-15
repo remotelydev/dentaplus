@@ -30,7 +30,6 @@ const HOVER_OPEN_DELAY = 120
 const HOVER_CLOSE_DELAY = 220
 
 const openDesktopMenu = ref<DesktopMenu | null>(null)
-// A menu opened by click or keyboard stays open when the pointer leaves it.
 const isDesktopMenuPinned = ref(false)
 const isDesktopServicesOpen = computed(() => openDesktopMenu.value === 'services')
 const isDesktopKontaktOpen = computed(() => openDesktopMenu.value === 'kontakt')
@@ -363,16 +362,6 @@ watch(isMobileMenuOpen, (nextIsMobileMenuOpen) => {
               </div>
             </Transition>
           </li>
-          <!-- <li>
-            <a href="https://www.facebook.com/dentaplusturek" target="_blank">
-              <FacebookIcon class="w-6 h-6" />
-            </a>
-          </li>
-          <li>
-            <a href="https://www.instagram.com/klinika.dentaplus" target="_blank">
-              <InstagramIcon class="w-6 h-6" />
-            </a>
-          </li> -->
         </ul>
       </nav>
       <nav

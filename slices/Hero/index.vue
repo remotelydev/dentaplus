@@ -4,8 +4,6 @@ import {
   type HTMLRichTextMapSerializer,
 } from "@prismicio/client";
 
-// The array passed to \`getSliceComponentProps\` is purely optional.
-// Consider it as a visual hint for you when templating your slice.
 const props = defineProps(
   getSliceComponentProps<Content.HeroSlice>([
     "slice",
@@ -16,9 +14,6 @@ const props = defineProps(
 );
 const prismic = usePrismic();
 
-// Hand-written widths. @nuxt/image 1.2 turns sizes="100vw" into single-pixel
-// srcset descriptors, which iOS Safari treats as a huge image. 800 covers a
-// phone at about 2x, 1200 covers a 3x phone, 1400 covers the desktop hero.
 const HERO_WIDTHS = [800, 1200, 1400] as const
 
 const lcpImage = computed(() => {
@@ -61,7 +56,7 @@ useHead(() => {
 const serializer: HTMLRichTextMapSerializer = {
   ...prismic.options.richTextSerializer,
   heading1: ({ children }) =>
-    /* html */ `<h1 class="font-semibold leading-tight tracking-tight md:leading-tight text-[length:clamp(1.75rem,0.75rem+5vw,3rem)] md:text-7xl break-words hyphens-auto mb-4 mt-12 first:mt-0 last:mb-0">${children}</h1>`,
+    `<h1 class="font-semibold leading-tight tracking-tight md:leading-tight text-[length:clamp(1.75rem,0.75rem+5vw,3rem)] md:text-7xl break-words hyphens-auto mb-4 mt-12 first:mt-0 last:mb-0">${children}</h1>`,
 };
 
 const normalizeCopy = (value: string | null | undefined) =>
@@ -108,7 +103,6 @@ const showDescription = computed(
         fetchpriority="high"
         class="pointer-events-none select-none object-cover h-full w-full md:object-[50%_30%]"
       />
-      <!-- Heads start ~45% down the desktop crop; the scrim must clear by then so faces stay undimmed. -->
       <div
         aria-hidden="true"
         class="absolute inset-0 hidden bg-gradient-to-b from-slate-900/75 via-slate-900/45 via-25% to-slate-900/0 to-45% md:block"
