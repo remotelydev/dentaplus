@@ -28,7 +28,6 @@ const imageAlt = (field: { alt?: string | null } | null | undefined) =>
           :key="item.title"
           class="flex w-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-white"
         >
-          <!-- VueCompareImage sets an inline px height from the photos' own ratio; hold it to the 4:3 frame. -->
           <div class="aspect-[4/3] w-full bg-slate-100 [&>*]:!h-full">
             <ClientOnly>
               <VueCompareImage

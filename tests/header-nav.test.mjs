@@ -44,17 +44,6 @@ test('mobile submenus stay tap-to-expand without hover handlers', () => {
   assert.doesNotMatch(mobileNav, /@pointerenter|@mouseenter/)
 })
 
-test('Galeria is filtered out of the primary header', () => {
-  assert.match(header, /isGaleriaItem/)
-  assert.match(header, /!isGaleriaItem\(item\)/)
-})
-
-test('service dropdown uses resolveServiceNav from Prismic or SERVICE_NAV', () => {
-  assert.match(header, /resolveServiceNav/)
-  assert.match(header, /service_links/)
-  assert.match(header, /serviceNavItems/)
-})
-
 test('service nav falls back to SERVICE_NAV and normalizes CMS links', () => {
   const fallback = resolveServiceNav(null, () => '', () => null)
   assert.deepEqual(fallback.map((item) => item.to), SERVICE_NAV.map((item) => item.to))

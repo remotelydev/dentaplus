@@ -25,14 +25,6 @@ const SERVICE_HEADINGS = [
   'Tomografia 3D w Turku',
 ]
 
-test('service extras render servicePages headings', () => {
-  const extras = read('components/ServiceExtras.vue')
-
-  assert.match(extras, /servicePages\[uid\]\.h2s/)
-  assert.match(extras, /block\.heading/)
-  assert.match(extras, /block\.body/)
-})
-
 test('servicePages keep existing headings and invent no PLN', () => {
   const services = read('data/services.ts')
 

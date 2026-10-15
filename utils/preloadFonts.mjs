@@ -1,8 +1,5 @@
 const CRITICAL_FONT = /\/_nuxt\/inter-latin(?:-ext)?-(?:400|600)-normal\.[a-z0-9]+\.woff2/g
 
-// Document → font is the network-dependency chain. Preload the files the
-// first paint actually uses so they are no longer a late-discovered chain.
-// Weight 500 is left for the stylesheet. Low priority keeps them behind the LCP image.
 export function preloadCriticalFonts(html) {
   if (!html || html.includes('rel="preload" as="font"')) return html
 

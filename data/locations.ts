@@ -4,7 +4,6 @@ type HoursRow =
   | { days: string, dayOfWeek: string[], opens: string, closes: string, closed?: false }
   | { days: string, closed: true }
 
-// Saturday is appointment-only, so it is shown as closed and never emitted as open hours in JSON-LD.
 export const CLINIC_HOURS: Record<'turek' | 'poddebice', HoursRow[]> = {
   turek: [
     { days: 'Pn–Pt', dayOfWeek: WEEKDAYS, opens: '8:00', closes: '20:00' },

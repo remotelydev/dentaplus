@@ -11,8 +11,6 @@
   status = 301
   force = true
 
-# Retired Prismic uids that contained ł. The live documents are michal-trzos and weronika-wlodarska.
-# force shadows any previously published unicode HTML.
 [[redirects]]
   from = "/zespol/michał-trzos"
   to = "/zespol/michal-trzos/"

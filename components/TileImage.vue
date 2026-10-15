@@ -28,7 +28,6 @@ const props = defineProps({
 });
 
 const prismic = usePrismic()
-// Tiles are full width on phones and half the viewport from md up.
 const tile = computed(() => buildResponsiveImage(prismic.asImageSrc, props.image, {
   widths: [480, 800, 1200],
   cap: 1400,
