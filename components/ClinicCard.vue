@@ -38,15 +38,13 @@ const hours = computed(() => CLINIC_HOURS[props.location.uid])
         </div>
       </dl>
     </div>
-    <iframe
+    <DeferredMap
       :src="location.mapSrc"
       :title="location.mapTitle"
       width="100%"
       height="360"
       class="h-[360px] w-full border-0 md:h-full md:min-h-[360px]"
       allowfullscreen
-      loading="lazy"
-      referrerpolicy="no-referrer-when-downgrade"
     />
   </div>
   <div v-else>
@@ -69,15 +67,13 @@ const hours = computed(() => CLINIC_HOURS[props.location.uid])
         {{ row.days }}: {{ row.closed ? 'nieczynne' : `${row.opens}–${row.closes}` }}
       </li>
     </ul>
-    <iframe
+    <DeferredMap
       :src="location.mapSrc"
       :title="location.mapTitle"
       width="100%"
       height="360"
       class="mb-12 border-0"
       allowfullscreen
-      loading="lazy"
-      referrerpolicy="no-referrer-when-downgrade"
     />
   </div>
 </template>

@@ -159,7 +159,7 @@ const maps = computed(() =>
     <div
       class="grid"
       :class="{ 'md:grid-cols-2': maps.length > 1 }">
-      <iframe
+      <DeferredMap
         v-for="map in maps"
         :key="map.src"
         :src="map.src"
@@ -167,9 +167,7 @@ const maps = computed(() =>
         width="100%"
         height="450"
         style="border: 0"
-        allowfullscreen="false"
-        loading="lazy"
-        referrerpolicy="no-referrer-when-downgrade" />
+        allowfullscreen="false" />
     </div>
   </section>
 </template>
