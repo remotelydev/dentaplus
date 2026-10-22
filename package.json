@@ -17,23 +17,23 @@
     "test:seo": "node --experimental-strip-types --test tests/*.test.mjs"
   },
   "dependencies": {
-    "@fontsource/inter": "^5.0.15",
-    "vue3-compare-image": "^1.1.1"
+    "@fontsource/inter": "^5.3.0",
+    "vue3-compare-image": "^1.2.6"
   },
   "devDependencies": {
-    "@nuxt/devtools": "^1.0.0",
+    "@nuxt/devtools": "^1.7.0",
     "@nuxt/eslint-config": "^0.2.0",
-    "@nuxt/image": "^1.2.0",
-    "@nuxtjs/prismic": "^3.1.0",
-    "@nuxtjs/tailwindcss": "^6.8.0",
-    "@slicemachine/adapter-nuxt": "^0.3.25",
+    "@nuxt/image": "^1.11.0",
+    "@nuxtjs/prismic": "^3.4.8",
+    "@nuxtjs/tailwindcss": "^6.14.0",
+    "@slicemachine/adapter-nuxt": "^0.3.100",
     "@tailwindcss/aspect-ratio": "^0.4.2",
-    "@vueuse/core": "^10.7.2",
-    "@vueuse/nuxt": "^10.7.2",
+    "@vueuse/core": "^10.11.1",
+    "@vueuse/nuxt": "^10.11.1",
     "concurrently": "^8.2.2",
-    "eslint": "^8.52.0",
-    "nuxt": "^3.8.0",
-    "slice-machine-ui": "^1.20.0",
-    "vite-svg-loader": "^5.1.0"
+    "eslint": "^8.57.1",
+    "nuxt": "^3.21.11",
+    "slice-machine-ui": "^1.26.0",
+    "vite-svg-loader": "^5.1.3"
   }
 }

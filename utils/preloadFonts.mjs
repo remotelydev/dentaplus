@@ -1,4 +1,4 @@
-const CRITICAL_FONT = /\/_nuxt\/inter-latin(?:-ext)?-(?:400|600)-normal\.[a-z0-9]+\.woff2/g
+const CRITICAL_FONT = /\/_nuxt\/inter-latin(?:-ext)?-(?:400|600)-normal\.[A-Za-z0-9_-]+\.woff2/g
 
 export function preloadCriticalFonts(html) {
   if (!html || html.includes('rel="preload" as="font"')) return html
