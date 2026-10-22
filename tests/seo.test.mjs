@@ -411,6 +411,10 @@ test('critical Inter files are preloaded off the font chain', () => {
   assert.match(preloaded, /href="\/_nuxt\/inter-latin-ext-600-normal\.bbb\.woff2"/)
   assert.doesNotMatch(preloaded, /inter-latin-500-normal\.ccc\.woff2" fetchpriority/)
   assert.ok(preloaded.indexOf('as="image"') < preloaded.indexOf('as="font"'))
+
+  const viteHashed = preloadCriticalFonts('<head><style>@font-face{src:url(/_nuxt/inter-latin-400-normal.C38fXH4l.woff2)}@font-face{src:url(/_nuxt/inter-latin-ext-600-normal.D2b_5O-k.woff2)}</style></head>')
+  assert.match(viteHashed, /href="\/_nuxt\/inter-latin-400-normal\.C38fXH4l\.woff2"/)
+  assert.match(viteHashed, /href="\/_nuxt\/inter-latin-ext-600-normal\.D2b_5O-k\.woff2"/)
 })
 
 test('404 and preview are noindexed', () => {
